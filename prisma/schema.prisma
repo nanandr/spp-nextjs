@@ -9,3 +9,56 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id          BigInt    @id @db.UnsignedBigInt @default(autoincrement())
+  nama        String    @db.VarChar(255)
+  nip         String
+  alamat      String    @db.Text
+  email       String
+  hp          String
+  role        Role      @default(Staff)
+  createdAt   DateTime  @db.Timestamp() @default(now())
+  updatedAt   DateTime  @db.Timestamp()
+}
+
+model Biaya {
+  id          BigInt    @id @db.UnsignedBigInt @default(autoincrement())
+  tahunAjaran String
+  biaya       BigInt    @db.UnsignedBigInt
+  createdAt   DateTime  @db.Timestamp() @default(now())
+  updatedAt   DateTime  @db.Timestamp()
+}
+
+model Kelas {
+  id          BigInt    @id @db.UnsignedBigInt @default(autoincrement())
+  namaKelas   String    @db.VarChar(10)
+  createdAt   DateTime  @db.Timestamp() @default(now())
+  updatedAt   DateTime  @db.Timestamp()
+  deletedAt   DateTime  @db.Timestamp()
+  siswa       Siswa[]
+}
+
+model Siswa {
+  id          BigInt    @id @db.UnsignedBigInt @default(autoincrement())
+  nama        String    @db.VarChar(255)
+  nis         String
+  jk          JenisKelamin
+  kelasId     BigInt    @db.UnsignedBigInt
+  angkatan    BigInt
+  hp          String
+  createdAt   DateTime  @db.Timestamp() @default(now())
+  updatedAt   DateTime  @db.Timestamp()
+  deletedAt   DateTime  @db.Timestamp()
+  kelas       Kelas     @relation(fields: [kelasId], references: [id])
+}
+
+enum Role {
+  Staff
+  Admin
+}
+
+enum JenisKelamin {
+  LakiLaki
+  Perempuan
+}
