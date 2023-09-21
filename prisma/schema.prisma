@@ -11,46 +11,114 @@ datasource db {
 }
 
 model User {
-  id          BigInt    @id @db.UnsignedBigInt @default(autoincrement())
-  nama        String    @db.VarChar(255)
+  id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
+  nama        String        @db.VarChar(255)
   nip         String
-  alamat      String    @db.Text
+  alamat      String        @db.Text
   email       String
   hp          String
-  role        Role      @default(Staff)
-  createdAt   DateTime  @db.Timestamp() @default(now())
-  updatedAt   DateTime  @db.Timestamp()
+  role        Role          @default(Staff)
+  createdAt   DateTime      @db.Timestamp() @default(now())
+  updatedAt   DateTime      @db.Timestamp()
+
+  transaksi   Transaksi[]   @relation("UserToTransaksi")
 }
 
-model Biaya {
-  id          BigInt    @id @db.UnsignedBigInt @default(autoincrement())
+model Spp {
+  id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
   tahunAjaran String
-  biaya       BigInt    @db.UnsignedBigInt
-  createdAt   DateTime  @db.Timestamp() @default(now())
-  updatedAt   DateTime  @db.Timestamp()
+  spp         BigInt        @db.UnsignedBigInt
+  createdAt   DateTime      @db.Timestamp() @default(now())
+  updatedAt   DateTime      @db.Timestamp()
+  deletedAt   DateTime      @db.Timestamp()
+
+  siswa       SppSiswa[]    @relation("SppToSiswa")
+  detail      Detail[]      @relation("SppToDetail")
 }
 
 model Kelas {
-  id          BigInt    @id @db.UnsignedBigInt @default(autoincrement())
-  namaKelas   String    @db.VarChar(10)
-  createdAt   DateTime  @db.Timestamp() @default(now())
-  updatedAt   DateTime  @db.Timestamp()
-  deletedAt   DateTime  @db.Timestamp()
-  siswa       Siswa[]
+  id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
+  namaKelas   String        @db.VarChar(10)
+  createdAt   DateTime      @db.Timestamp() @default(now())
+  updatedAt   DateTime      @db.Timestamp()
+  deletedAt   DateTime      @db.Timestamp()
+
+  siswa       Siswa[]       @relation("KelasToSiswa")
 }
 
 model Siswa {
-  id          BigInt    @id @db.UnsignedBigInt @default(autoincrement())
-  nama        String    @db.VarChar(255)
+  id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
+  nama        String        @db.VarChar(255)
   nis         String
   jk          JenisKelamin
-  kelasId     BigInt    @db.UnsignedBigInt
+  kelasId     BigInt        @db.UnsignedBigInt
   angkatan    BigInt
   hp          String
-  createdAt   DateTime  @db.Timestamp() @default(now())
-  updatedAt   DateTime  @db.Timestamp()
-  deletedAt   DateTime  @db.Timestamp()
-  kelas       Kelas     @relation(fields: [kelasId], references: [id])
+  diskonId    BigInt        @db.UnsignedBigInt
+  createdAt   DateTime      @db.Timestamp() @default(now())
+  updatedAt   DateTime      @db.Timestamp()
+  deletedAt   DateTime      @db.Timestamp()
+
+  kelas       Kelas         @relation("KelasToSiswa", fields: [kelasId], references: [id])
+  diskon      Diskon        @relation("DiskonToSiswa", fields: [diskonId], references: [id])
+
+  transaksi   Transaksi[]   @relation("SiswaToTransaksi")
+  spp         SppSiswa[]    @relation("SiswaToSpp")
+}
+
+model SppSiswa {
+  id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
+  siswaId     BigInt        @db.UnsignedBigInt
+  sppId       BigInt        @db.UnsignedBigInt
+  createdAt   DateTime      @db.Timestamp() @default(now())
+  updatedAt   DateTime      @db.Timestamp()
+  deletedAt   DateTime      @db.Timestamp()
+
+  siswa       Siswa         @relation("SiswaToSpp", fields: [siswaId], references: [id])
+  spp         Spp           @relation("SppToSiswa", fields: [sppId], references: [id])
+}
+
+model Transaksi {
+  id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
+  siswaId     BigInt        @db.UnsignedBigInt
+  userId      BigInt        @db.UnsignedBigInt
+  tanggal     DateTime      @db.Date
+  totalBayar  BigInt
+  bulan       String
+  createdAt   DateTime      @db.Timestamp() @default(now())
+  updatedAt   DateTime      @db.Timestamp()
+  deletedAt   DateTime      @db.Timestamp()
+
+  siswa       Siswa         @relation("SiswaToTransaksi", fields: [siswaId], references: [id])
+  user        User          @relation("UserToTransaksi", fields: [userId], references: [id])
+
+  detail      Detail[]      @relation("TransaksiToDetail")
+}
+
+model Detail {
+  id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
+  transaksiId BigInt        @db.UnsignedBigInt
+  sppId       BigInt        @db.UnsignedBigInt
+  jumlahBayar BigInt
+  sisa        BigInt
+  keterangan  String
+  createdAt   DateTime      @db.Timestamp() @default(now())
+  updatedAt   DateTime      @db.Timestamp()
+  deletedAt   DateTime      @db.Timestamp()
+
+  transaksi   Transaksi     @relation("TransaksiToDetail", fields: [transaksiId], references: [id])
+  spp         Spp           @relation("SppToDetail", fields: [sppId], references: [id])
+  
+}
+
+model Diskon {
+  id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
+  potongan    BigInt
+  createdAt   DateTime      @db.Timestamp() @default(now())
+  updatedAt   DateTime      @db.Timestamp()
+  deletedAt   DateTime      @db.Timestamp()
+
+  siswa       Siswa[]       @relation("DiskonToSiswa")
 }
 
 enum Role {
