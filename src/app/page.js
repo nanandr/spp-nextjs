@@ -25,8 +25,8 @@ export default function Home() {
           <Image 
             src={logo} 
             alt="Logo SDQ Bina Mulya" 
-            width="90px"
-            height="90px"
+            width={90}
+            height={90}
           />
           <div className="flex flex-col align-middle p-2">
             <h3 className="text-white text-4xl">SDQ Bina Mulya</h3>
