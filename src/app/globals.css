@@ -1,5 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background  : #1f1f21;
+  --dark        : #28292F;
+  --lightblue   : #55B8E1;
+  --blue        : #3C4EF0;
+  --green       : #63CF30;
+  --red         : #FC2F2F;
+  --cyan        : #30C6CF;
+  --white       : white;
+}
+
 *{
   box-sizing: border-box;
   padding: 0px;
   margin: 0px;
+}
+
+.background{
+  background-color: var(--background);
+}
+
+.dark{
+  background-color: var(--dark);
 }
