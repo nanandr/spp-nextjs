@@ -29,7 +29,7 @@ export default function Home() {
             height={90}
           />
           <div className="flex flex-col align-middle p-2">
-            <h3 className="text-white text-4xl">SDQ Bina Mulya</h3>
+            <h3 className="text-white text-4xl font-bold">SDQ Bina Mulya</h3>
             <p className='text-gray-600'>Aplikasi SPP</p>
           </div>
         </div>
