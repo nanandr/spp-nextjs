@@ -17,6 +17,7 @@ model User {
   alamat      String        @db.Text
   email       String
   hp          String
+  profilePic  String
   role        Role          @default(Staff)
   createdAt   DateTime      @db.Timestamp() @default(now())
   updatedAt   DateTime      @db.Timestamp()

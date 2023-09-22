@@ -1,6 +1,9 @@
+"use client";
+
 import Link from 'next/link';
 import Image from 'next/image';
 import logo from '../../assets/image/logo90x90.png';
+import { useState } from 'react';
 
 export default function Sidebar(props) {
     return (
@@ -65,9 +68,11 @@ function Navigation(props) {
 }
 
 function Dropdown(props) {
+    const [visible, setVisible] = useState(true);
+
     return (
         <li>
-            <button type="button" className={(props.active ? "bg-blue-400 text-white " : "bg-gray-600 hover:bg-blue-400 text-gray-200 ") + "flex items-center justify-between px-2 py-4 hover:text-white transition duration-200 rounded-lg active:bg-blue-500 group w-full"} aria-controls="sidebar-dropdown" data-collapse-toggle="sidebar-dropdown">
+            <button onClick={() => setVisible(!visible)} type="button" className={(props.active ? "bg-blue-400 text-white " : "bg-gray-600 hover:bg-blue-400 text-gray-200 ") + "flex items-center justify-between px-2 py-4 hover:text-white transition duration-200 rounded-lg active:bg-blue-500 group w-full"} aria-controls="sidebar-dropdown" data-collapse-toggle="sidebar-dropdown">
                 <div className='flex items-center'>
                     { props.children }
                     <span className="ml-3">{ props.title }</span>
@@ -76,7 +81,7 @@ function Dropdown(props) {
                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4"/>
                 </svg>
             </button>
-            <ul id="sidebar-dropdown" className="py-2 space-y-2">
+            <ul id="sidebar-dropdown" className={(visible ? "" : "hidden ") + "py-2 space-y-2"}>
                 {props.links.map(link => (
                     <li>
                         <Link href={link.href} className="flex items-center w-full p-2 text-gray-200 transition duration-200 rounded-lg group hover:text-white hover:bg-blue-400 active:bg-blue-500">{link.name}</Link>
