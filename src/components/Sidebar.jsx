@@ -33,7 +33,7 @@ export default function Sidebar(props) {
                     <Navigation title="Laporan" href="/laporan" active={props.active == 'laporan' ? true : false }>
                         <Document />
                     </Navigation>
-                    <Dropdown title="Akun" links={[{name: 'Siswa', href: '/siswa'}, {name: 'Petugas', href: '/petugas'}]}>
+                    <Dropdown title="Akun" links={[{name: 'Siswa', href: '/siswa', active:props.active}, {name: 'Petugas', href: '/petugas', active:props.active}]}>
                         <People />
                     </Dropdown>
                     <Navigation title="Kelas" href="/kelas" active={props.active == 'kelas' ? true : false }>
@@ -58,7 +58,7 @@ function Navigation(props) {
 
 function Dropdown(props) {
     const [visible, setVisible] = useState(true);
-
+    
     return (
         <li>
             <button onClick={() => setVisible(!visible)} type="button" className={(props.active ? "bg-blue-400 text-white " : "bg-gray-600 hover:bg-blue-400 text-gray-200 ") + "flex items-center justify-between px-2 py-4 hover:text-white transition duration-200 rounded-lg active:bg-blue-500 group w-full"} aria-controls="sidebar-dropdown" data-collapse-toggle="sidebar-dropdown">
@@ -73,7 +73,7 @@ function Dropdown(props) {
             <ul id="sidebar-dropdown" className={(visible ? "" : "hidden ") + "py-2 space-y-2"}>
                 {props.links.map(link => (
                     <li>
-                        <Link href={link.href} className="flex items-center w-full p-2 text-gray-200 transition duration-200 rounded-lg group hover:text-white hover:bg-blue-400 active:bg-blue-500">{link.name}</Link>
+                        <Link href={link.href} className={(link.name == link.active ? "bg-blue-400 text-white " : " hover:bg-blue-400 text-gray-200 ") + "flex items-center w-full p-2 text-gray-200 transition duration-200 rounded-lg group hover:text-white hover:bg-blue-400 active:bg-blue-500"}>{link.name}</Link>
                     </li>
                 ))}
             </ul>
