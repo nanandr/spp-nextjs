@@ -24,7 +24,7 @@ export default function Dashboard() {
 
 function Card(props) {
     return (
-        <div className={"h-36 md:h-40 rounded-lg text-white p-2 flex flex-col justify-between " + props.background}>
+        <div className={"h-36 md:h-40 rounded-lg text-white p-4 flex flex-col justify-between " + props.background}>
             <h2 className="text-2xl font-bold">{props.title}</h2>
             <p className="text-6xl font-extrabold">30</p>
         </div>

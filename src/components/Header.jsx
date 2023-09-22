@@ -63,7 +63,7 @@ function Profile(props) {
     return (
         <div className='p-2 rounded-lg text-right transition-transform -translate-x-full sm:translate-x-0 hidden md:block hover:bg-zinc-700'>
             <div className='flex flex-row items-center gap-3'>
-                <span className='max-w-xs truncate'>{props.name}</span>
+                <span className='max-w-xs truncate cursor-default'>{props.name}</span>
                 <Image 
                     src={logo} 
                     alt="Logo SDQ Bina Mulya" 
