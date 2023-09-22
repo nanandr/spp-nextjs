@@ -24,21 +24,11 @@ export default function Sidebar(props) {
                     </div>
                 </div>
                 <ul className="space-y-4 font-medium my-5">
-                    <Navigation title="Dashboard" href="/dashboard" active={props.active == 'dashboard' ? true : false }>
-                        <Menu />
-                    </Navigation>
-                    <Navigation title="Pembayaran" href="/pembayaran" active={props.active == 'pembayaran' ? true : false }>
-                        <Money />
-                    </Navigation>
-                    <Navigation title="Laporan" href="/laporan" active={props.active == 'laporan' ? true : false }>
-                        <Document />
-                    </Navigation>
-                    <Dropdown title="Akun" links={[{name: 'Siswa', href: '/siswa', active:props.active}, {name: 'Petugas', href: '/petugas', active:props.active}]}>
-                        <People />
-                    </Dropdown>
-                    <Navigation title="Kelas" href="/kelas" active={props.active == 'kelas' ? true : false }>
-                        <Book />
-                    </Navigation>
+                    <Navigation title="Dashboard" href="/dashboard" active={props.active == 'dashboard' ? true : false } icon={<Menu/>}/>
+                    <Navigation title="Pembayaran" href="/pembayaran" active={props.active == 'pembayaran' ? true : false } icon={<Money/>}/>
+                    <Navigation title="Laporan" href="/laporan" active={props.active == 'laporan' ? true : false } icon={<Document/>}/>
+                    <Dropdown title="Akun" links={[{name: 'Siswa', href: '/siswa'}, {name: 'Petugas', href: '/petugas'}]} icon={<People/>}/>
+                    <Navigation title="Kelas" href="/kelas" active={props.active == 'kelas' ? true : false } icon={<Book/>}/>
                 </ul>
             </div>
         </aside>
@@ -49,7 +39,7 @@ function Navigation(props) {
     return (
         <li>
             <Link href={props.href} className={(props.active ? "bg-blue-400 text-white " : "bg-gray-600 hover:bg-blue-400 text-gray-200 ") + "flex items-center px-2 py-4 hover:text-white transition duration-200 rounded-lg active:bg-blue-500 group"}>
-                { props.children }
+                { props.icon }
                 <span className="ml-3">{ props.title }</span>
             </Link>
         </li>
@@ -63,7 +53,7 @@ function Dropdown(props) {
         <li>
             <button onClick={() => setVisible(!visible)} type="button" className={(props.active ? "bg-blue-400 text-white " : "bg-gray-600 hover:bg-blue-400 text-gray-200 ") + "flex items-center justify-between px-2 py-4 hover:text-white transition duration-200 rounded-lg active:bg-blue-500 group w-full"} aria-controls="sidebar-dropdown" data-collapse-toggle="sidebar-dropdown">
                 <div className='flex items-center'>
-                    { props.children }
+                    { props.icon }
                     <span className="ml-3">{ props.title }</span>
                 </div>
                 <svg className="w-3 h-3 mx-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
