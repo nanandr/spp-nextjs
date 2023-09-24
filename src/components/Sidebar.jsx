@@ -23,7 +23,6 @@ export default function Sidebar(props) {
                         <p className='text-gray-500'>Aplikasi SPP</p>
                     </div>
                 </div>
-                {console.log(props)}
                 <ul className="space-y-4 font-medium my-5">
                     <Navigation title="Dashboard" href="/dashboard" active={props.active == 'dashboard' ? true : false } icon={<Menu/>}/>
                     <Navigation title="Pembayaran" href="/pembayaran" active={props.active == 'pembayaran' ? true : false } icon={<Money/>}/>
