@@ -11,7 +11,7 @@ export default function Siswa() {
                 <Header title='Siswa'/>
                 <Search placeholder="Cari Siswa (NIS, Nama, Kelas)..."/>
                 <main className="w-full max-h-fit bg-zinc-700 p-2 md:p-3 rounded-lg flex flex-col gap-2">
-                    <Table />
+                    <Table title="Siswa"/>
                 </main>
             </div>
         </div>

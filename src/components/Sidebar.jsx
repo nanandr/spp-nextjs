@@ -23,11 +23,12 @@ export default function Sidebar(props) {
                         <p className='text-gray-500'>Aplikasi SPP</p>
                     </div>
                 </div>
+                {console.log(props)}
                 <ul className="space-y-4 font-medium my-5">
                     <Navigation title="Dashboard" href="/dashboard" active={props.active == 'dashboard' ? true : false } icon={<Menu/>}/>
                     <Navigation title="Pembayaran" href="/pembayaran" active={props.active == 'pembayaran' ? true : false } icon={<Money/>}/>
                     <Navigation title="Laporan" href="/laporan" active={props.active == 'laporan' ? true : false } icon={<Document/>}/>
-                    <Dropdown title="Akun" links={[{name: 'Siswa', href: '/siswa'}, {name: 'Petugas', href: '/petugas'}]} icon={<People/>}/>
+                    <Dropdown title="Akun" links={[{name: 'Siswa', href: '/siswa', active: props.active}, {name: 'Petugas', href: '/petugas', active: props.active}]} icon={<People/>}/>
                     <Navigation title="Kelas" href="/kelas" active={props.active == 'kelas' ? true : false } icon={<Book/>}/>
                 </ul>
             </div>

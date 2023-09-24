@@ -1,4 +1,4 @@
-export default function Table() {
+export default function Table(props) {
     const tableRow = [
         {id: 1,siswa_name: "Rafi Ikhwan Purnama", pegawai_name: "Muhammad Zubari Jaenal Adi", date: "20/10/2006", total: "Rp. 200.000,-", bulan: "Juli", status: true},
         {id: 2,siswa_name: "cell", pegawai_name: "cell", date: "cell", total: "cell", bulan: "cell", status: false},
@@ -24,8 +24,9 @@ export default function Table() {
     ]
     
     return(
-        <div className="inline-block py-2 sm:px-6 lg:px-8">
-            <div className="overflow-x-auto w-ful max-h-screen">
+        <div className="inline-block py-2 px-2">
+            <h1 className="flex w-fit font-bold text-xl mb-2 cursor-default border-b border-b-zinc-700 hover:border-b-gray-300 transition-all">Data {props.title}</h1>
+            <div className="overflow-x-auto w-ful max-h-96">
                 <table className="table-auto overflow-x-auto text-left text-sm font-light w-max-content lg:w-full">
                     <thead className="border-b font-medium dark:border-neutral-500">
                         <tr>
@@ -40,9 +41,7 @@ export default function Table() {
                     </thead>
                     <tbody>
                         {tableRow.map((row)=> (
-                            <tr key={row.id} 
-                                className="border-b dark:border-neutral-500"
-                            >
+                            <tr key={row.id} className="border-b dark:border-neutral-500">
                                 <td className="whitespace-nowrap px-6 py-4 font-medium">{row.id}</td>
                                 <td className="whitespace-nowrap px-6 py-4">{row.siswa_name}</td>
                                 <td className="whitespace-nowrap px-6 py-4">{row.pegawai_name}</td>

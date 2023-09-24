@@ -11,7 +11,7 @@ export default function Laporan() {
                 <Header title='Laporan'/>
                 <Search placeholder="Cari Laporan..."/>
                 <main className="w-full max-h-fit bg-zinc-700 p-2 md:p-3 rounded-lg flex flex-col gap-2">
-                    <Table />
+                    <Table title="Laporan"/>
                 </main>
             </div>
         </div>
