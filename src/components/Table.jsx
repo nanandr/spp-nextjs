@@ -26,7 +26,7 @@ export default function Table(props) {
     return(
         <div className="inline-block py-2 px-2">
             <h1 className="flex w-fit font-bold text-xl mb-2 cursor-default border-b border-b-zinc-700 hover:border-b-gray-300 transition-all">Data {props.title}</h1>
-            <div className="overflow-x-auto w-ful max-h-96">
+            <div className="overflow-x-auto w-ful max-h-96 scroll">
                 <table className="table-auto overflow-x-auto text-left text-sm font-light w-max-content lg:w-full">
                     <thead className="border-b font-medium dark:border-neutral-500">
                         <tr>
