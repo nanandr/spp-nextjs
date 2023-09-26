@@ -20,7 +20,7 @@ export default function Home() {
 
   return (
     <main className="flex justify-center bg-black bg-opacity-90 min-h-screen">
-      <div className="text-gray-200 shadow rounded p-10 bg-gray-950 bg-opacity-50 h-fit my-auto">
+      <div className="text-gray-200 shadow rounded p-10 bg-zinc-800 h-fit my-auto">
         <div className="flex flex-row flex-wrap align-middle">
           <Image 
             src={logo} 
@@ -36,14 +36,14 @@ export default function Home() {
         <form className='flex flex-col mt-5' onSubmit={login} method="post">
           <div className="my-3">
             <label className='block text-sm font-light mb-1' htmlFor="email">E-Mail or Username</label>
-            <input autoComplete='off' className='text-sm transition-all bg-gray-950 bg-opacity-20 appearance-none border border-gray-700 rounded w-full py-3 px-3 text-gray-300 leading-tight focus:outline-none focus-within:bg-gray-950 focus:bg-opacity-50 focus:outline focus:outline-gray-800 focus:outline-offset-2' type="text" id='email' name='email'/>
+            <input autoComplete='off' className='text-sm transition-all bg-zinc-800 bg-opacity-20 appearance-none border border-gray-600 rounded w-full py-3 px-3 text-gray-300 leading-tight focus:outline-none focus-within:bg-zinc-800 focus:bg-opacity-50 focus:outline focus:outline-zinc-700 focus:outline-offset-2' type="text" id='email' name='email'/>
           </div>
           <div className="my-3">
             <div className="flex flex-row justify-between mb-1">
               <label className='block text-sm font-light' htmlFor="Password">Password</label>
               <p className='text-gray-500 cursor-pointer'>Lupa Password?</p>
             </div>
-            <input autoComplete='off' className='text-sm transition-all bg-gray-950 bg-opacity-20 appearance-none border border-gray-700 rounded w-full py-3 px-3 text-gray-300 leading-tight focus:outline-none focus-within:bg-gray-950 focus:bg-opacity-50 focus:outline focus:outline-gray-800 focus:outline-offset-2' type="password" id='password' name='password'/>
+            <input autoComplete='off' className='text-sm transition-all bg-zinc-800 bg-opacity-20 appearance-none border border-gray-600 rounded w-full py-3 px-3 text-gray-300 leading-tight focus:outline-none focus-within:bg-zinc-800 focus:bg-opacity-50 focus:outline focus:outline-zinc-700 focus:outline-offset-2' type="password" id='password' name='password'/>
           </div>
           <button disabled={loading} type='submit' className={"my-5 py-3 px-3 transition font-semibold " + (loading ? "bg-gray-700 font-semibold" : "bg-blue-400 hover:bg-blue-500")}>{loading ? "Loading..." : "Login"}</button>
         </form>
