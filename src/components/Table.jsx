@@ -28,7 +28,7 @@ export default function Table(props) {
             <h1 className="flex w-fit font-bold text-xl mb-2 cursor-default border-b border-b-zinc-700 hover:border-b-gray-300 transition-all">
                 Data {props.title}
             </h1>
-            <div className="overflow-x-auto w-full max-h-96 scroll pr-0.5">
+            <div className="overflow-x-auto w-full scroll pr-0.5">
                 <table className="table-auto overflow-x-auto text-left text-sm font-light w-max-content lg:w-full">
                     <thead className="border-b font-medium dark:border-neutral-500 sticky top-0 bg-zinc-800">
                         <tr>
@@ -39,7 +39,7 @@ export default function Table(props) {
                             ))}
                         </tr>
                     </thead>
-                    <tbody className="overflow-y-scroll max-h-72"> {/* Adjust max-h-72 as needed */}
+                    <tbody className="overflow-y-scroll"> {/* Adjust max-h-72 as needed */}
                         {tableRow.map((row) => (
                             <tr key={row.ID} className="border-b dark:border-neutral-500">
                                 {Object.keys(row).map((key) => (

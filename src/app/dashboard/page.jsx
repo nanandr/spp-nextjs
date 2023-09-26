@@ -3,7 +3,7 @@ import Table from "@/components/Table";
 
 export default function Dashboard() {
     return (
-        <Index title='Pembayaran' placeholder='Pencarian cepat...'>
+        <Index title='Dashboard' placeholder='Pencarian cepat...'>
             <div className="w-full grid grid-cols-2 xl:grid-cols-3 min-[2560px]:grid-cols-5 gap-2 md:gap-3">
                 <Card content="30" title="Jumlah Siswa" background='bg-blue-600'/>
                 <Card content="5" title="Transaksi Bulan Ini" background='bg-yellow-500'/>
