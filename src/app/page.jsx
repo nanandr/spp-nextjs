@@ -30,7 +30,7 @@ export default function Home() {
           />
           <div className="flex flex-col align-middle p-2">
             <h3 className="text-white text-4xl font-bold">SDQ Bina Mulya</h3>
-            <p className='text-gray-600'>Aplikasi SPP</p>
+            <p className='text-gray-500'>Aplikasi SPP</p>
           </div>
         </div>
         <form className='flex flex-col mt-5' onSubmit={login} method="post">
