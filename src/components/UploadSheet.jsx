@@ -3,9 +3,12 @@
 import { useState } from "react";
 import { Upload } from "../../public/svg";
 import * as XLSX from "xlsx";
+import PopUp from "./PopUp";
+import Table from "./Table";
 
 export default function UploadSheet() {
     const [data, setData] = useState([]);
+    const [showPopUp, setPopUp] = useState(false);
 
     const fileUpload = (e) => {
         const reader = new FileReader();
@@ -17,8 +20,17 @@ export default function UploadSheet() {
             const sheet = workBook.Sheets[sheetName];
             const parsedData = XLSX.utils.sheet_to_json(sheet);
             setData(parsedData);
+            setPopUp(true);
             console.log(parsedData);
         }
+    }
+
+    const resetPath  = (e) => {
+        e.target.value = null;
+    }
+
+    const handlePopUp = () => {
+        setPopUp(false);
     }
 
     return (
@@ -27,7 +39,13 @@ export default function UploadSheet() {
                 <Upload/>
                 Unggah Data (.xlsx .xls)
             </label>
-            <input id="fileInput" type={"file"} accept=".xlsx, .xls" className="hidden" aria-hidden="true" onChange={fileUpload}/>
+            <input id="fileInput" type={"file"} accept=".xlsx, .xls" className="hidden" aria-hidden="true" onChange={fileUpload} onClick={resetPath}/>
+            {
+                showPopUp &&
+                <PopUp title="Unggah Data Siswa" onClose={handlePopUp}>
+                    <Table data={data}/>
+                </PopUp>
+            }
         </>
     )
 }
