@@ -20,8 +20,8 @@ model User {
   hp          String
   profilePic  String
   role        Role          @default(Staff)
-  createdAt   DateTime      @db.Timestamp() @default(now())
-  updatedAt   DateTime      @db.Timestamp()
+  createdAt   DateTime?     @db.Timestamp(0) @default(now())
+  updatedAt   DateTime?     @db.Timestamp(0)
 
   transaksi   Transaksi[]   @relation("UserToTransaksi")
 
@@ -32,9 +32,9 @@ model Spp {
   id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
   tahunAjaran String
   spp         BigInt        @db.UnsignedBigInt
-  createdAt   DateTime      @db.Timestamp() @default(now())
-  updatedAt   DateTime      @db.Timestamp()
-  deletedAt   DateTime      @db.Timestamp()
+  createdAt   DateTime?     @db.Timestamp(0) @default(now())
+  updatedAt   DateTime?     @db.Timestamp(0)
+  deletedAt   DateTime?     @db.Timestamp(0)
 
   siswa       SppSiswa[]    @relation("SppToSiswa")
   detail      Detail[]      @relation("SppToDetail")
@@ -45,9 +45,9 @@ model Spp {
 model Kelas {
   id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
   namaKelas   String        @db.VarChar(10)
-  createdAt   DateTime      @db.Timestamp() @default(now())
-  updatedAt   DateTime      @db.Timestamp()
-  deletedAt   DateTime      @db.Timestamp()
+  createdAt   DateTime?     @db.Timestamp(0) @default(now())
+  updatedAt   DateTime?     @db.Timestamp(0)
+  deletedAt   DateTime?     @db.Timestamp(0)
 
   siswa       Siswa[]       @relation("KelasToSiswa")
 
@@ -97,9 +97,9 @@ model Transaksi {
   tanggal     DateTime      @db.Date
   totalBayar  BigInt
   bulan       String
-  createdAt   DateTime      @db.Timestamp() @default(now())
-  updatedAt   DateTime      @db.Timestamp()
-  deletedAt   DateTime      @db.Timestamp()
+  createdAt   DateTime?     @db.Timestamp(0) @default(now())
+  updatedAt   DateTime?     @db.Timestamp(0)
+  deletedAt   DateTime?     @db.Timestamp(0)
 
   siswa       Siswa         @relation("SiswaToTransaksi", fields: [siswaId], references: [id])
   user        User          @relation("UserToTransaksi", fields: [userId], references: [id])
@@ -116,9 +116,9 @@ model Detail {
   jumlahBayar BigInt
   sisa        BigInt
   keterangan  String
-  createdAt   DateTime      @db.Timestamp() @default(now())
-  updatedAt   DateTime      @db.Timestamp()
-  deletedAt   DateTime      @db.Timestamp()
+  createdAt   DateTime?     @db.Timestamp(0) @default(now())
+  updatedAt   DateTime?     @db.Timestamp(0)
+  deletedAt   DateTime?     @db.Timestamp(0)
 
   transaksi   Transaksi     @relation("TransaksiToDetail", fields: [transaksiId], references: [id])
   spp         Spp           @relation("SppToDetail", fields: [sppId], references: [id])
@@ -129,9 +129,9 @@ model Detail {
 model Diskon {
   id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
   potongan    BigInt
-  createdAt   DateTime      @db.Timestamp() @default(now())
-  updatedAt   DateTime      @db.Timestamp()
-  deletedAt   DateTime      @db.Timestamp()
+  createdAt   DateTime?     @db.Timestamp(0) @default(now())
+  updatedAt   DateTime?     @db.Timestamp(0)
+  deletedAt   DateTime?     @db.Timestamp(0)
 
   siswa       Siswa[]       @relation("DiskonToSiswa")
 

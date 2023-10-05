@@ -6,6 +6,7 @@ import Table from "@/components/Table"
 import UploadSheet from "@/components/UploadSheet";
 import InputData from "@/components/InputData";
 import PopUp from "@/components/PopUp";
+import prisma from './prismaClient'
 
 export default function Siswa() {
     async function api () {
