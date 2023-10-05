@@ -16,6 +16,7 @@ model User {
   nip         String
   alamat      String        @db.Text
   email       String
+  password    String        @db.VarChar(255)
   hp          String
   profilePic  String
   role        Role          @default(Staff)
@@ -23,6 +24,8 @@ model User {
   updatedAt   DateTime      @db.Timestamp()
 
   transaksi   Transaksi[]   @relation("UserToTransaksi")
+
+  @@map("users")
 }
 
 model Spp {
@@ -35,6 +38,8 @@ model Spp {
 
   siswa       SppSiswa[]    @relation("SppToSiswa")
   detail      Detail[]      @relation("SppToDetail")
+
+  @@map("spp")
 }
 
 model Kelas {
@@ -45,6 +50,8 @@ model Kelas {
   deletedAt   DateTime      @db.Timestamp()
 
   siswa       Siswa[]       @relation("KelasToSiswa")
+
+  @@map("kelas")
 }
 
 model Siswa {
@@ -52,10 +59,10 @@ model Siswa {
   nama        String        @db.VarChar(255)
   nis         String
   jk          JenisKelamin
-  kelasId     BigInt        @db.UnsignedBigInt
+  kelasId     BigInt        @db.UnsignedBigInt @map("kelas_id")
   angkatan    BigInt
   hp          String
-  diskonId    BigInt        @db.UnsignedBigInt
+  diskonId    BigInt        @db.UnsignedBigInt @map("diskon_id")
   createdAt   DateTime      @db.Timestamp() @default(now())
   updatedAt   DateTime      @db.Timestamp()
   deletedAt   DateTime      @db.Timestamp()
@@ -65,24 +72,28 @@ model Siswa {
 
   transaksi   Transaksi[]   @relation("SiswaToTransaksi")
   spp         SppSiswa[]    @relation("SiswaToSpp")
+
+  @@map("siswa")
 }
 
 model SppSiswa {
   id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
-  siswaId     BigInt        @db.UnsignedBigInt
-  sppId       BigInt        @db.UnsignedBigInt
+  siswaId     BigInt        @db.UnsignedBigInt @map("siswa_id")
+  sppId       BigInt        @db.UnsignedBigInt @map("spp_id")
   createdAt   DateTime      @db.Timestamp() @default(now())
   updatedAt   DateTime      @db.Timestamp()
   deletedAt   DateTime      @db.Timestamp()
 
   siswa       Siswa         @relation("SiswaToSpp", fields: [siswaId], references: [id])
   spp         Spp           @relation("SppToSiswa", fields: [sppId], references: [id])
+
+  @@map("spp_siswa")
 }
 
 model Transaksi {
   id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
-  siswaId     BigInt        @db.UnsignedBigInt
-  userId      BigInt        @db.UnsignedBigInt
+  siswaId     BigInt        @db.UnsignedBigInt @map("siswa_id")
+  userId      BigInt        @db.UnsignedBigInt @map("user_id")
   tanggal     DateTime      @db.Date
   totalBayar  BigInt
   bulan       String
@@ -94,12 +105,14 @@ model Transaksi {
   user        User          @relation("UserToTransaksi", fields: [userId], references: [id])
 
   detail      Detail[]      @relation("TransaksiToDetail")
+
+  @@map("transaksi")
 }
 
 model Detail {
   id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
-  transaksiId BigInt        @db.UnsignedBigInt
-  sppId       BigInt        @db.UnsignedBigInt
+  transaksiId BigInt        @db.UnsignedBigInt @map("transaksi_id")
+  sppId       BigInt        @db.UnsignedBigInt @map("spp_id")
   jumlahBayar BigInt
   sisa        BigInt
   keterangan  String
@@ -110,6 +123,7 @@ model Detail {
   transaksi   Transaksi     @relation("TransaksiToDetail", fields: [transaksiId], references: [id])
   spp         Spp           @relation("SppToDetail", fields: [sppId], references: [id])
   
+  @@map("details")
 }
 
 model Diskon {
@@ -120,6 +134,8 @@ model Diskon {
   deletedAt   DateTime      @db.Timestamp()
 
   siswa       Siswa[]       @relation("DiskonToSiswa")
+
+  @@map("diskon")
 }
 
 enum Role {
