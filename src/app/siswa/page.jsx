@@ -1,31 +1,39 @@
 "use client";
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import Index from "../index"
 import Table from "@/components/Table"
 import UploadSheet from "@/components/UploadSheet";
 import InputData from "@/components/InputData";
-import PopUp from "@/components/PopUp";
-import prisma from './prismaClient'
 
 export default function Siswa() {
-    async function api () {
-        useEffect(() => {
-          first
-        
-          return () => {
-            second
-          }
-        }, [third])
-        
-    }
+  const [dataSiswa, setDataSiswa] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {  
+    fetch('http://localhost:3000/api/siswa')
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then(data => {
+        setDataSiswa(data.siswa);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+
     return (
         <Index title='Siswa' placeholder='Cari Siswa (NIS, Nama, Tanggal)...'>
             <div className="flex flex-row gap-2 justify-end">
               <UploadSheet/>
               <InputData/>
             </div>
-            <Table title='Siswa' />
+            <Table title='Siswa' data={dataSiswa} loading={loading}/>
         </Index>
     )
 }

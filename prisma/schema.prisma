@@ -63,9 +63,9 @@ model Siswa {
   angkatan    BigInt
   hp          String
   diskonId    BigInt        @db.UnsignedBigInt @map("diskon_id")
-  createdAt   DateTime      @db.Timestamp() @default(now())
-  updatedAt   DateTime      @db.Timestamp()
-  deletedAt   DateTime      @db.Timestamp()
+  createdAt   DateTime?     @db.Timestamp() @default(now())
+  updatedAt   DateTime?     @db.Timestamp()
+  deletedAt   DateTime?     @db.Timestamp()
 
   kelas       Kelas         @relation("KelasToSiswa", fields: [kelasId], references: [id])
   diskon      Diskon        @relation("DiskonToSiswa", fields: [diskonId], references: [id])
@@ -80,9 +80,9 @@ model SppSiswa {
   id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
   siswaId     BigInt        @db.UnsignedBigInt @map("siswa_id")
   sppId       BigInt        @db.UnsignedBigInt @map("spp_id")
-  createdAt   DateTime      @db.Timestamp() @default(now())
-  updatedAt   DateTime      @db.Timestamp()
-  deletedAt   DateTime      @db.Timestamp()
+  createdAt   DateTime?     @db.Timestamp() @default(now())
+  updatedAt   DateTime?     @db.Timestamp()
+  deletedAt   DateTime?     @db.Timestamp()
 
   siswa       Siswa         @relation("SiswaToSpp", fields: [siswaId], references: [id])
   spp         Spp           @relation("SppToSiswa", fields: [sppId], references: [id])
