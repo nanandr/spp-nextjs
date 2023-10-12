@@ -1,7 +1,16 @@
 export default function Table(props) {
     return(
         props.loading ?   
-        <span>loading</span>
+        <div className="inline-block py-2 px-2 animate-pulse space-y-4">
+            <div className="bg-gray-400 h-7 w-40" />
+            <div className="bg-zinc-800 h-10" />
+            <div className="bg-zinc-600 h-10" />
+            <div className="bg-zinc-600 h-10" />
+            <div className="bg-zinc-600 h-10" />
+            <div className="bg-zinc-600 h-10" />
+            <div className="bg-zinc-600 h-10" />
+            <div className="bg-zinc-600 h-10" />
+        </div>
         :
         props.data ?
         <div className="inline-block py-2 px-2">
