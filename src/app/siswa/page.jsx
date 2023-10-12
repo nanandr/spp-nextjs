@@ -11,7 +11,7 @@ export default function Siswa() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {  
-    fetch('http://localhost:3000/api/siswa')
+    fetch(`http://${window.location.host}/api/siswa`)
       .then(res => {
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);

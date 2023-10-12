@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
-import { connectToDatabase } from "../../../../utils/serverHelper";
+import { connectToDatabase } from "../../../../../utils/serverHelper";
 
 export const POST = async (req) => {
     try {
