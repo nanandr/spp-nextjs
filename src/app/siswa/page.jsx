@@ -27,11 +27,30 @@ export default function Siswa() {
       });
   }, []);
 
+  const submitHandler = async (e) => {
+      e.preventDefault()
+      setLoading(true);
+      try{
+          const body = { nama, nis, jk, kelas, angkatan, hp, diskon }
+          await fetch(`/api/siswa`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(body),
+          })
+          setLoading(false)
+          setPopUp(false)
+      }catch(error){
+          console.log(error)
+      }
+
+      return router.push('/siswa')
+  }
+
     return (
         <Index title='Siswa' placeholder='Cari Siswa (NIS, Nama, Tanggal)...'>
             <div className="flex flex-row gap-2 justify-end">
               <UploadSheet/>
-              <InputData/>
+              <InputData submitHandler={submitHandler}/>
             </div>
             <Table title='Siswa' data={dataSiswa} loading={loading}/>
         </Index>
