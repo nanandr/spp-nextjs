@@ -32,5 +32,19 @@ export const GET = async (req) => {
 }
 
 export const POST = async (req) => {
-    return NextResponse.json({ message: 'Hello World', status: "success" });
+    // const { nama, nis, jk, kelas, angkatan, hp, diskon } = req.body
+    // console.log(req.body)
+    const siswa = await prisma.siswa.create({
+        data: {
+            nama: "Rafi I",
+            nis: "21115352",
+            jk: "LakiLaki",
+            kelasId: 1,
+            angkatan: 2,
+            hp: "0812391273",
+            diskonId: 1,
+        },
+    })
+
+    return NextResponse.json({ message: 'Hello World', status: "success", result: siswa });
 }
