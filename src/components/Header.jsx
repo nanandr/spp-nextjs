@@ -37,7 +37,7 @@ function Dropdown(props) {
 
     return (
         <div className='relative'>
-            <button onClick={() => setVisible(!visible)} type="button" className={"bg-white hover:bg-gray-200 text-black flex items-center justify-between px-2 py-2 transition duration-200 rounded-lg group w-40"} aria-controls="sidebar-dropdown" data-collapse-toggle="sidebar-dropdown">
+            <button onClick={() => setVisible(!visible)} type="button" className={"bg-white hover:bg-gray-200 text-black flex items-center justify-between px-2 py-2 transition duration-200 rounded-lg group w-40"} aria-controls="tahun-ajar-dropdown" data-collapse-toggle="tahun-ajar-dropdown">
                 <div className='flex items-center'>
                     <span className="ml-1">{ tahunAjar.find((tahun) => tahun.active)?.tahun }</span>
                 </div>
@@ -45,7 +45,7 @@ function Dropdown(props) {
                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4"/>
                 </svg>
             </button>
-            <ul id="sidebar-dropdown" className={(visible ? "" : "hidden ") + "p-2 space-y-2 absolute w-full bg-gray-200 rounded-lg z-50"}>
+            <ul id="tahun-ajar-dropdown" className={(visible ? "" : "hidden ") + "p-2 space-y-2 absolute w-full bg-gray-200 rounded-lg z-50"}>
                 <li>
                     <button disabled={true} className={"text-black flex items-center w-full p-2 transition duration-200 rounded-lg group"}>Tahun Ajaran</button>
                 </li>

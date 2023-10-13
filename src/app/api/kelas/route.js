@@ -1,21 +1,18 @@
-import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
+import { NextResponse } from "next/server";
 import { dateTimeFormat } from "../../../../utils/format";
+
 const prisma = new PrismaClient;
 
 export const GET = async (req) => {
     try {
-        const siswa = await prisma.siswa.findMany();
+        const kelas = await prisma.kelas.findMany();
         let no = 1;
 
-        const data = siswa.map(item => {
+        const data = kelas.map(item => {
             return {
                 "No": no++,
-                "NIS": item.nis,
-                "Nama": item.nama,
-                "Kelas": `${item.kelasId} RPL A`,
-                "JK": item.jk,
-                "Hp": item.hp,
+                "Nama kelas": item.namaKelas,
                 "Data dibuat": dateTimeFormat(item.createdAt),
                 "Data diubah": dateTimeFormat(item.updatedAt)
             }
@@ -23,15 +20,14 @@ export const GET = async (req) => {
 
         return NextResponse.json({
             message: "Successfully fetched data",
-            siswa: data
+            kelas: data
         });
     }
-    catch (error) {
-        console.log(error)
+    catch(error) {
         return NextResponse.json({ message: "Error fetching data" });
     }
 }
 
 export const POST = async (req) => {
-    return NextResponse.json({ message: 'Hello World', status: "success" });
+
 }
