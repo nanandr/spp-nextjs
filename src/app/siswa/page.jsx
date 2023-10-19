@@ -19,6 +19,7 @@ export default function Siswa() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
+      console.log(data);
       setLoading(false);
     }catch(error){
       console.error(error);
@@ -47,7 +48,7 @@ export default function Siswa() {
       <div className="flex flex-row gap-2 justify-end">
         <UploadSheet/>
         <InputData>
-          <Create submitHandler={submitHandler}/>
+          <Create loading={loading} submitHandler={submitHandler}/>
         </InputData>
       </div>
       <Table title='Siswa' data={dataSiswa} loading={loading}/>

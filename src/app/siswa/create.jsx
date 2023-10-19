@@ -4,10 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Create(props) {
-    const [loading, setLoading] = useState(false);
     const [nama, setNama] = useState('');
     const [nis, setNis] = useState(0);
-    const [jk, setJk] = useState('');
+    const [jk, setJk] = useState('LakiLaki');
     const [kelas, setKelas] = useState(0);
     const [angkatan, setAngkatan] = useState(0);
     const [hp, setHp] = useState(0);
@@ -54,6 +53,7 @@ export default function Create(props) {
             <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="jk">Jenis Kelamin</label>
                 <select 
+                    defaultValue="LakiLaki"
                     className="text-sm transition-all bg-zinc-800 bg-opacity-20 appearance-none border border-gray-600 rounded w-full py-3 px-3 text-gray-300 leading-tight focus:outline-none focus-within:bg-zinc-800 focus:bg-opacity-50 focus:outline focus:outline-zinc-700 focus:outline-offset-2"
                     id='jk'
                     onChange={(e) => setJk(e.target.value)}
@@ -103,7 +103,7 @@ export default function Create(props) {
                     value={diskon}
                     required />
             </div>
-            <button disabled={loading} type='submit' className={"w-full my-5 py-3 px-3 transition font-semibold " + (loading ? "bg-gray-700 font-semibold" : "bg-blue-400 hover:bg-blue-500")}>{loading ? "Loading..." : "Submit"}</button>
+            <button disabled={props.loading} type='submit' className={"w-full my-5 py-3 px-3 transition font-semibold " + (props.loading ? "bg-gray-700 font-semibold" : "bg-blue-400 hover:bg-blue-500")}>{props.loading ? "Loading..." : "Submit"}</button>
         </form>
     )
 } 

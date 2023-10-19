@@ -38,12 +38,12 @@ export const POST = async (req) => {
         
         const siswa = await prisma.siswa.create({
             data: {
-                nama: "Rafi I",
+                nama: "Syahrul Ady Purnama",
                 nis: "21115732",
-                jk: "LakiLaki",
-                kelas: 1,
+                jk: "Perempuan",
+                kelasId: 1,
                 angkatan: 2,
-                hp: "0291031920",
+                hp: "0129309120",
                 diskonId: 1,
             },
         });
