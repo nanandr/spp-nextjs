@@ -5,7 +5,7 @@ import Index from "../index"
 import Table from "@/components/Table"
 import UploadSheet from "@/components/UploadSheet";
 import InputData from "@/components/InputData";
-import Input from "./input";
+import Create from "./create";
 
 export default function Siswa() {
   const [dataSiswa, setDataSiswa] = useState([]);
@@ -47,7 +47,7 @@ export default function Siswa() {
       <div className="flex flex-row gap-2 justify-end">
         <UploadSheet/>
         <InputData>
-          <Input submitHandler={submitHandler}/>
+          <Create submitHandler={submitHandler}/>
         </InputData>
       </div>
       <Table title='Siswa' data={dataSiswa} loading={loading}/>

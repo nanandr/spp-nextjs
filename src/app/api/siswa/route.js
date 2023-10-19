@@ -38,13 +38,13 @@ export const POST = async (req) => {
         
         const siswa = await prisma.siswa.create({
             data: {
-                nama: nama,
-                nis: nis,
-                jk: jk,
-                kelas: kelas,
-                angkatan: angkatan,
-                hp: hp,
-                diskonId: diskon
+                nama: "Rafi I",
+                nis: "21115732",
+                jk: "LakiLaki",
+                kelas: 1,
+                angkatan: 2,
+                hp: "0291031920",
+                diskonId: 1,
             },
         });
 

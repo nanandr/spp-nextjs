@@ -1,8 +1,9 @@
 "use client"
+import Input from "@/components/Input";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function Input(props) {
+export default function Create(props) {
     const [loading, setLoading] = useState(false);
     const [nama, setNama] = useState('');
     const [nis, setNis] = useState(0);
@@ -12,7 +13,6 @@ export default function Input(props) {
     const [hp, setHp] = useState(0);
     const [diskon, setDiskon] = useState(0);
     const router = useRouter();
-    const inputClasses = `text-sm transition-all bg-zinc-800 bg-opacity-20 appearance-none border border-gray-600 rounded w-full py-3 px-3 text-gray-300 leading-tight focus:outline-none focus-within:bg-zinc-800 focus:bg-opacity-50 focus:outline focus:outline-zinc-700 focus:outline-offset-2`
 
     const submit = (e) => {
         e.preventDefault();
@@ -33,9 +33,8 @@ export default function Input(props) {
         <form onSubmit={submit} className="m-3">
             <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="nama">Nama Siswa</label>
-                <input
+                <Input
                     autoComplete='off' 
-                    className={inputClasses} 
                     type="text" 
                     id='nama' 
                     onChange={(e) => setNama(e.target.value)}
@@ -44,9 +43,8 @@ export default function Input(props) {
             </div>
             <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="nis">NIS</label>
-                <input
+                <Input
                     autoComplete='off' 
-                    className={inputClasses} 
                     type="number" 
                     id='nis' 
                     onChange={(e) => setNis(e.target.value)}
@@ -56,7 +54,7 @@ export default function Input(props) {
             <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="jk">Jenis Kelamin</label>
                 <select 
-                    className={inputClasses} 
+                    className="text-sm transition-all bg-zinc-800 bg-opacity-20 appearance-none border border-gray-600 rounded w-full py-3 px-3 text-gray-300 leading-tight focus:outline-none focus-within:bg-zinc-800 focus:bg-opacity-50 focus:outline focus:outline-zinc-700 focus:outline-offset-2"
                     id='jk'
                     onChange={(e) => setJk(e.target.value)}
                     value={jk}
@@ -67,9 +65,8 @@ export default function Input(props) {
             </div>
             <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="kelas">Kelas</label>
-                <input
+                <Input
                     autoComplete='off' 
-                    className={inputClasses} 
                     type="text" 
                     id='kelas' 
                     onChange={(e) => setKelas(e.target.value)}
@@ -78,9 +75,8 @@ export default function Input(props) {
             </div>
             <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="angkatan">Angkatan</label>
-                <input
+                <Input
                     autoComplete='off' 
-                    className={inputClasses} 
                     type="number" 
                     id='angkatan' 
                     onChange={(e) => setAngkatan(e.target.value)}
@@ -89,9 +85,8 @@ export default function Input(props) {
             </div>
             <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="hp">Nomor Telepon</label>
-                <input
+                <Input
                     autoComplete='off' 
-                    className={inputClasses} 
                     type="number" 
                     id='hp' 
                     onChange={(e) => setHp(e.target.value)}
@@ -100,9 +95,8 @@ export default function Input(props) {
             </div>
             <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="diskon">Diskon</label>
-                <input
+                <Input
                     autoComplete='off' 
-                    className={inputClasses} 
                     type="number" 
                     id='diskon' 
                     onChange={(e) => setDiskon(e.target.value)}
