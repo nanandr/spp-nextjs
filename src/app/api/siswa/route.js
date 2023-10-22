@@ -32,25 +32,26 @@ export const GET = async (req) => {
     }
 }
 
-export const POST = async (req) => {
+export const POST = async (req, res) => {
+    const body = await req.json()
     try {
-        const { nama, nis, jk, kelas, angkatan, hp, diskon } = req.body
-        
+        const { nama, nis, jk, kelas, angkatan, hp, diskon } = body
+
         const siswa = await prisma.siswa.create({
             data: {
-                nama: "Syahrul Ady Purnama",
-                nis: "21115732",
-                jk: "Perempuan",
-                kelasId: 1,
-                angkatan: 2,
-                hp: "0129309120",
-                diskonId: 1,
+                nama: nama,
+                nis: nis,
+                jk: jk,
+                kelasId: kelas,
+                angkatan: angkatan,
+                hp: hp,
+                diskonId: diskon,
             },
         });
 
         return NextResponse.json({ message: "Successfully created data", result: siswa });
     }
-    catch(error) {
+    catch (error) {
         return NextResponse.json({ message: error }, { status: 500 });
     }
 }

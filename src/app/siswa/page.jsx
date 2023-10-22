@@ -6,24 +6,28 @@ import Table from "@/components/Table"
 import UploadSheet from "@/components/UploadSheet";
 import InputData from "@/components/InputData";
 import Create from "./create";
+import axios from "axios";
 
 export default function Siswa() {
   const [dataSiswa, setDataSiswa] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const submitHandler = async (data) => {
+    console.log(data)
     setLoading(true);
-    try{
-      await fetch(`http://${window.location.host}/api/siswa`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      console.log(data);
+    await axios.post(`http://${window.location.host}/api/siswa`, data, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(res => {
+      console.log(res)
       setLoading(false);
-    }catch(error){
+    }).
+    catch(error => {
       console.error(error);
-    }
+      setLoading(false);
+    });
   }
 
   useEffect(() => {  

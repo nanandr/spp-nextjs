@@ -11,18 +11,17 @@ export default function Create(props) {
     const [angkatan, setAngkatan] = useState(0);
     const [hp, setHp] = useState(0);
     const [diskon, setDiskon] = useState(0);
-    const router = useRouter();
 
     const submit = (e) => {
         e.preventDefault();
         const data = {
-            nama,
-            nis,
-            jk,
-            kelas,
-            angkatan,
-            hp,
-            diskon
+            nama: nama,
+            nis: nis,
+            jk: jk,
+            kelas: parseInt(kelas),
+            angkatan: parseInt(angkatan),
+            hp: hp,
+            diskon: parseInt(diskon)
         };
 
         props.submitHandler(data);
