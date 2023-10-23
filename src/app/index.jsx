@@ -6,6 +6,12 @@ export default function Index(props) {
     return (
         <div className="flex flex-row bg-black bg-opacity-90 min-h-screen">
             <Sidebar active={props.title}/>
+            {props.notFound ? 
+            <>
+                {props.children}
+            </>
+
+            :
             <div className="p-4 sm:ml-80 text-gray-200 flex flex-col w-full gap-5">
                 <Header title={props.title}/>
                 <Search placeholder={props.placeholder}/>
@@ -13,6 +19,7 @@ export default function Index(props) {
                     {props.children}
                 </main>
             </div>
+            }
         </div>
     )
 }
