@@ -1,30 +1,30 @@
 "use client"
 import Input from "@/components/Input";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 export default function Create(props) {
-    const [nama, setNama] = useState('');
-    const [nis, setNis] = useState(0);
-    const [jk, setJk] = useState('LakiLaki');
-    const [kelas, setKelas] = useState(0);
-    const [angkatan, setAngkatan] = useState(0);
-    const [hp, setHp] = useState(0);
-    const [diskon, setDiskon] = useState(0);
+    const [form, setForm] = useState({
+        nama: '',
+        nis: '',
+        jk: 'LakiLaki',
+        kelas: '',
+        angkatan: '',
+        hp: '',
+        diskon: '',
+    })
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setForm(prevForm => ({
+            ...prevForm,
+            [name]: ['kelas', 'angkatan', 'diskon'].includes(name) ? parseInt(value) : value,
+        }));
+    };    
+    
+    
     const submit = (e) => {
-        e.preventDefault();
-        const data = {
-            nama: nama,
-            nis: nis,
-            jk: jk,
-            kelas: parseInt(kelas),
-            angkatan: parseInt(angkatan),
-            hp: hp,
-            diskon: parseInt(diskon)
-        };
-
-        props.submitHandler(data);
+        e.preventDefault();    
+        props.submitHandler(form);
     }
 
     return (
@@ -35,9 +35,10 @@ export default function Create(props) {
                     autoComplete='off' 
                     type="text" 
                     id='nama' 
-                    onChange={(e) => setNama(e.target.value)}
-                    value={nama}
-                    required />
+                    name='nama' 
+                    onChange={handleChange}
+                    required
+                />
             </div>
             <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="nis">NIS</label>
@@ -45,20 +46,26 @@ export default function Create(props) {
                     autoComplete='off' 
                     type="number" 
                     id='nis' 
-                    onChange={(e) => setNis(e.target.value)}
-                    value={nis}
-                    required />
+                    name='nis' 
+                    onChange={handleChange}
+                    required
+                />
             </div>
             <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="jk">Jenis Kelamin</label>
                 <select 
-                    defaultValue="LakiLaki"
+                    defaultValue={"LakiLaki"}
                     className="text-sm transition-all bg-zinc-800 bg-opacity-20 appearance-none border border-gray-600 rounded w-full py-3 px-3 text-gray-300 leading-tight focus:outline-none focus-within:bg-zinc-800 focus:bg-opacity-50 focus:outline focus:outline-zinc-700 focus:outline-offset-2"
                     id='jk'
-                    onChange={(e) => setJk(e.target.value)}
-                    value={jk}
-                    required>
-                    <option value="Lakilaki">Laki-laki</option>
+                    name='jk'
+                    value={form['jk']}
+                    onChange={(e) => setForm(prev => ({
+                      ...prev,
+                      jk: e.target.value
+                    }))}
+                    required
+                >
+                    <option value="LakiLaki">Laki-laki</option>
                     <option value="Perempuan">Perempuan</option>
                 </select>
             </div>
@@ -68,9 +75,10 @@ export default function Create(props) {
                     autoComplete='off' 
                     type="text" 
                     id='kelas' 
-                    onChange={(e) => setKelas(e.target.value)}
-                    value={kelas}
-                    required />
+                    name='kelas' 
+                    onChange={handleChange}
+                    required
+                />
             </div>
             <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="angkatan">Angkatan</label>
@@ -78,9 +86,10 @@ export default function Create(props) {
                     autoComplete='off' 
                     type="number" 
                     id='angkatan' 
-                    onChange={(e) => setAngkatan(e.target.value)}
-                    value={angkatan}
-                    required />
+                    name='angkatan' 
+                    onChange={handleChange}
+                    required
+                />
             </div>
             <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="hp">Nomor Telepon</label>
@@ -88,9 +97,10 @@ export default function Create(props) {
                     autoComplete='off' 
                     type="number" 
                     id='hp' 
-                    onChange={(e) => setHp(e.target.value)}
-                    value={hp}
-                    required />
+                    name='hp' 
+                    onChange={handleChange}
+                    required
+                />
             </div>
             <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="diskon">Diskon</label>
@@ -98,9 +108,10 @@ export default function Create(props) {
                     autoComplete='off' 
                     type="number" 
                     id='diskon' 
-                    onChange={(e) => setDiskon(e.target.value)}
-                    value={diskon}
-                    required />
+                    name='diskon' 
+                    onChange={handleChange}
+                    required
+                />
             </div>
             <button disabled={props.loading} type='submit' className={"w-full my-5 py-3 px-3 transition font-semibold " + (props.loading ? "bg-gray-700 font-semibold" : "bg-blue-400 hover:bg-blue-500")}>{props.loading ? "Loading..." : "Submit"}</button>
         </form>

@@ -13,7 +13,6 @@ export default function Siswa() {
   const [loading, setLoading] = useState(true);
 
   const submitHandler = async (data) => {
-    console.log(data)
     setLoading(true);
     await axios.post(`http://${window.location.host}/api/siswa`, data, {
       headers: {
