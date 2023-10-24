@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import Index from "../index"
 import Table from "@/components/Table"
 import UploadSheet from "@/components/UploadSheet";
@@ -14,9 +14,8 @@ export default function Siswa() {
   const [error, setError] = useState('');
 
   const fetchData = async () => {
-    setLoading(true);
     await axios.get(`http://${window.location.host}/api/siswa`)
-    .then(res => setDataSiswa(res.data))
+    .then(res => setDataSiswa(res.data.siswa))
     .catch(err => {
       console.error(err);
       setError(err.response.data.message);
@@ -24,21 +23,20 @@ export default function Siswa() {
     .finally(() => setLoading(false));
   }
 
-  const submitHandler = useCallback(
-    async (data) => {
-      setLoading(true);
-      await axios.post(`http://${window.location.host}/api/siswa`, data)
-      .then(res => console.log(res))
-      .catch(error => {
-        console.error(error);
-        setError(error.response.data.message);
-      })
-      .finally(() => setLoading(false));
-    }, []);
+  const submitHandler = async (data) => {
+    setLoading(true);
+    await axios.post(`http://${window.location.host}/api/siswa`, data)
+    .then(res => console.log(res))
+    .catch(error => {
+      console.error(error);
+      setError(error.response.data.message);
+    })
+    .finally(() => fetchData());
+  }
 
   useEffect(() => {
     fetchData();
-  }, [submitHandler]);
+  }, []);
 
   return (
     <Index title='Siswa' placeholder='Cari Siswa (NIS, Nama, Tanggal)...'>
