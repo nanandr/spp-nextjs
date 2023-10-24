@@ -1,21 +1,32 @@
 import { NextResponse } from "next/server";
-import { Prisma } from "@prisma/client";
-import { connectToDatabase } from "../../../../../utils/serverHelper";
+import { PrismaClient } from "@prisma/client";
+import bcrypt from 'bcrypt';
+const prisma = new PrismaClient;
 
 export const POST = async (req) => {
+    const body = await req.json();
     try {
-        const { name, email, password } = await req.json();
-        if(!name || !email || !password) return NextResponse.json({message: "Invalid Data", status: 422});
+        const { nama, nip, alamat, email, password, hp } = body;
+        
+        if(!nama || !nip || !alamat || !email || !password || !hp) {
+            return NextResponse.json({message: "Invalid Data"}, { status: 422 });
+        }
+
         const hashedPassword = bcrypt.hash(password, 10);
-        await connectToDatabase();
-        const newUser = await Prisma.UserScalarFieldEnum({data: {email, name, hashedPassword}});
-        return NextResponse.json({message: 'Successfully registered account', status: 200});
+        const user = await prisma.user.create({
+            data: {
+                nama: nama,
+                nip: nip,
+                alamat: alamat,
+                email: email,
+                password: hashedPassword,
+                hp: hp
+            }
+        });
+        return NextResponse.json({message: 'Successfully registered account', user}, { status: 201 });
     }
     catch (error) {
         console.log(error);
-        throw new Error("Unable to connect to create new user");
-    }
-    finally {
-        Prisma.$disconnect();
+        return NextResponse.json({ message: error }, { status: 500 });
     }
 }

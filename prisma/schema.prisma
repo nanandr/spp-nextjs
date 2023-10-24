@@ -18,7 +18,6 @@ model User {
   email       String
   password    String        @db.VarChar(255)
   hp          String
-  profilePic  String
   role        Role          @default(Staff)
   createdAt   DateTime?     @db.Timestamp(0) @default(now())
   updatedAt   DateTime?     @db.Timestamp(0)
@@ -28,9 +27,20 @@ model User {
   @@map("users")
 }
 
+model TahunAjar {
+  id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
+  tahun       String        @unique
+  createdAt   DateTime?     @db.Timestamp() @default(now())
+  updatedAt   DateTime?     @db.Timestamp()
+  deletedAt   DateTime?     @db.Timestamp()
+
+  kelas       kelasSiswa[]  @relation("TahunToKelas")
+  spp         Spp[]         @relation("TahunToSpp")
+}
+
 model Spp {
   id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
-  tahunAjaran String
+  tahunAjarId BigInt        @db.UnsignedBigInt
   spp         BigInt        @db.UnsignedBigInt
   createdAt   DateTime?     @db.Timestamp(0) @default(now())
   updatedAt   DateTime?     @db.Timestamp(0)
@@ -38,6 +48,8 @@ model Spp {
 
   siswa       SppSiswa[]    @relation("SppToSiswa")
   detail      Detail[]      @relation("SppToDetail")
+
+  tahunAjar   TahunAjar     @relation("TahunToSpp", fields: [tahunAjarId], references: [id])
 
   @@map("spp")
 }
@@ -49,7 +61,7 @@ model Kelas {
   updatedAt   DateTime?     @db.Timestamp(0)
   deletedAt   DateTime?     @db.Timestamp(0)
 
-  siswa       Siswa[]       @relation("KelasToSiswa")
+  siswa       kelasSiswa[]  @relation("KelasToSiswa")
 
   @@map("kelas")
 }
@@ -59,27 +71,50 @@ model Siswa {
   nama        String        @db.VarChar(255)
   nis         String
   jk          JenisKelamin
-  kelasId     BigInt        @db.UnsignedBigInt @map("kelas_id")
   angkatan    BigInt
   hp          String
-  diskonId    BigInt        @db.UnsignedBigInt @map("diskon_id")
+  createdAt   DateTime?     @db.Timestamp() @default(now())
+  updatedAt   DateTime?     @db.Timestamp()
+  deletedAt   DateTime?     @db.Timestamp()
+
+  kelas       kelasSiswa[]  @relation("SiswaToKelas")
+  transaksi   Transaksi[]   @relation("SiswaToTransaksi")
+  spp         SppSiswa[]    @relation("SiswaToSpp")
+  diskon      diskonSiswa[] @relation("SiswaToDiskon")
+
+  @@map("siswa")
+}
+
+model kelasSiswa {
+  id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
+  siswaId     BigInt        @db.UnsignedBigInt
+  kelasId     BigInt        @db.UnsignedBigInt
+  tahunAjarId BigInt        @db.UnsignedBigInt
   createdAt   DateTime?     @db.Timestamp() @default(now())
   updatedAt   DateTime?     @db.Timestamp()
   deletedAt   DateTime?     @db.Timestamp()
 
   kelas       Kelas         @relation("KelasToSiswa", fields: [kelasId], references: [id])
+  siswa       Siswa         @relation("SiswaToKelas", fields: [siswaId], references: [id])
+  tahunAjar   TahunAjar     @relation("TahunToKelas", fields: [tahunAjarId], references: [id])
+}
+
+model diskonSiswa {
+  id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
+  siswaId     BigInt        @db.UnsignedBigInt
+  diskonId    BigInt        @db.UnsignedBigInt
+  createdAt   DateTime?     @db.Timestamp() @default(now())
+  updatedAt   DateTime?     @db.Timestamp()
+  deletedAt   DateTime?     @db.Timestamp()
+
   diskon      Diskon        @relation("DiskonToSiswa", fields: [diskonId], references: [id])
-
-  transaksi   Transaksi[]   @relation("SiswaToTransaksi")
-  spp         SppSiswa[]    @relation("SiswaToSpp")
-
-  @@map("siswa")
+  siswa       Siswa         @relation("SiswaToDiskon", fields: [siswaId], references: [id])
 }
 
 model SppSiswa {
   id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
-  siswaId     BigInt        @db.UnsignedBigInt @map("siswa_id")
-  sppId       BigInt        @db.UnsignedBigInt @map("spp_id")
+  siswaId     BigInt        @db.UnsignedBigInt
+  sppId       BigInt        @db.UnsignedBigInt
   createdAt   DateTime?     @db.Timestamp() @default(now())
   updatedAt   DateTime?     @db.Timestamp()
   deletedAt   DateTime?     @db.Timestamp()
@@ -92,8 +127,8 @@ model SppSiswa {
 
 model Transaksi {
   id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
-  siswaId     BigInt        @db.UnsignedBigInt @map("siswa_id")
-  userId      BigInt        @db.UnsignedBigInt @map("user_id")
+  siswaId     BigInt        @db.UnsignedBigInt
+  userId      BigInt        @db.UnsignedBigInt
   tanggal     DateTime      @db.Date
   totalBayar  BigInt
   bulan       String
@@ -111,8 +146,8 @@ model Transaksi {
 
 model Detail {
   id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
-  transaksiId BigInt        @db.UnsignedBigInt @map("transaksi_id")
-  sppId       BigInt        @db.UnsignedBigInt @map("spp_id")
+  transaksiId BigInt        @db.UnsignedBigInt
+  sppId       BigInt        @db.UnsignedBigInt
   jumlahBayar BigInt
   sisa        BigInt
   keterangan  String
@@ -133,7 +168,7 @@ model Diskon {
   updatedAt   DateTime?     @db.Timestamp(0)
   deletedAt   DateTime?     @db.Timestamp(0)
 
-  siswa       Siswa[]       @relation("DiskonToSiswa")
+  siswa       diskonSiswa[] @relation("DiskonToSiswa")
 
   @@map("diskon")
 }

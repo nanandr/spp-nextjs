@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react"
-import Index from "../index"
-import Table from "@/components/Table"
+import { useEffect, useState } from "react";
+import Index from "../index";
+import Table from "@/components/Table";
 import UploadSheet from "@/components/UploadSheet";
 import InputData from "@/components/InputData";
 import Create from "./create";
@@ -27,9 +27,9 @@ export default function Siswa() {
     setLoading(true);
     await axios.post(`http://${window.location.host}/api/siswa`, data)
     .then(res => console.log(res))
-    .catch(error => {
-      console.error(error);
-      setError(error.response.data.message);
+    .catch(err => {
+      console.error(err);
+      setError(err.response.data.message);
     })
     .finally(() => fetchData());
   }
