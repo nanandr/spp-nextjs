@@ -28,7 +28,7 @@ export const GET = async (req) => {
     }
     catch (error) {
         console.log(error)
-        return NextResponse.json({ message: "Error fetching data" });
+        return NextResponse.json({ message: "Error fetching data" }, { status: 500 });
     }
 }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import Index from "../index"
 import Table from "@/components/Table"
 import UploadSheet from "@/components/UploadSheet";
@@ -11,50 +11,45 @@ import axios from "axios";
 export default function Siswa() {
   const [dataSiswa, setDataSiswa] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const submitHandler = async (data) => {
+  const fetchData = async () => {
     setLoading(true);
-    await axios.post(`http://${window.location.host}/api/siswa`, data, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
+    await axios.get(`http://${window.location.host}/api/siswa`)
+    .then(res => setDataSiswa(res.data))
+    .catch(err => {
+      console.error(err);
+      setError(err.response.data.message);
     })
-    .then(res => {
-      console.log(res)
-      setLoading(false);
-    }).
-    catch(error => {
-      console.error(error);
-      setLoading(false);
-    });
+    .finally(() => setLoading(false));
   }
 
-  useEffect(() => {  
-    fetch(`http://${window.location.host}/api/siswa`)
-      .then(res => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then(data => {
-        setDataSiswa(data.siswa);
-        setLoading(false);
-      })
+  const submitHandler = useCallback(
+    async (data) => {
+      setLoading(true);
+      await axios.post(`http://${window.location.host}/api/siswa`, data)
+      .then(res => console.log(res))
       .catch(error => {
-        console.error('Error fetching data:', error);
-      });
+        console.error(error);
+        setError(error.response.data.message);
+      })
+      .finally(() => setLoading(false));
+    }, []);
+
+  useEffect(() => {
+    fetchData();
   }, [submitHandler]);
 
   return (
     <Index title='Siswa' placeholder='Cari Siswa (NIS, Nama, Tanggal)...'>
+      {/* search onsubmit={searchHandler} */}
       <div className="flex flex-row gap-2 justify-end">
         <UploadSheet/>
         <InputData>
           <Create loading={loading} submitHandler={submitHandler}/>
         </InputData>
       </div>
-      <Table title='Siswa' data={dataSiswa} loading={loading}/>
+      <Table title='Siswa' data={dataSiswa} loading={loading} error={error} />
     </Index>
   )
 }

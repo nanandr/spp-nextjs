@@ -20,7 +20,7 @@ export default function Table(props) {
                 </h1>
             }
             {
-                props.data ?
+                props.data.length > 0 ?
                 <div className="overflow-x-auto w-full scroll pr-0.5">
                     <table className="table table-auto overflow-x-auto text-left text-sm font-light w-max-content lg:w-full">
                         <thead className="border-b font-medium dark:border-neutral-500 sticky top-0 bg-zinc-800">
@@ -46,7 +46,7 @@ export default function Table(props) {
                     </table>
                 </div>
                 :
-                <span>Data Tidak Ada</span>
+                <span>{ props.error }</span>
             }
         </div>
     )
