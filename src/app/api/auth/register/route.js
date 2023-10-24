@@ -12,7 +12,7 @@ export const POST = async (req) => {
             return NextResponse.json({message: "Invalid Data"}, { status: 422 });
         }
 
-        const hashedPassword = bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
         const user = await prisma.user.create({
             data: {
                 nama: nama,
@@ -23,7 +23,7 @@ export const POST = async (req) => {
                 hp: hp
             }
         });
-        return NextResponse.json({message: 'Successfully registered account', user}, { status: 201 });
+        return NextResponse.json({message: 'Successfully registered account'}, { status: 201 });
     }
     catch (error) {
         console.log(error);

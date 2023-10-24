@@ -7,17 +7,15 @@ export default function Create(props) {
         nama: '',
         nis: '',
         jk: 'LakiLaki',
-        kelas: '',
         angkatan: '',
         hp: '',
-        diskon: '',
     })
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setForm(prevForm => ({
             ...prevForm,
-            [name]: ['kelas', 'angkatan', 'diskon'].includes(name) ? parseInt(value) : value,
+            [name]: ['angkatan'].includes(name) ? parseInt(value) : value,
         }));
     };    
     
@@ -69,7 +67,7 @@ export default function Create(props) {
                     <option value="Perempuan">Perempuan</option>
                 </select>
             </div>
-            <div className="my-3">
+            {/* <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="kelas">Kelas</label>
                 <Input
                     autoComplete='off' 
@@ -79,7 +77,7 @@ export default function Create(props) {
                     onChange={handleChange}
                     required
                 />
-            </div>
+            </div> */}
             <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="angkatan">Angkatan</label>
                 <Input
@@ -102,7 +100,7 @@ export default function Create(props) {
                     required
                 />
             </div>
-            <div className="my-3">
+            {/* <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="diskon">Diskon</label>
                 <Input
                     autoComplete='off' 
@@ -112,7 +110,7 @@ export default function Create(props) {
                     onChange={handleChange}
                     required
                 />
-            </div>
+            </div> */}
             <button disabled={props.loading} type='submit' className={"w-full my-5 py-3 px-3 transition font-semibold " + (props.loading ? "bg-gray-700 font-semibold" : "bg-blue-400 hover:bg-blue-500")}>{props.loading ? "Loading..." : "Submit"}</button>
         </form>
     )
