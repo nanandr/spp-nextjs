@@ -9,7 +9,7 @@ export const POST = async (req) => {
         const { nama, nip, alamat, email, password, hp } = body;
         
         if(!nama || !nip || !alamat || !email || !password || !hp) {
-            return NextResponse.json({message: "Invalid Data"}, { status: 422 });
+            return NextResponse.json({ message: "Invalid Data" }, { status: 422 });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -23,7 +23,7 @@ export const POST = async (req) => {
                 hp: hp
             }
         });
-        return NextResponse.json({message: 'Successfully registered account'}, { status: 201 });
+        return NextResponse.json({ message: 'Successfully registered account' }, { status: 201 });
     }
     catch (error) {
         console.log(error);

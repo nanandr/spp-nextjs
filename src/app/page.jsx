@@ -6,6 +6,7 @@ import logo from '../../assets/image/logo90x90.png';
 import { useState } from 'react';
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useSession } from 'next-auth/react';
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
@@ -15,6 +16,9 @@ export default function Home() {
     password: ''
   });
   const router = useRouter();
+
+  const { data: session } = useSession();
+  console.log('Client Session', session);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -66,7 +70,7 @@ export default function Home() {
               <label className='block text-sm font-light' htmlFor="Password">Password</label>
               <p className='text-gray-500 cursor-pointer'>Lupa Password?</p>
             </div>
-            <input onChange={handleChange} autoComplete='off' className='text-sm transition-all bg-zinc-800 bg-opacity-20 appearance-none border border-gray-   600 rounded w-full py-3 px-3 text-gray-300 leading-tight focus:outline-none focus-within:bg-zinc-800 focus:bg-opacity-50 focus:outline focus:outline-zinc-700 focus:outline-offset-2' type="password" id='password' name='password'/>
+            <input onChange={handleChange} autoComplete='off' className='text-sm transition-all bg-zinc-800 bg-opacity-20 appearance-none border border-gray-600 rounded w-full py-3 px-3 text-gray-300 leading-tight focus:outline-none focus-within:bg-zinc-800 focus:bg-opacity-50 focus:outline focus:outline-zinc-700 focus:outline-offset-2' type="password" id='password' name='password'/>
           </div>
           <button disabled={loading} type='submit' className={"my-5 py-3 px-3 transition font-semibold " + (loading ? "bg-gray-700 font-semibold" : "bg-blue-400 hover:bg-blue-500")}>{loading ? "Loading..." : "Login"}</button>
         </form>
