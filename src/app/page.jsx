@@ -3,10 +3,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import logo from '../../assets/image/logo90x90.png';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from "next/navigation";
-import axios from "axios";
-import { useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
@@ -15,10 +14,9 @@ export default function Home() {
     email: '',
     password: ''
   });
-  const router = useRouter();
 
-  const { data: session } = useSession();
-  console.log('Client Session', session);
+  const router = useRouter();
+  const { status } = useSession();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,17 +31,32 @@ export default function Home() {
     setLoading(true);
     console.log(form);
 
-    await axios.post(`http://${window.location.host}/api/auth/login`, form)
-    .then(res => {
-      // return router.push('/dashboard');
-      console.log(res)
-    })
-    .catch(err => {
-      console.error(err);
-      setError(err.response.data.message);
+    try {
+      const response = await signIn('credentials', {
+        email: form.email,
+        password: form.password
+      });
+
+      if(!response || response.ok !== true) {
+        setLoading(false);
+        setError("Invalid Credentials");
+      }
+      else {
+        router.refresh();
+      }
+    }
+    catch(err) {
       setLoading(false);
-    });
+      console.log(err);
+    }
   }
+
+  useEffect(() => {
+    if(status === 'authenticated') {
+      router.refresh();
+      router.push('dashboard');
+    }
+  }, [status]);
 
   return (
     <main className="flex justify-center bg-black bg-opacity-90 min-h-screen">

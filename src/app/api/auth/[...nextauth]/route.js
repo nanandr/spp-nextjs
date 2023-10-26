@@ -1,10 +1,7 @@
 import NextAuth from "next-auth";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../../../../../utils/prisma";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from 'bcrypt';
-
-const prisma = new PrismaClient();
 
 export const authOptions = {
     providers: [
@@ -16,10 +13,10 @@ export const authOptions = {
             },
             async authorize(credentials) {
                 if(!credentials || !credentials.email || !credentials.password) {
+                    console.log("invalid credentials");
                     return null;
                 }
                 try {
-                    await prisma.$connect();
                     const user = await prisma.user.findFirst({
                         where: { email: credentials.email },
                     });
@@ -29,29 +26,51 @@ export const authOptions = {
                         user.password
                     )
                     
-                    console.log(`password is ${ isPasswordCorrect ? 'true' : 'false' }`);
-
                     if(isPasswordCorrect) {
-                        return {
-                            id: user.id,
+                        const data = {
+                            id: parseInt(user.id),
                             nama: user.nama,
+                            nip: user.nip,
+                            alamat: user.alamat,
                             email: user.email,
-                            token: 'exampletoken'
-                        };
+                            hp: user.hp,
+                            role: user.role
+                        }
+                        console.log(`successfully logged in`, data);
+
+                        return data;
                     }
+
+                    console.log("invalid password");
     
                     return null;
                 }
                 catch(err) {
                     console.error(err);
                 }
-                finally {
-                    await prisma.$disconnect();
-                }
             }
         })
     ],
-    adapter: PrismaAdapter(prisma),
+    pages: {
+        signIn: '/',
+        signOut: 'auth/signout'
+    },
+    secret: process.env.NEXTAUTH_SECRET,
+    callbacks: {
+        session: async ({ session }) => {
+            const user = await prisma.user.findFirst({
+                where: { email: session.user.email },
+            });
+
+            return {
+                user: {
+                    nama: user.nama,
+                    email: user.email,
+                },
+                expires: session.expires
+            }
+        },
+    }
 }
 
 const handler = NextAuth(authOptions);

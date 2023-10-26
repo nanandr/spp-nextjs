@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import logo from '../../assets/image/logo90x90.png';
-import Image from 'next/image';
+import HeaderProfile from './HeaderProfile';
 
 export default function Header(props) {
     const dataTahun = [
@@ -17,7 +16,7 @@ export default function Header(props) {
             <h1 className="text-4xl font-bold">{props.title}</h1>
             <div className='flex flex-row items-center gap-2'>
                 <Dropdown links={dataTahun}/>
-                <Profile name="Admin Something"/>
+                <HeaderProfile/>
             </div>
         </div>
     )
@@ -56,22 +55,5 @@ function Dropdown(props) {
                 ))}
             </ul>
          </div>
-    )
-}
-
-function Profile(props) {
-    return (
-        <div className='p-2 rounded-lg text-right transition-transform -translate-x-full sm:translate-x-0 hidden md:block hover:bg-zinc-700'>
-            <div className='flex flex-row items-center gap-3'>
-                <span className='max-w-xs truncate cursor-default'>{props.name}</span>
-                <Image 
-                    src={logo} 
-                    alt="Logo SDQ Bina Mulya" 
-                    width={48}
-                    height={48}
-                    className='object-contain select-none'
-                />
-            </div>
-        </div>
     )
 }

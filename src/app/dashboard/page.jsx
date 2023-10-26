@@ -1,7 +1,12 @@
 import Index from "../index";
 import Table from "@/components/Table";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/route";
 
-export default function Dashboard() {
+export default async function Dashboard() {
+    const session = await getServerSession(authOptions);
+    console.log(session);  
+
     return (
         <Index title='Dashboard' placeholder='Pencarian cepat...'>
             <div className="w-full grid grid-cols-2 xl:grid-cols-3 min-[2560px]:grid-cols-5 gap-2 md:gap-3">
@@ -11,7 +16,7 @@ export default function Dashboard() {
                 <Card content="9" title="Jumlah Kelas" background='bg-blue-400'/>
                 <Card content="Rp. 200.000.000,-" title="Total Saldo" background='bg-green-600'/>
             </div>
-            <Table title="Transaksi" />
+            <Table title="Transaksi" data={[]} />
         </Index>
     )
 }
