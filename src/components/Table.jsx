@@ -46,7 +46,7 @@ export default function Table(props) {
                     </table>
                 </div>
                 :
-                <span>{ props.error }</span>
+                <span>{ props.error ? props.error : 'Data Tidak Ada' }</span>
             }
         </div>
     )

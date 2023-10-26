@@ -5,13 +5,22 @@ const prisma = new PrismaClient;
 
 export const GET = async (req) => {
     try {
-        const kelas = await prisma.kelas.findMany();
+        const petugas = await prisma.user.findMany({
+            where: {
+                role: 'Staff'
+            }
+        });
+
         let no = 1;
 
-        const data = kelas.map(item => {
+        const data = petugas.map(item => {
             return {
                 "No": no++,
-                "Nama kelas": item.namaKelas,
+                "NIP": item.nip,
+                "Nama Petugas": item.nama,
+                "Alamat": item.alamat,
+                "Email": item.email,
+                "Hp": item.hp,
                 "Data dibuat": dateTimeFormat(item.createdAt),
                 "Data diubah": dateTimeFormat(item.updatedAt)
             }
@@ -19,7 +28,7 @@ export const GET = async (req) => {
 
         return NextResponse.json({
             message: "Successfully fetched data",
-            kelas: data
+            petugas: data
         });
     }
     catch(error) {
