@@ -1,8 +1,23 @@
+"use client";
+
 import Header from "@/components/Header";
 import Search from "@/components/Search";
 import Sidebar from "@/components/Sidebar";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
-export default function Index(props) {
+export default function Index(props) {  
+    const router = useRouter();
+    const { status } = useSession();
+    
+    // useEffect(() => {
+    //   if(status !== 'authenticated') {
+    //     router.refresh();
+    //     router.push('/');
+    //   }
+    // }, [status]);
+
     return (
         <div className="flex flex-row bg-black bg-opacity-90 min-h-screen">
             <Sidebar active={props.title}/>

@@ -17,7 +17,7 @@ export default function Petugas() {
     }
     return (
         <Index title='Petugas' placeholder='Cari Petugas (NIP, Nama)...'>
-            <Table title='Petugas' />
+            <Table title='Petugas' data={[]}/>
         </Index>
     )
 }

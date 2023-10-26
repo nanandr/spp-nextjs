@@ -17,7 +17,7 @@ export default function Pembayaran() {
     }
     return (
         <Index title='Pembayaran' placeholder='Cari Pembayaran (NIS, Nama, Tanggal)...'>
-            <Table title='Pembayaran' />
+            <Table title='Pembayaran' data={[]}/>
         </Index>
     )
 }
