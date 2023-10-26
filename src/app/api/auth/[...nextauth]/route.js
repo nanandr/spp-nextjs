@@ -64,8 +64,10 @@ export const authOptions = {
 
             return {
                 user: {
+                    id: parseInt(user.id),
                     nama: user.nama,
                     email: user.email,
+                    role: user.role
                 },
                 expires: session.expires
             }

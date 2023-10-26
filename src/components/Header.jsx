@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import HeaderProfile from './HeaderProfile';
+import { signOut } from 'next-auth/react';
 
 export default function Header(props) {
     const dataTahun = [
@@ -17,6 +18,7 @@ export default function Header(props) {
             <div className='flex flex-row items-center gap-2'>
                 <Dropdown links={dataTahun}/>
                 <HeaderProfile/>
+                <button type='button' onClick={() => signOut()}>Logout</button>
             </div>
         </div>
     )
