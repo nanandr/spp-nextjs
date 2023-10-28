@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from 'next-auth/react';
 import axios from 'axios';
+import { getUrl } from '../../utils/format';
 
 export default function Home() {
   const [view, setView] = useState('Login');
@@ -64,7 +65,7 @@ function Form(props) {
     event.preventDefault();
     setLoading(true);
 
-    await axios.post(`http://${window.location.host}/api/auth/register`, form)
+    await axios.post(getUrl(`/api/auth/register`), form)
     .then(async (res) => {
       console.log(res);
       await signIn('credentials', {
@@ -78,8 +79,7 @@ function Form(props) {
       setLoading(false);
       console.log(err);
       setError(err.response.data.message);
-    })
-    // .finally(() => fetchData());
+    });
   }
 
   useEffect(() => {

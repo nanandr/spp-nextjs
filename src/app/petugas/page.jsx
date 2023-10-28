@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import Index from "../index"
 import Table from "@/components/Table"
 import axios from "axios";
+import { getUrl } from "../../../utils/format";
 
 export default function Petugas() {
   const [dataPetugas, setDataPetugas] = useState([])
@@ -11,7 +12,7 @@ export default function Petugas() {
   const [error, setError] = useState('');
 
   const fetchData = async () => {
-    await axios.get(`http://${window.location.host}/api/petugas`)
+    await axios.get(getUrl('/api/petugas'))
     .then(res => setDataPetugas(res.data.petugas))
     .catch(err => {
       console.error(err);
@@ -22,7 +23,7 @@ export default function Petugas() {
 
   const submitHandler = async (data) => {
     setLoading(true);
-    await axios.post(`http://${window.location.host}/api/petugas`, data)
+    await axios.post(getUrl('/api/petugas'), data)
     .then(res => console.log(res))
     .catch(err => {
       console.error(err);

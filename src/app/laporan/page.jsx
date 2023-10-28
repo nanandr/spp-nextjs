@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import Index from "../index"
 import Table from "@/components/Table"
 import axios from "axios";
+import { getUrl } from "../../../utils/geUrl";
 
 export default function Laporan() {
   const [dataLaporan, setDataLaporan] = useState([]);
@@ -11,7 +12,7 @@ export default function Laporan() {
   const [error, setError] = useState('');
 
   const fetchData = async () => {
-    await axios.get(`http://${window.location.host}/api/laporan`)
+    await axios.get(getUrl('/api/laporan'))
     .then(res => setDataLaporan(res.data.laporan))
     .catch(err => {
       console.error(err);
@@ -22,7 +23,7 @@ export default function Laporan() {
 
   const submitHandler = async (data) => {
     setLoading(true);
-    await axios.post(`http://${window.location.host}/api/laporan`, data)
+    await axios.post(getUrl('/api/laporan'), data)
     .then(res => console.log(res))
     .catch(err => {
       console.error(err);
