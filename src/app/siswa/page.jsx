@@ -7,21 +7,42 @@ import UploadSheet from "@/components/UploadSheet";
 import InputData from "@/components/InputData";
 import Create from "./create";
 import axios from "axios";
-import { getUrl } from "../../../utils/format";
+import { getUrl } from "../../../utils/getUrl";
+import { siswaFormat, dateTimeFormat } from "../../../utils/format";
 
 export default function Siswa() {
   const [dataSiswa, setDataSiswa] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
+  
   const fetchData = async () => {
     await axios.get(getUrl('/api/siswa'))
-    .then(res => setDataSiswa(res.data.siswa))
+    .then(res => {
+      siswaFormat(res.data.data)
+      .then(data => {
+        setDataSiswa(data)
+      })
+      .catch(err => {
+        console.log(err)
+        setError(err.message)
+      })
+    })
     .catch(err => {
       console.error(err);
-      setError(err.response.data.message);
+      setError(err.message);
     })
     .finally(() => setLoading(false));
+    // Alternate Code
+    // try {
+    //   const response = await axios.get(getUrl('/api/siswa'));
+    //   const formattedData = await siswaFormat(response.data.data);
+    //   setDataSiswa(formattedData);
+    // } catch (error) {
+    //   console.error(error);
+    //   setError(error.message);
+    // } finally {
+    //   setLoading(false);
+    // }
   }
 
   const submitHandler = async (data) => {

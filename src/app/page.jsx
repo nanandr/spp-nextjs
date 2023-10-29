@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from 'next-auth/react';
 import axios from 'axios';
-import { getUrl } from '../../utils/format';
+import { getUrl } from '../../utils/getUrl';
 
 export default function Home() {
   const [view, setView] = useState('Login');

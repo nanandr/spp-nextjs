@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Index from "../index"
 import Table from "@/components/Table"
 import axios from "axios";
-import { getUrl } from "../../../utils/geUrl";
+import { getUrl } from "../../../utils/getUrl";
 
 export default function Laporan() {
   const [dataLaporan, setDataLaporan] = useState([]);

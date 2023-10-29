@@ -12,6 +12,19 @@ export const dateTimeFormat = (dateTime) => {
     return null;
 }
 
-export const getUrl = (path) => {
-    return `${window.location.protocol}//${window.location.host}${path}`;
+export const siswaFormat = async (data) => {
+    let no = 1;
+    const siswa = data.map(item => {
+        return {
+            "No": no++,
+            "NIS": item.nis,
+            "Nama": item.nama,
+            "Kelas": `1 RPL A`,
+            "JK": item.jk,
+            "Hp": item.hp,
+            "Data dibuat": dateTimeFormat(item.createdAt),
+            "Data diubah": dateTimeFormat(item.updatedAt)
+        }
+    })
+    return siswa
 }

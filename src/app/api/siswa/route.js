@@ -6,29 +6,34 @@ const prisma = new PrismaClient;
 export const GET = async (req) => {
     try {
         const siswa = await prisma.siswa.findMany();
-        let no = 1;
 
         const data = siswa.map(item => {
             return {
-                "No": no++,
-                "NIS": item.nis,
-                "Nama": item.nama,
-                "Kelas": `1 RPL A`,
-                "JK": item.jk,
-                "Hp": item.hp,
-                "Data dibuat": dateTimeFormat(item.createdAt),
-                "Data diubah": dateTimeFormat(item.updatedAt)
+                id: parseInt(item.id),
+                nis: item.nis,
+                nama: item.nama,
+                kelas: `1 RPL A`,
+                jk: item.jk,
+                angkatan: parseInt(item.angkatan),
+                hp: item.hp,
+                createdAt: dateTimeFormat(item.createdAt),
+                updatedAt: dateTimeFormat(item.updatedAt)
             }
         });
 
         return NextResponse.json({
+            status: 1,
             message: "Successfully fetched data",
-            siswa: data
+            data: data
         });
     }
     catch (error) {
         console.log(error)
-        return NextResponse.json({ message: "Error fetching data" }, { status: 500 });
+        return NextResponse.json({ 
+            status: 0,
+            message: "Error fetching data",
+            data: [],
+        }, { status: 500 });
     }
 }
 
@@ -47,9 +52,15 @@ export const POST = async (req, res) => {
             },
         });
 
-        return NextResponse.json({ message: "Successfully created data"});
+        return NextResponse.json({ 
+            status: 1,
+            message: "Successfully created data"
+        });
     }
     catch (error) {
-        return NextResponse.json({ message: error }, { status: 500 });
+        return NextResponse.json({
+            status: 0,
+            message: error
+        }, { status: 500 });
     }
 }
