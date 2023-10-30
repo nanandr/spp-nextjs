@@ -14,46 +14,29 @@ export default function Siswa() {
   const [dataSiswa, setDataSiswa] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  
+
   const fetchData = async () => {
-    await axios.get(getUrl('/api/siswa'))
-    .then(res => {
-      siswaFormat(res.data.data)
-      .then(data => {
-        setDataSiswa(data)
-      })
-      .catch(err => {
-        console.log(err)
-        setError(err.message)
-      })
-    })
-    .catch(err => {
+    try {
+      const res = await axios.get(getUrl('/api/siswa'));
+      const formattedData = await siswaFormat(res.data.siswa);
+      setDataSiswa(formattedData);
+    } catch (err) {
       console.error(err);
       setError(err.message);
-    })
-    .finally(() => setLoading(false));
-    // Alternate Code
-    // try {
-    //   const response = await axios.get(getUrl('/api/siswa'));
-    //   const formattedData = await siswaFormat(response.data.data);
-    //   setDataSiswa(formattedData);
-    // } catch (error) {
-    //   console.error(error);
-    //   setError(error.message);
-    // } finally {
-    //   setLoading(false);
-    // }
+    } finally {
+      setLoading(false);
+    }
   }
 
   const submitHandler = async (data) => {
     setLoading(true);
     await axios.post(getUrl('/api/siswa'), data)
-    .then(res => console.log(res))
-    .catch(err => {
-      console.error(err);
-      setError(err.response.data.message);
-    })
-    .finally(() => fetchData());
+      .then(res => console.log(res))
+      .catch(err => {
+        console.error(err);
+        setError(err.response.data.message);
+      })
+      .finally(() => fetchData());
   }
 
   useEffect(() => {
@@ -64,9 +47,9 @@ export default function Siswa() {
     <Index title='Siswa' placeholder='Cari Siswa (NIS, Nama, Tanggal)...'>
       {/* search onsubmit={searchHandler} */}
       <div className="flex flex-row gap-2 justify-end">
-        <UploadSheet/>
+        <UploadSheet />
         <InputData>
-          <Create loading={loading} submitHandler={submitHandler}/>
+          <Create loading={loading} submitHandler={submitHandler} />
         </InputData>
       </div>
       <Table title='Siswa' data={dataSiswa} loading={loading} error={error} />
