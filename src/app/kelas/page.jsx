@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react"
-import Index from "../index"
-import Table from "@/components/Table"
+import { useEffect, useState } from "react";
+import Index from "../index";
+import Table from "@/components/Table";
+import InputData from "@/components/InputData";
+import Create from "./create";
 import axios from "axios";
 import { getUrl } from "../../../utils/getUrl";
 
@@ -38,6 +40,11 @@ export default function Kelas() {
 
   return (
     <Index title='Kelas' placeholder='Cari Kelas...'>
+        <div className="flex flex-row gap-2 justify-end">
+          <InputData title="Input Data Kelas" form="Form Tambah Data Kelas">
+            <Create loading={loading} submitHandler={submitHandler}/>
+          </InputData>
+        </div>
         <Table title='Kelas' data={dataKelas} loading={loading} error={error}/>
     </Index>
   )

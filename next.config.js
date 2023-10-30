@@ -1,4 +1,3 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
     serverActions: true,
@@ -14,6 +13,6 @@ const nextConfig = {
     }
     return config;
   }
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

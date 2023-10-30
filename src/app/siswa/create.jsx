@@ -9,7 +9,7 @@ export default function Create(props) {
         jk: 'LakiLaki',
         angkatan: '',
         hp: '',
-    })
+    });
 
     const handleChange = (e) => {
         const { name, value } = e.target;

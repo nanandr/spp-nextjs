@@ -1,3 +1,5 @@
+import { Delete, Edit } from "../../public/svg";
+
 export default function Table(props) {
     return(
         props.loading ?   
@@ -30,6 +32,7 @@ export default function Table(props) {
                                         {key}
                                     </th>
                                 ))}
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody className="overflow-y-scroll"> {/* Adjust max-h-72 as needed */}
@@ -40,6 +43,10 @@ export default function Table(props) {
                                             {key === 'Status' ? (<p className={(row[key] ? 'bg-green-700' : 'bg-red-700') + " p-1 whitespace-normal text-center rounded"}>{row[key] ? 'Lunas' : 'Belum Lunas'}</p>) : row[key]}
                                         </td>
                                     ))}
+                                    <td className="flex flex-row flex-wrap gap-2 py-3">
+                                        <button className="w-9 h-9 bg-orange-500 p-2 rounded-md"><Edit/></button>
+                                        <button className="w-9 h-9 bg-red-500 p-2 rounded-md"><Delete/></button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>

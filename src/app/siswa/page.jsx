@@ -16,33 +16,16 @@ export default function Siswa() {
   const [error, setError] = useState('');
   
   const fetchData = async () => {
-    await axios.get(getUrl('/api/siswa'))
-    .then(res => {
-      siswaFormat(res.data.data)
-      .then(data => {
-        setDataSiswa(data)
-      })
-      .catch(err => {
-        console.log(err)
-        setError(err.message)
-      })
-    })
-    .catch(err => {
+    try {
+      const res = await axios.get(getUrl('/api/siswa'));
+      const data = await siswaFormat(res.data.data);
+      setDataSiswa(data);
+    } catch (err) {
       console.error(err);
       setError(err.message);
-    })
-    .finally(() => setLoading(false));
-    // Alternate Code
-    // try {
-    //   const response = await axios.get(getUrl('/api/siswa'));
-    //   const formattedData = await siswaFormat(response.data.data);
-    //   setDataSiswa(formattedData);
-    // } catch (error) {
-    //   console.error(error);
-    //   setError(error.message);
-    // } finally {
-    //   setLoading(false);
-    // }
+    } finally {
+      setLoading(false);
+    }
   }
 
   const submitHandler = async (data) => {
@@ -61,11 +44,11 @@ export default function Siswa() {
   }, []);
 
   return (
-    <Index title='Siswa' placeholder='Cari Siswa (NIS, Nama, Tanggal)...'>
+    <Index title='Siswa' placeholder='Cari Siswa (NIS, Nama)...'>
       {/* search onsubmit={searchHandler} */}
       <div className="flex flex-row gap-2 justify-end">
         <UploadSheet/>
-        <InputData>
+        <InputData title="Input Data Siswa" form="Form Tambah Data Siswa">
           <Create loading={loading} submitHandler={submitHandler}/>
         </InputData>
       </div>

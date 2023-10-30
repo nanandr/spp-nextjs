@@ -25,6 +25,6 @@ export const siswaFormat = async (data) => {
             "Data dibuat": dateTimeFormat(item.createdAt),
             "Data diubah": dateTimeFormat(item.updatedAt)
         }
-    })
-    return siswa
+    });
+    return siswa;
 }

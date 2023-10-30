@@ -27,6 +27,20 @@ export const GET = async (req) => {
     }
 }
 
-// export const POST = async (req) => {
+export const POST = async (req) => {
+    const body = await req.json();
+    try {
+        const { namaKelas } = body;
 
-// }
+        const kelas = await prisma.kelas.create({
+            data: {
+                namaKelas: namaKelas,
+            },
+        });
+
+        return NextResponse.json({ message: "Successfully created data" }, { status: 201 });
+    }
+    catch (error) {
+        return NextResponse.json({ message: error }, { status: 500 });
+    }
+}
