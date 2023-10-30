@@ -14,12 +14,12 @@ export default function Siswa() {
   const [dataSiswa, setDataSiswa] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  
+
   const fetchData = async () => {
     try {
       const res = await axios.get(getUrl('/api/siswa'));
-      const data = await siswaFormat(res.data.data);
-      setDataSiswa(data);
+      const formattedData = await siswaFormat(res.data.siswa);
+      setDataSiswa(formattedData);
     } catch (err) {
       console.error(err);
       setError(err.message);
@@ -31,12 +31,12 @@ export default function Siswa() {
   const submitHandler = async (data) => {
     setLoading(true);
     await axios.post(getUrl('/api/siswa'), data)
-    .then(res => console.log(res))
-    .catch(err => {
-      console.error(err);
-      setError(err.response.data.message);
-    })
-    .finally(() => fetchData());
+      .then(res => console.log(res))
+      .catch(err => {
+        console.error(err);
+        setError(err.response.data.message);
+      })
+      .finally(() => fetchData());
   }
 
   useEffect(() => {

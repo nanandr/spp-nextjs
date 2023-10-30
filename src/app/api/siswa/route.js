@@ -21,17 +21,11 @@ export const GET = async (req) => {
             }
         });
 
-        return NextResponse.json({
-            message: "Successfully fetched data",
-            data: data
-        });
+        return NextResponse.json({ message: "Successfully fetched data", siswa: data });
     }
     catch (error) {
         console.log(error)
-        return NextResponse.json({ 
-            message: "Error fetching data",
-            data: [],
-        }, { status: 500 });
+        return NextResponse.json({ message: "Error fetching data" }, { status: 500 });
     }
 }
 

@@ -11,18 +11,17 @@ export const GET = async (req) => {
             }
         });
 
-        let no = 1;
-
         const data = petugas.map(item => {
             return {
-                "No": no++,
-                "NIP": item.nip,
-                "Nama Petugas": item.nama,
-                "Alamat": item.alamat,
-                "Email": item.email,
-                "Hp": item.hp,
-                "Data dibuat": dateTimeFormat(item.createdAt),
-                "Data diubah": dateTimeFormat(item.updatedAt)
+                id: parseInt(item.id),
+                nip: item.nip,
+                nama: item.nama,
+                alamat: item.alamat,
+                email: item.email,
+                hp: item.hp,
+                role: item.role,
+                createdAt: dateTimeFormat(item.createdAt),
+                updatedAt: dateTimeFormat(item.updatedAt)
             }
         });
 
