@@ -34,6 +34,21 @@ export default function Kelas() {
     .finally(() => fetchData());
   }
 
+  const deleteHandler = async (id) => {
+    setLoading(true);
+    await axios.delete(getUrl(`/api/kelas/${id}`))
+    .then(res => console.log(res))
+    .catch(err => {
+      console.error(err);
+      setError(err.response.data.message);
+    })
+    .finally(() => fetchData());
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -45,7 +60,7 @@ export default function Kelas() {
             <Create loading={loading} submitHandler={submitHandler}/>
           </InputData>
         </div>
-        <Table title='Kelas' data={dataKelas} loading={loading} error={error}/>
+        <Table title='Kelas' data={dataKelas} loading={loading} error={error} deleteHandler={deleteHandler}/>
     </Index>
   )
 }

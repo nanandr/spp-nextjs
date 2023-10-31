@@ -15,6 +15,7 @@ model User {
   nama        String        @db.VarChar(255)
   nip         String
   alamat      String        @db.Text
+  jk          JenisKelamin
   email       String
   password    String        @db.VarChar(255)
   hp          String
@@ -70,6 +71,7 @@ model Siswa {
   id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
   nama        String        @db.VarChar(255)
   nis         String
+  alamat      String        @db.Text
   jk          JenisKelamin
   angkatan    BigInt
   hp          String

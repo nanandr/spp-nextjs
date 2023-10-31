@@ -39,6 +39,28 @@ export default function Siswa() {
       .finally(() => fetchData());
   }
 
+  const editHandler = {
+    form: "Edit Data Siswa",
+    submitHandler: async (data) => {
+      setLoading(true);
+      await axios.put(getUrl(`api/siswa/${data.id}`), data)
+        .then(res => console.log(res))
+        .catch(err => console.error(err))
+        .finally(() => fetchData());
+    } 
+  }
+
+  const deleteHandler = async (id) => {
+    setLoading(true);
+    await axios.delete(getUrl(`/api/siswa/${id}`))
+    .then(res => console.log(res))
+    .catch(err => {
+      console.error(err);
+      setError(err.response.data.message);
+    })
+    .finally(() => fetchData());
+  }
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -52,7 +74,7 @@ export default function Siswa() {
           <Create loading={loading} submitHandler={submitHandler}/>
         </InputData>
       </div>
-      <Table title='Siswa' data={dataSiswa} loading={loading} error={error} />
+      <Table title='Siswa' data={dataSiswa} loading={loading} error={error} editHandler={editHandler} deleteHandler={deleteHandler}/>
     </Index>
   )
 }

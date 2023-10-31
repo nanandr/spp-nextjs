@@ -17,6 +17,7 @@ export const siswaFormat = async (data) => {
     const siswa = data.map(item => {
         return {
             "No": no++,
+            "id": item.id,
             "NIS": item.nis,
             "Nama": item.nama,
             "Kelas": `1 RPL A`,

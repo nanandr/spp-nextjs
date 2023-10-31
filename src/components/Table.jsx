@@ -1,6 +1,16 @@
+"use client";
+
+import { useState } from "react";
 import { Delete, Edit } from "../../public/svg";
+import PopUp from "./PopUp";
 
 export default function Table(props) {
+    const [showPopUp, setPopUp] = useState(false);
+    
+    const handlePopUp = () => {
+        setPopUp(false);
+    }
+
     return(
         props.loading ?   
         <div className="inline-block py-2 px-2 animate-pulse space-y-4">
@@ -28,6 +38,7 @@ export default function Table(props) {
                         <thead className="border-b font-medium dark:border-neutral-500 sticky top-0 bg-zinc-800">
                             <tr>
                                 {Object.keys(props.data[0]).map((key) => (
+                                    key !== 'id' &&
                                     <th key={key} scope="col" className="px-6 py-4">
                                         {key}
                                     </th>
@@ -37,15 +48,16 @@ export default function Table(props) {
                         </thead>
                         <tbody className="overflow-y-scroll"> {/* Adjust max-h-72 as needed */}
                             {props.data.map((row) => (
-                                <tr key={row.ID} className="border-b dark:border-neutral-500">
+                                <tr key={row.id} className="border-b dark:border-neutral-500">
                                     {Object.keys(row).map((key) => (
+                                        key !== 'id' &&
                                         <td key={key} className="whitespace-nowrap px-6 py-4">
                                             {key === 'Status' ? (<p className={(row[key] ? 'bg-green-700' : 'bg-red-700') + " p-1 whitespace-normal text-center rounded"}>{row[key] ? 'Lunas' : 'Belum Lunas'}</p>) : row[key]}
                                         </td>
                                     ))}
                                     <td className="flex flex-row flex-wrap gap-2 py-3">
-                                        <button className="w-9 h-9 bg-orange-500 p-2 rounded-md"><Edit/></button>
-                                        <button className="w-9 h-9 bg-red-500 p-2 rounded-md"><Delete/></button>
+                                        <button onClick={()=>setPopUp(true)} className="w-9 h-9 bg-orange-500 p-2 rounded-md"><Edit/></button>
+                                        <button onClick={() => props.deleteHandler(row.id)} className="w-9 h-9 bg-red-500 p-2 rounded-md"><Delete/></button>
                                     </td>
                                 </tr>
                             ))}
@@ -54,6 +66,12 @@ export default function Table(props) {
                 </div>
                 :
                 <span>{ props.error ? props.error : 'Data Tidak Ada' }</span>
+            }
+            {
+                showPopUp &&
+                <PopUp title={ props.editHandler.form } onClose={handlePopUp}>
+                    { props.children }
+                </PopUp>
             }
         </div>
     )

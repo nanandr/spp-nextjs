@@ -11,6 +11,7 @@ export const GET = async (req) => {
         const data = kelas.map(item => {
             return {
                 "No": no++,
+                id: parseInt(item.id),
                 "Nama kelas": item.namaKelas,
                 "Data dibuat": dateTimeFormat(item.createdAt),
                 "Data diubah": dateTimeFormat(item.updatedAt)

@@ -4,15 +4,20 @@ import { prisma } from "../../../../../utils/prisma";
 
 export const GET = async (req, context) => {
     try {
-        const kelas = await prisma.kelas.findFirst({
+        const user = await prisma.user.findFirst({
             where: { id: context.params.id }
         });
 
-        return NextResponse.json({ message: "Successfully fetched data", kelas: {
-            id: parseInt(kelas.id),
-            namaKelas: kelas.namaKelas,
-            createdAt: dateTimeFormat(kelas.createdAt),
-            updatedAt: dateTimeFormat(kelas.updatedAt)
+        return NextResponse.json({ message: "Successfully fetched data", user: {
+            id: parseInt(user.id),
+            nama: user.nama,
+            nip: user.nip,
+            alamat: user.alamat,
+            email: user.email,
+            hp: user.hp,
+            role: user.role,
+            createdAt: dateTimeFormat(user.createdAt),
+            updatedAt: dateTimeFormat(user.updatedAt)
         }});
     }
     catch (error) {
