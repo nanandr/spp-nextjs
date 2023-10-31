@@ -3,13 +3,17 @@ import Input from "@/components/Input";
 import { useState } from "react";
 
 export default function Create(props) {
+    const currentData = props.dataSiswa ?? '';
     const [form, setForm] = useState({
-        nama: '',
-        nis: '',
-        jk: 'LakiLaki',
-        angkatan: '',
-        hp: '',
+        id: currentData.id ?? '',
+        nama: currentData.nama ?? '',
+        nis: currentData.nis ?? '',
+        alamat: currentData.alamat ?? '',
+        jk: currentData.jk ?? 'LakiLaki',
+        angkatan: currentData.angkatan ??  '',
+        hp: currentData.hp ??  '',
     });
+    
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -34,6 +38,7 @@ export default function Create(props) {
                     type="text" 
                     id='nama' 
                     name='nama' 
+                    value={form['nama']}
                     onChange={handleChange}
                     required
                 />
@@ -45,6 +50,19 @@ export default function Create(props) {
                     type="number" 
                     id='nis' 
                     name='nis' 
+                    value={form['nis']}
+                    onChange={handleChange}
+                    required
+                />
+            </div>
+            <div className="my-3">
+                <label className='block text-sm font-light mb-1' htmlFor="alamat">Alamat</label>
+                <Input
+                    autoComplete='off' 
+                    type="text" 
+                    id='alamat' 
+                    name='alamat' 
+                    value={form['alamat']}
                     onChange={handleChange}
                     required
                 />
@@ -74,6 +92,7 @@ export default function Create(props) {
                     type="text" 
                     id='kelas' 
                     name='kelas' 
+                    value={form['kelas']}
                     onChange={handleChange}
                     required
                 />
@@ -85,6 +104,7 @@ export default function Create(props) {
                     type="number" 
                     id='angkatan' 
                     name='angkatan' 
+                    value={form['angkatan']}
                     onChange={handleChange}
                     required
                 />
@@ -96,6 +116,7 @@ export default function Create(props) {
                     type="number" 
                     id='hp' 
                     name='hp' 
+                    value={form['hp']}
                     onChange={handleChange}
                     required
                 />
@@ -107,6 +128,7 @@ export default function Create(props) {
                     type="number" 
                     id='diskon' 
                     name='diskon' 
+                    value={form['diskon']}
                     onChange={handleChange}
                     required
                 />

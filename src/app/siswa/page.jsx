@@ -1,69 +1,83 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import Index from "../index";
-import Table from "@/components/Table";
-import UploadSheet from "@/components/UploadSheet";
-import InputData from "@/components/InputData";
-import Create from "./create";
-import axios from "axios";
-import { getUrl } from "../../../utils/getUrl";
-import { siswaFormat, dateTimeFormat } from "../../../utils/format";
+import { useEffect, useState } from "react"
+import Index from "../index"
+import Table from "@/components/Table"
+import UploadSheet from "@/components/UploadSheet"
+import InputData from "@/components/InputData"
+import Create from "./create"
+import axios from "axios"
+import { getUrl, siswaFormat } from "../../../utils/format"
 
 export default function Siswa() {
-  const [dataSiswa, setDataSiswa] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [dataSiswa, setDataSiswa] = useState([])
+  const [currentDataSiswa, setCurrentDataSiswa] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const url = "/api/siswa/";
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(getUrl('/api/siswa'));
-      const formattedData = await siswaFormat(res.data.siswa);
-      setDataSiswa(formattedData);
+      const res = await axios.get(getUrl(url))
+      const formattedData = await siswaFormat(res.data.siswa)
+      setDataSiswa(formattedData)
     } catch (err) {
-      console.error(err);
-      setError(err.message);
+      console.error(err)
+      setError(err.message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   }
 
   const submitHandler = async (data) => {
-    setLoading(true);
-    await axios.post(getUrl('/api/siswa'), data)
+    setLoading(true)
+    await axios.post(getUrl(url), data)
       .then(res => console.log(res))
       .catch(err => {
-        console.error(err);
-        setError(err.response.data.message);
+        console.error(err)
+        setError(err.response.data.message)
       })
-      .finally(() => fetchData());
+      .finally(() => fetchData())
+  }
+
+  const getSelectedData = async (id) => {
+    try {
+      const res = await axios.get(getUrl(`${url}${id}`))
+      setCurrentDataSiswa(res.data.siswa)
+    } catch (err) {
+      console.error(err)
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const editHandler = {
     form: "Edit Data Siswa",
+    dataSiswa: currentDataSiswa,
     submitHandler: async (data) => {
-      setLoading(true);
-      await axios.put(getUrl(`api/siswa/${data.id}`), data)
+      setLoading(true)
+      await axios.put(getUrl(`${url}${data.id}`), data)
         .then(res => console.log(res))
         .catch(err => console.error(err))
-        .finally(() => fetchData());
+        .finally(() => fetchData())
     } 
   }
 
   const deleteHandler = async (id) => {
-    setLoading(true);
-    await axios.delete(getUrl(`/api/siswa/${id}`))
+    setLoading(true)
+    await axios.delete(getUrl(`${url}${id}`))
     .then(res => console.log(res))
     .catch(err => {
-      console.error(err);
-      setError(err.response.data.message);
+      console.error(err)
+      setError(err.response.data.message)
     })
-    .finally(() => fetchData());
+    .finally(() => fetchData())
   }
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   return (
     <Index title='Siswa' placeholder='Cari Siswa (NIS, Nama)...'>
@@ -74,7 +88,7 @@ export default function Siswa() {
           <Create loading={loading} submitHandler={submitHandler}/>
         </InputData>
       </div>
-      <Table title='Siswa' data={dataSiswa} loading={loading} error={error} editHandler={editHandler} deleteHandler={deleteHandler}/>
+      <Table title='Siswa' data={dataSiswa} loading={loading} error={error} getSelectedData={getSelectedData} editHandler={editHandler} deleteHandler={deleteHandler}/>
     </Index>
   )
 }

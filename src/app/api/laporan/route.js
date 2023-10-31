@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../../../../utils/prisma";
 import { dateTimeFormat } from "../../../../utils/format";
-const prisma = new PrismaClient;
 
 export const GET = async (req) => {
     try {

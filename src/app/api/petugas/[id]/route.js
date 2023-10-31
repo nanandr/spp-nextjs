@@ -13,6 +13,7 @@ export const GET = async (req, context) => {
             nama: user.nama,
             nip: user.nip,
             alamat: user.alamat,
+            jk: item.jk,
             email: user.email,
             hp: user.hp,
             role: user.role,
@@ -28,7 +29,7 @@ export const GET = async (req, context) => {
 
 export const DELETE = async (req, context) => {
     try {
-        const kelas = await prisma.kelas.delete({
+        const user = await prisma.user.delete({
             where: { id: context.params.id }
         });
 

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { dateTimeFormat } from "../../../../../utils/format";
 import { prisma } from "../../../../../utils/prisma";
+import { dateTimeFormat } from "../../../../../utils/format";
 
 export const GET = async (req, context) => {
     try {

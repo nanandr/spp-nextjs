@@ -12,6 +12,7 @@ export const GET = async (req, context) => {
             id: parseInt(siswa.id),
             nama: siswa.nama,
             nis: siswa.nis,
+            alamat: siswa.alamat,
             jk: siswa.jk,
             angkatan: parseInt(siswa.angkatan),
             hp: siswa.hp,
@@ -28,13 +29,14 @@ export const GET = async (req, context) => {
 export const PUT = async (req, context) => {
     const body = await req.json();
     try {
-        const { nama, nis, jk, angkatan, hp } = body;
+        const { nama, nis, alamat, jk, angkatan, hp } = body;
 
         const siswa = await prisma.siswa.update({
             where: { id: context.params.id },
             data: {
                 nama: nama,
                 nis: nis,
+                alamat: alamat,
                 jk: jk,
                 angkatan: angkatan,
                 hp: hp,
@@ -47,6 +49,7 @@ export const PUT = async (req, context) => {
             nama: siswa.nama,
             nis: siswa.nis,
             jk: siswa.jk,
+            alamat: alamat,
             angkatan: parseInt(siswa.angkatan),
             hp: siswa.hp,
             createdAt: dateTimeFormat(siswa.createdAt),

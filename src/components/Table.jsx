@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Delete, Edit } from "../../public/svg";
 import PopUp from "./PopUp";
+import Create from "@/app/siswa/create";
 
 export default function Table(props) {
     const [showPopUp, setPopUp] = useState(false);
@@ -10,6 +11,12 @@ export default function Table(props) {
     const handlePopUp = () => {
         setPopUp(false);
     }
+
+    const handleEditClick = (id) => {
+        props.getSelectedData(id);
+        setPopUp(true);
+    };
+      
 
     return(
         props.loading ?   
@@ -55,8 +62,8 @@ export default function Table(props) {
                                             {key === 'Status' ? (<p className={(row[key] ? 'bg-green-700' : 'bg-red-700') + " p-1 whitespace-normal text-center rounded"}>{row[key] ? 'Lunas' : 'Belum Lunas'}</p>) : row[key]}
                                         </td>
                                     ))}
-                                    <td className="flex flex-row flex-wrap gap-2 py-3">
-                                        <button onClick={()=>setPopUp(true)} className="w-9 h-9 bg-orange-500 p-2 rounded-md"><Edit/></button>
+                                    <td className="flex flex-row flex-wrap gap-2 py-3 justify-end">
+                                        <button onClick={() => handleEditClick(row.id)} className="w-9 h-9 bg-orange-500 p-2 rounded-md"><Edit/></button>
                                         <button onClick={() => props.deleteHandler(row.id)} className="w-9 h-9 bg-red-500 p-2 rounded-md"><Delete/></button>
                                     </td>
                                 </tr>
@@ -70,7 +77,7 @@ export default function Table(props) {
             {
                 showPopUp &&
                 <PopUp title={ props.editHandler.form } onClose={handlePopUp}>
-                    { props.children }
+                    <Create loading={props.loading} submitHandler={props.editHandler.submitHandler} dataSiswa={props.editHandler.dataSiswa}/>
                 </PopUp>
             }
         </div>

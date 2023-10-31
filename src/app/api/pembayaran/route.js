@@ -1,17 +1,11 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../../../../utils/prisma";
 import { dateTimeFormat } from "../../../../utils/format";
-const prisma = new PrismaClient;
 
 export const GET = async (req) => { 
-    (BigInt.prototype).toJSON = function () {
-        return this.toString();
-    };
     try {
         const transaksi = await prisma.transaksi.findMany();
    
-        let no = 1;
-
         const data = await Promise.all(transaksi.map(async (item) => {
             const siswa = await prisma.siswa.findMany({
                 where: {
@@ -24,21 +18,18 @@ export const GET = async (req) => {
                 }
             })
             return {
-                "No": no++,
-                "Nama Siswa": siswa[0].nama, 
-                "Nama Petugas": petugas[0].nama, 
-                "Tanggal Bayar": dateTimeFormat(item.tanggal),
-                "Total Bayar": item.totalBayar,
-                "Bulan": item.bulan,
-                "Data dibuat": dateTimeFormat(item.createdAt),
-                "Data diubah": dateTimeFormat(item.updatedAt)
+                id: parseInt(item.id),
+                namaSiswa: siswa[0].nama, 
+                namaPetugas: petugas[0].nama, 
+                tanggalBayar: dateTimeFormat(item.tanggal),
+                totalBayar: parseInt(item.totalBayar),
+                bulan: item.bulan,
+                createdAt: dateTimeFormat(item.createdAt),
+                updatedAt: dateTimeFormat(item.updatedAt)
             };
         }));
 
-        return NextResponse.json({
-            message: "Successfully fetched data",
-            transaksi: data
-        });
+        return NextResponse.json({ message: "Successfully fetched data", transaksi: data });
     }
     catch (error) {
         console.log(error)

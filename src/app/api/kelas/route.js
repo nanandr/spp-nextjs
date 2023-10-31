@@ -1,20 +1,19 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../../../../utils/prisma";
 import { dateTimeFormat } from "../../../../utils/format";
-const prisma = new PrismaClient;
 
 export const GET = async (req) => {
     try {
-        const kelas = await prisma.kelas.findMany();
-        let no = 1;
+        const kelas = await prisma.kelas.findMany({
+            take: 5,
+        });
 
         const data = kelas.map(item => {
             return {
-                "No": no++,
                 id: parseInt(item.id),
-                "Nama kelas": item.namaKelas,
-                "Data dibuat": dateTimeFormat(item.createdAt),
-                "Data diubah": dateTimeFormat(item.updatedAt)
+                namaKelas: item.namaKelas,
+                createdAt: dateTimeFormat(item.createdAt),
+                updatedAt: dateTimeFormat(item.updatedAt)
             }
         });
 

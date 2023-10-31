@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../../../../utils/prisma";
 import { dateTimeFormat } from "../../../../utils/format";
-const prisma = new PrismaClient;
 
 export const GET = async (req) => {
     try {
@@ -17,6 +16,7 @@ export const GET = async (req) => {
                 nip: item.nip,
                 nama: item.nama,
                 alamat: item.alamat,
+                jk: item.jk,
                 email: item.email,
                 hp: item.hp,
                 role: item.role,

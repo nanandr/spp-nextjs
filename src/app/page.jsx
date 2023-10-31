@@ -12,7 +12,7 @@ export default function Home() {
   const [view, setView] = useState('Login');
   return (
     <main className="flex justify-center bg-black bg-opacity-90 min-h-screen">
-      <Form title={view} setView={setView}/>
+      <Form title={view} setView={setView} />
     </main>
   )
 }
@@ -24,6 +24,7 @@ function Form(props) {
     nama: '',
     nip: '',
     alamat: '',
+    jk: 'LakiLaki',
     hp: '',
     email: '',
     password: ''
@@ -35,10 +36,10 @@ function Form(props) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm(prevForm => ({
-        ...prevForm,
-        [name]: value,
+      ...prevForm,
+      [name]: value,
     }));
-  };    
+  };
 
   const login = async (event) => {
     event.preventDefault();
@@ -50,12 +51,12 @@ function Form(props) {
         password: form.password
       });
 
-      if(!response || response.ok !== true) {
+      if (!response || response.ok !== true) {
         setLoading(false);
         setError("Invalid Credentials");
       }
     }
-    catch(err) {
+    catch (err) {
       setLoading(false);
       console.log(err);
     }
@@ -66,24 +67,24 @@ function Form(props) {
     setLoading(true);
 
     await axios.post(getUrl(`/api/auth/register`), form)
-    .then(async (res) => {
-      console.log(res);
-      await signIn('credentials', {
-        email: form.email,
-        password: form.password
-      });
+      .then(async (res) => {
+        console.log(res);
+        await signIn('credentials', {
+          email: form.email,
+          password: form.password
+        });
 
-      router.refresh();
-    })
-    .catch(err => {
-      setLoading(false);
-      console.log(err);
-      setError(err.response.data.message);
-    });
+        router.refresh();
+      })
+      .catch(err => {
+        setLoading(false);
+        console.log(err);
+        setError(err.response.data.message);
+      });
   }
 
   useEffect(() => {
-    if(status === 'authenticated') {
+    if (status === 'authenticated') {
       router.refresh();
       router.push('dashboard');
     }
@@ -92,9 +93,9 @@ function Form(props) {
   return (
     <div className="text-gray-200 shadow rounded p-10 bg-zinc-800 h-fit my-auto">
       <div className="flex flex-row flex-wrap align-middle">
-        <Image 
-          src={logo} 
-          alt="Logo SDQ Bina Mulya" 
+        <Image
+          src={logo}
+          alt="Logo SDQ Bina Mulya"
           width={90}
           height={90}
         />
@@ -110,6 +111,26 @@ function Form(props) {
             <Input name="nama" type="text" handleChange={handleChange} />
             <Input name="nip" type="number" handleChange={handleChange} />
             <Input name="alamat" type="text" handleChange={handleChange} />
+            <div className="my-3">
+              <div className="flex flex-row justify-between mb-1">
+                <label className='block text-sm font-light mb-1' htmlFor="jk">Jenis Kelamin</label>
+              </div>
+              <select
+                defaultValue={"LakiLaki"}
+                className="text-sm transition-all bg-zinc-800 bg-opacity-20 appearance-none border border-gray-600 rounded w-full py-3 px-3 text-gray-300 leading-tight focus:outline-none focus-within:bg-zinc-800 focus:bg-opacity-50 focus:outline focus:outline-zinc-700 focus:outline-offset-2"
+                id='jk'
+                name='jk'
+                value={form['jk']}
+                onChange={(e) => setForm(prev => ({
+                  ...prev,
+                  jk: e.target.value
+                }))}
+                required
+              >
+                <option value="LakiLaki">Laki-laki</option>
+                <option value="Perempuan">Perempuan</option>
+              </select>
+            </div>
             <Input name="hp" type="number" handleChange={handleChange} />
           </>
         }
@@ -120,12 +141,12 @@ function Form(props) {
             <p className='text-gray-500 cursor-pointer'>Lupa Password?</p>
           }
         </Input>
-        <button disabled={loading} type='submit' className={"my-5 py-3 px-3 transition font-semibold " + (loading ? "bg-gray-700 font-semibold" : "bg-blue-400 hover:bg-blue-500")}>{ loading ? "Loading..." : props.title }</button>
+        <button disabled={loading} type='submit' className={"my-5 py-3 px-3 transition font-semibold " + (loading ? "bg-gray-700 font-semibold" : "bg-blue-400 hover:bg-blue-500")}>{loading ? "Loading..." : props.title}</button>
       </form>
       {
         props.title == 'Login' ?
           <span className='font-light'>Belum Terdaftar ? <button type='button' onClick={() => props.setView('Signup')} className='font-normal'>Daftar &#x2192;</button></span>
-        :
+          :
           <span className='font-light'><button type='button' onClick={() => props.setView('Login')} className='font-normal'>&#8592; Kembali</button></span>
       }
     </div>
@@ -142,7 +163,7 @@ function Input(props) {
           props.children
         }
       </div>
-      <input onChange={props.handleChange} autoComplete='off' className='text-sm transition-all bg-zinc-800 bg-opacity-20 appearance-none border border-gray-600 rounded w-full py-3 px-3 text-gray-300 leading-tight focus:outline-none focus-within:bg-zinc-800 focus:bg-opacity-50 focus:outline focus:outline-zinc-700 focus:outline-offset-2' type={props.type} id={props.name} name={props.name}/>
+      <input onChange={props.handleChange} onWheel={(e) => e.target.blur()} autoComplete='off' className='text-sm transition-all bg-zinc-800 bg-opacity-20 appearance-none border border-gray-600 rounded w-full py-3 px-3 text-gray-300 leading-tight focus:outline-none focus-within:bg-zinc-800 focus:bg-opacity-50 focus:outline focus:outline-zinc-700 focus:outline-offset-2' type={props.type} id={props.name} name={props.name} />
     </div>
   )
 }

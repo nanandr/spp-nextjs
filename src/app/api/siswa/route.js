@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../../../../utils/prisma";
 import { dateTimeFormat } from "../../../../utils/format";
-const prisma = new PrismaClient;
 
 export const GET = async (req) => {
     try {
@@ -11,6 +10,7 @@ export const GET = async (req) => {
             return {
                 id: parseInt(item.id),
                 nis: item.nis,
+                alamat: item.alamat,
                 nama: item.nama,
                 kelas: `1 RPL A`,
                 jk: item.jk,
@@ -32,12 +32,13 @@ export const GET = async (req) => {
 export const POST = async (req, res) => {
     const body = await req.json();
     try {
-        const { nama, nis, jk, angkatan, hp } = body;
+        const { nama, nis, jk, angkatan, alamat, hp } = body;
 
         const siswa = await prisma.siswa.create({
             data: {
                 nama: nama,
                 nis: nis,
+                alamat: alamat,
                 jk: jk,
                 angkatan: angkatan,
                 hp: hp,

@@ -12,6 +12,10 @@ export const dateTimeFormat = (dateTime) => {
     return null;
 }
 
+export const getUrl = (path) => {
+    return `${window.location.protocol}//${window.location.host}${path}`;
+}
+
 export const siswaFormat = async (data) => {
     let no = 1;
     const siswa = data.map(item => {
@@ -23,9 +27,60 @@ export const siswaFormat = async (data) => {
             "Kelas": `1 RPL A`,
             "JK": item.jk,
             "Hp": item.hp,
-            "Data dibuat": dateTimeFormat(item.createdAt),
-            "Data diubah": dateTimeFormat(item.updatedAt)
+            "Alamat": item.alamat,
+            "Data dibuat": item.createdAt,
+            "Data diubah": item.updatedAt
         }
     });
     return siswa;
+}
+
+export const petugasFormat = async (data) => {
+    let no = 1;
+    const petugas = data.map(item => {
+        return {
+            "No": no++,
+            "id": item.id,
+            "NIP": item.nip,
+            "Nama": item.nama,
+            "Alamat": item.alamat,
+            "JK": item.jk,
+            "Hp": item.hp,
+            "Data dibuat": item.createdAt,
+            "Data diubah": item.updatedAt
+        }
+    });
+    return petugas;
+}
+
+export const kelasFormat = async (data) => {
+    let no = 1;
+    const kelas = data.map(item => {
+        return {
+            "No": no++,
+            "id": item.id,
+            "Nama": item.namaKelas,
+            "Data dibuat": item.createdAt,
+            "Data diubah": item.updatedAt
+        }
+    });
+    return kelas;
+}
+
+export const pembayaranFormat = async (data) => {
+    let no = 1;
+    const pembayaran = data.map(item => {
+        return {
+            "No": no++,
+            "id": item.id,
+            "Nama Siswa": item.namaSiswa,
+            "Nama Petugas": item.namaPetugas,
+            "Tanggal Bayar": item.tanggalBayar,
+            "Total Bayar": item.totalBayar,
+            "Bulan": item.bulan,
+            "Data diubah": item.createdAt,
+            "Data diubah": item.updatedAt,
+        }
+    });
+    return pembayaran;
 }
