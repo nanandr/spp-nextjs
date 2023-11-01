@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../utils/prisma";
-import { dateTimeFormat } from "../../../../utils/format";
+import { take, dateTimeFormat } from "../../../../utils/format";
 
-export const GET = async (req) => {
+export const GET = async (req, res) => {
+    const url = new URL(req.url);
+    const page = url.searchParams.get("page");
     try {
-        const siswa = await prisma.siswa.findMany();
+        const siswa = await prisma.siswa.findMany({
+            skip: (page - 1) * take,
+            take: take,
+        });
 
         const data = siswa.map(item => {
             return {

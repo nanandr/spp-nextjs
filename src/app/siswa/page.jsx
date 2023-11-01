@@ -10,85 +10,75 @@ import axios from "axios"
 import { getUrl, siswaFormat } from "../../../utils/format"
 
 export default function Siswa() {
-  const [dataSiswa, setDataSiswa] = useState([])
-  const [currentDataSiswa, setCurrentDataSiswa] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [dataSiswa, setDataSiswa] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [index, setIndex] = useState(0);
+  const [page, setPage] = useState(1);
   const url = "/api/siswa/";
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(getUrl(url))
-      const formattedData = await siswaFormat(res.data.siswa)
-      setDataSiswa(formattedData)
+      const res = await axios.get(getUrl(`/api/siswa?page=${page}`));
+      const formattedData = await siswaFormat(res.data.siswa, page);
+      setDataSiswa(formattedData);
     } catch (err) {
-      console.error(err)
-      setError(err.message)
+      console.error(err);
+      setError(err.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
   const submitHandler = async (data) => {
-    setLoading(true)
+    setLoading(true);
     await axios.post(getUrl(url), data)
       .then(res => console.log(res))
       .catch(err => {
         console.error(err)
         setError(err.response.data.message)
       })
-      .finally(() => fetchData())
-  }
-
-  const getSelectedData = async (id) => {
-    try {
-      const res = await axios.get(getUrl(`${url}${id}`))
-      setCurrentDataSiswa(res.data.siswa)
-    } catch (err) {
-      console.error(err)
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
+      .finally(() => fetchData());
   }
 
   const editHandler = {
-    form: "Edit Data Siswa",
-    dataSiswa: currentDataSiswa,
-    submitHandler: async (data) => {
+    title: "Edit Data Siswa",
+    indexHandler: (index) => setIndex(index),
+    form: () => <Create loading={loading} dataSiswa={dataSiswa[index]} submitHandler={async (data) => {
       setLoading(true)
       await axios.put(getUrl(`${url}${data.id}`), data)
         .then(res => console.log(res))
         .catch(err => console.error(err))
-        .finally(() => fetchData())
-    } 
+        .finally(() => fetchData());
+    }} />,
   }
 
   const deleteHandler = async (id) => {
-    setLoading(true)
+    setLoading(true);
     await axios.delete(getUrl(`${url}${id}`))
-    .then(res => console.log(res))
-    .catch(err => {
-      console.error(err)
-      setError(err.response.data.message)
-    })
-    .finally(() => fetchData())
+      .then(res => console.log(res))
+      .catch(err => {
+        console.error(err)
+        setError(err.response.data.message)
+      })
+      .finally(() => fetchData());
   }
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    fetchData();
+  }, [page]);
 
   return (
     <Index title='Siswa' placeholder='Cari Siswa (NIS, Nama)...'>
       {/* search onsubmit={searchHandler} */}
       <div className="flex flex-row gap-2 justify-end">
-        <UploadSheet/>
+        <UploadSheet />
         <InputData title="Input Data Siswa" form="Form Tambah Data Siswa">
-          <Create loading={loading} submitHandler={submitHandler}/>
+          <Create loading={loading} submitHandler={submitHandler} />
         </InputData>
       </div>
-      <Table title='Siswa' data={dataSiswa} loading={loading} error={error} getSelectedData={getSelectedData} editHandler={editHandler} deleteHandler={deleteHandler}/>
+      <Table title='Siswa' data={dataSiswa} loading={loading} error={error} editHandler={editHandler} deleteHandler={deleteHandler} />
+      <button onClick={() => setPage(page + 1)}>Pagination</button>
     </Index>
   )
 }

@@ -1,3 +1,5 @@
+export const take = parseInt(process.env.TAKE);
+
 export const dateTimeFormat = (dateTime) => {
     if(dateTime !== null) {
         const input = new Date(dateTime);
@@ -16,8 +18,8 @@ export const getUrl = (path) => {
     return `${window.location.protocol}//${window.location.host}${path}`;
 }
 
-export const siswaFormat = async (data) => {
-    let no = 1;
+export const siswaFormat = async (data, page = 1) => {
+    let no = (page - 1) * 5 + 1;
     const siswa = data.map(item => {
         return {
             "No": no++,
@@ -25,6 +27,7 @@ export const siswaFormat = async (data) => {
             "NIS": item.nis,
             "Nama": item.nama,
             "Kelas": `1 RPL A`,
+            "Angkatan": item.angkatan,
             "JK": item.jk,
             "Hp": item.hp,
             "Alamat": item.alamat,
@@ -35,8 +38,8 @@ export const siswaFormat = async (data) => {
     return siswa;
 }
 
-export const petugasFormat = async (data) => {
-    let no = 1;
+export const petugasFormat = async (data, page = 1) => {
+    let no = (page - 1) * 5 + 1;
     const petugas = data.map(item => {
         return {
             "No": no++,
@@ -53,8 +56,8 @@ export const petugasFormat = async (data) => {
     return petugas;
 }
 
-export const kelasFormat = async (data) => {
-    let no = 1;
+export const kelasFormat = async (data, page = 1) => {
+    let no = (page - 1) * 5 + 1;
     const kelas = data.map(item => {
         return {
             "No": no++,
@@ -67,8 +70,8 @@ export const kelasFormat = async (data) => {
     return kelas;
 }
 
-export const pembayaranFormat = async (data) => {
-    let no = 1;
+export const pembayaranFormat = async (data, page = 1) => {
+    let no = (page - 1) * 5 + 1;
     const pembayaran = data.map(item => {
         return {
             "No": no++,

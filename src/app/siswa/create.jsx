@@ -6,12 +6,13 @@ export default function Create(props) {
     const currentData = props.dataSiswa ?? '';
     const [form, setForm] = useState({
         id: currentData.id ?? '',
-        nama: currentData.nama ?? '',
-        nis: currentData.nis ?? '',
-        alamat: currentData.alamat ?? '',
-        jk: currentData.jk ?? 'LakiLaki',
-        angkatan: currentData.angkatan ??  '',
-        hp: currentData.hp ??  '',
+        nama: currentData.Nama ?? '',
+        nis: currentData.NIS ?? '',
+        alamat: currentData.Alamat ?? '',
+        angkatan: currentData.Angkatan ?? '',
+        jk: currentData.JK ?? 'LakiLaki',
+        angkatan: currentData.Angkatan ??  '',
+        hp: currentData.Hp ??  '',
     });
     
 
