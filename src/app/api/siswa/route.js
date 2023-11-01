@@ -4,20 +4,32 @@ import { take, dateTimeFormat } from "../../../../utils/format";
 
 export const GET = async (req, res) => {
     const url = new URL(req.url);
-    const page = url.searchParams.get("page");
+    let page = url.searchParams.get("page");
+    if(!page) {
+        page = 1;
+    }
     try {
         const siswa = await prisma.siswa.findMany({
             skip: (page - 1) * take,
             take: take,
+            include: {
+                kelas: true
+            }
         });
 
         const data = siswa.map(item => {
+            const kelas = item.kelas.map(kelas => {
+                return {
+                    kelasId: parseInt(kelas.kelasId),
+                    tahunAjarId: parseInt(kelas.tahunAjarId)
+                }
+            });
             return {
                 id: parseInt(item.id),
                 nis: item.nis,
                 alamat: item.alamat,
                 nama: item.nama,
-                kelas: `1 RPL A`,
+                kelas: kelas,
                 jk: item.jk,
                 angkatan: parseInt(item.angkatan),
                 hp: item.hp,

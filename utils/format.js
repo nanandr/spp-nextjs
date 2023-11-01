@@ -1,4 +1,5 @@
-export const take = parseInt(process.env.TAKE);
+// export const take = parseInt(process.env.TAKE);
+export const take = 10;
 
 export const dateTimeFormat = (dateTime) => {
     if(dateTime !== null) {
@@ -19,7 +20,8 @@ export const getUrl = (path) => {
 }
 
 export const siswaFormat = async (data, page = 1) => {
-    let no = (page - 1) * 5 + 1;
+    console.log(take)
+    let no = (page - 1) * take + 1;
     const siswa = data.map(item => {
         return {
             "No": no++,

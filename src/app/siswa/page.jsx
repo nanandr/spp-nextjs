@@ -8,6 +8,7 @@ import InputData from "@/components/InputData"
 import Create from "./create"
 import axios from "axios"
 import { getUrl, siswaFormat } from "../../../utils/format"
+import Pagination from "@/components/Pagination"
 
 export default function Siswa() {
   const [dataSiswa, setDataSiswa] = useState([]);
@@ -65,6 +66,7 @@ export default function Siswa() {
   }
 
   useEffect(() => {
+    setLoading(true);
     fetchData();
   }, [page]);
 
@@ -78,7 +80,8 @@ export default function Siswa() {
         </InputData>
       </div>
       <Table title='Siswa' data={dataSiswa} loading={loading} error={error} editHandler={editHandler} deleteHandler={deleteHandler} />
-      <button onClick={() => setPage(page + 1)}>Pagination</button>
+      {/* DONT FORGET TO CHANGE TOTAL TO VALUE FROM API */}
+      <Pagination page={page} setPage={setPage} loading={loading} total={5}/> 
     </Index>
   )
 }
