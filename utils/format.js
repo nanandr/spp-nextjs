@@ -1,5 +1,5 @@
 // export const take = parseInt(process.env.TAKE);
-export const take = 10;
+export const take = 5;
 
 export const dateTimeFormat = (dateTime) => {
     if(dateTime !== null) {

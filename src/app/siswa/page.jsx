@@ -16,11 +16,13 @@ export default function Siswa() {
   const [error, setError] = useState('');
   const [index, setIndex] = useState(0);
   const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
   const url = "/api/siswa/";
 
   const fetchData = async () => {
     try {
       const res = await axios.get(getUrl(`/api/siswa?page=${page}`));
+      setTotal(res.data.total);
       const formattedData = await siswaFormat(res.data.siswa, page);
       setDataSiswa(formattedData);
     } catch (err) {
@@ -81,7 +83,7 @@ export default function Siswa() {
       </div>
       <Table title='Siswa' data={dataSiswa} loading={loading} error={error} editHandler={editHandler} deleteHandler={deleteHandler} />
       {/* DONT FORGET TO CHANGE TOTAL TO VALUE FROM API */}
-      <Pagination page={page} setPage={setPage} loading={loading} total={5}/> 
+      <Pagination page={page} setPage={setPage} loading={loading} total={total}/> 
     </Index>
   )
 }

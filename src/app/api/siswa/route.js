@@ -38,7 +38,9 @@ export const GET = async (req, res) => {
             }
         });
 
-        return NextResponse.json({ message: "Successfully fetched data", siswa: data });
+        const total = await prisma.siswa.count();
+
+        return NextResponse.json({ message: "Successfully fetched data", siswa: data, total: total });
     }
     catch (error) {
         console.log(error)

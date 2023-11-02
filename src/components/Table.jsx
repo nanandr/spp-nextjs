@@ -36,6 +36,9 @@ export default function Table(props) {
                 <div className="bg-zinc-600 h-10 rounded" />
                 <div className="bg-zinc-600 h-10 rounded" />
                 <div className="bg-zinc-600 h-10 rounded" />
+                <div className="bg-zinc-600 h-10 rounded" />
+                <div className="bg-zinc-600 h-10 rounded" />
+                <div className="bg-zinc-600 h-10 rounded" />
             </div>
             :
             <div className="inline-block py-2 px-2 break-words">
@@ -47,7 +50,7 @@ export default function Table(props) {
                 }
                 {
                     props.data.length > 0 ?
-                    <div className=" overflow-x-auto w-full scroll pr-0.5">
+                    <div className="overflow-x-auto w-full scroll pr-0.5 min-h-[400px]">
                         <table className="table table-auto w-full overflow-scroll text-left text-sm font-light">
                             <thead className="border-b font-medium dark:border-neutral-500 sticky top-0 bg-zinc-800">
                                 <tr>
