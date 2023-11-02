@@ -17,33 +17,34 @@ export const GET = async (req, res) => {
             }
         });
 
-        const data = siswa.map(item => {
-            const kelas = item.kelas.map(kelas => {
-                return {
-                    kelasId: parseInt(kelas.kelasId),
-                    tahunAjarId: parseInt(kelas.tahunAjarId)
-                }
-            });
+        const data = await Promise.all(siswa.map(async (item) => {
+            let kelasSiswa = await Promise.all(item.kelas.map(async (kelas) => {
+                const dataKelas = await prisma.kelas.findFirst({ where: { id: kelas.kelasId } });
+                const dataTahun = await prisma.tahunAjar.findFirst({ where: { id: kelas.tahunAjarId } });
+
+                return { tahunId: parseInt(dataTahun.id), namaKelas: dataKelas.namaKelas, tahunAjar: dataTahun.tahun };
+            }));
+
             return {
                 id: parseInt(item.id),
                 nis: item.nis,
                 alamat: item.alamat,
                 nama: item.nama,
-                kelas: kelas,
+                kelas: kelasSiswa,
                 jk: item.jk,
                 angkatan: parseInt(item.angkatan),
                 hp: item.hp,
                 createdAt: dateTimeFormat(item.createdAt),
                 updatedAt: dateTimeFormat(item.updatedAt)
             }
-        });
+        }));
 
         const total = await prisma.siswa.count();
 
         return NextResponse.json({ message: "Successfully fetched data", siswa: data, total: total });
     }
     catch (error) {
-        console.log(error)
+        console.log(error);
         return NextResponse.json({ message: "Error fetching data" }, { status: 500 });
     }
 }

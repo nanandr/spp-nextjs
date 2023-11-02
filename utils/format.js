@@ -19,16 +19,18 @@ export const getUrl = (path) => {
     return `${window.location.protocol}//${window.location.host}${path}`;
 }
 
-export const siswaFormat = async (data, page = 1) => {
-    console.log(take)
+export const siswaFormat = async (data, page = 1, tahunParams) => {
+
     let no = (page - 1) * take + 1;
     const siswa = data.map(item => {
+        const kelas = item.kelas.find(i => i.tahunAjar === tahunParams);
+
         return {
             "No": no++,
             "id": item.id,
             "NIS": item.nis,
             "Nama": item.nama,
-            "Kelas": `1 RPL A`,
+            "Kelas": kelas ? kelas.namaKelas : '',
             "Angkatan": item.angkatan,
             "JK": item.jk,
             "Hp": item.hp,

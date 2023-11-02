@@ -9,6 +9,7 @@ import Create from "./create"
 import axios from "axios"
 import { getUrl, siswaFormat } from "../../../utils/format"
 import Pagination from "@/components/Pagination"
+import { useSearchParams } from "next/navigation"
 
 export default function Siswa() {
   const [dataSiswa, setDataSiswa] = useState([]);
@@ -17,13 +18,14 @@ export default function Siswa() {
   const [index, setIndex] = useState(0);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
+  const searchParams = useSearchParams();
   const url = "/api/siswa/";
 
   const fetchData = async () => {
     try {
       const res = await axios.get(getUrl(`/api/siswa?page=${page}`));
       setTotal(res.data.total);
-      const formattedData = await siswaFormat(res.data.siswa, page);
+      const formattedData = await siswaFormat(res.data.siswa, page, searchParams.get('tahun'));
       setDataSiswa(formattedData);
     } catch (err) {
       console.error(err);
@@ -70,7 +72,7 @@ export default function Siswa() {
   useEffect(() => {
     setLoading(true);
     fetchData();
-  }, [page]);
+  }, [page, searchParams.get('tahun')]);
 
   return (
     <Index title='Siswa' placeholder='Cari Siswa (NIS, Nama)...'>
