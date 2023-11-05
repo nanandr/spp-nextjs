@@ -9,9 +9,10 @@ import axios from "axios"
 import { getUrl, kelasFormat } from "../../../utils/format"
 
 export default function Kelas() {
-  const [dataKelas, setDataKelas] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [dataKelas, setDataKelas] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [index, setIndex] = useState(0);
 
   const fetchData = async () => {
     try {
@@ -37,6 +38,18 @@ export default function Kelas() {
     .finally(() => fetchData())
   }
 
+  const editHandler = {
+    title: "Form Edit Data Kelas",
+    indexHandler: (index) => setIndex(index),
+    form: () => <Create loading={loading} data={dataKelas[index]} submitHandler={async (data) => {
+      setLoading(true)
+      await axios.put(getUrl(`/api/kelas/${data.id}`), data)
+        .then(res => console.log(res))
+        .catch(err => console.error(err))
+        .finally(() => fetchData());
+    }} />,
+  }
+
   const deleteHandler = async (id) => {
     setLoading(true)
     await axios.delete(getUrl(`/api/kelas/${id}`))
@@ -59,7 +72,7 @@ export default function Kelas() {
             <Create loading={loading} submitHandler={submitHandler}/>
           </InputData>
         </div>
-        <Table title='Kelas' data={dataKelas} loading={loading} error={error} deleteHandler={deleteHandler}/>
+        <Table title='Kelas' data={dataKelas} loading={loading} error={error} editHandler={editHandler} deleteHandler={deleteHandler}/>
     </Index>
   )
 }
