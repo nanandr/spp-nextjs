@@ -2,7 +2,7 @@
 export const take = 5;
 
 export const dateTimeFormat = (dateTime) => {
-    if(dateTime !== null) {
+    if (dateTime !== null) {
         const input = new Date(dateTime);
         return input.toLocaleDateString('en-GB', {
             hour: '2-digit',
