@@ -3,8 +3,10 @@ import Input from "@/components/Input";
 import { useState } from "react";
 
 export default function Create(props) {
+    const currentData = props.data ?? '';
     const [form, setForm] = useState({
-        namaKelas: ''
+        id: currentData.id ?? '',
+        namaKelas: currentData.Nama ?? '',
     });
 
     const handleChange = (e) => {
@@ -31,6 +33,7 @@ export default function Create(props) {
                     id='namaKelas' 
                     name='namaKelas' 
                     onChange={handleChange}
+                    value={form['namaKelas']}
                     required
                 />
             </div>
