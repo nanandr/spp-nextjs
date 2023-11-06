@@ -24,7 +24,7 @@ export default function Sidebar(props) {
                     </div>
                 </div>
                 <ul className="space-y-4 font-medium my-5 transition-all duration-200">
-                    <Navigation title="Dashboard" href="/dashboard" active={props.active == 'Dashboard' ? true : false } icon={<Menu/>}/>
+                    <Navigation title="Dashboard" href="/" active={props.active == 'Dashboard' ? true : false } icon={<Menu/>}/>
                     <Navigation title="Pembayaran" href="/pembayaran" active={props.active == 'Pembayaran' ? true : false } icon={<Money/>}/>
                     <Navigation title="Laporan" href="/laporan" active={props.active == 'Laporan' ? true : false } icon={<Document/>}/>
                     <Dropdown title="Akun" links={[{name: 'Siswa', href: '/siswa', active: props.active}, {name: 'Petugas', href: '/petugas', active: props.active}]} icon={<People/>}/>
