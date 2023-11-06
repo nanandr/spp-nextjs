@@ -1,45 +1,47 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from 'react'
-import HeaderProfile from './HeaderProfile'
+import { useEffect, useState } from 'react';
+import HeaderProfile from './HeaderProfile';
 import { useDispatch, useSelector } from "react-redux";
-import { toggleVisibility, selectVisibility } from '../redux/features/visibleSlice'
-import axios from 'axios'
-import { BurgerMenu } from '../../public/svg'
-import { getUrl } from '../../utils/format'
-import { useRouter } from 'next/navigation'
+import { toggleVisibility, selectVisibility } from '../redux/features/visibleSlice';
+import axios from 'axios';
+import { BurgerMenu } from '../../public/svg';
+import { getUrl } from '../../utils/format';
+import { useRouter } from 'next/navigation';
 
 export default function Header(props) {
-    const [data, setData] = useState([])
-    const [active, setActive] = useState({ id: 0, tahun: '' })
-    const dispatch = useDispatch()
-    const isVisible = useSelector(selectVisibility)
-    const router = useRouter()
+    const [data, setData] = useState([]);
+    const [active, setActive] = useState({ id: 0, tahun: '' });
+    const dispatch = useDispatch();
+    const isVisible = useSelector(selectVisibility);
+    const router = useRouter();
 
     const fetchData = async () => {
         try {
-            const res = await axios.get(getUrl('/api/tahun'))
-            setData(res.data.tahun)
-            setActive(res.data.tahun[0])
+            const res = await axios.get(getUrl('/api/tahun'));
+            setData(res.data.tahun);
+            setActive(res.data.tahun[0]);
         }
-        catch (err) { console.error(err) }
+        catch (err) { 
+            console.error(err);
+        };
     }
 
     const activeHandler = (link) => {
-        setActive(link)
+        setActive(link);
     }
 
     const handleToggle = () => {
-        dispatch(toggleVisibility())
+        dispatch(toggleVisibility());
     }
 
     useEffect(() => {
-        fetchData()
-    }, [])
+        fetchData();
+    }, []);
 
     useEffect(() => {
-        router.push(`${window.location.origin}${window.location.pathname}?tahun=${active.tahun}`)
-    }, [active])
+        router.push(`${window.location.origin}${window.location.pathname}?tahun=${active.tahun}`);
+    }, [active]);
 
     return (
         <div className="flex flex-row items-center w-full justify-between">

@@ -72,7 +72,7 @@ export default function Kelas() {
             <Create loading={loading} submitHandler={submitHandler}/>
           </InputData>
         </div>
-        <Table title='Kelas' data={dataKelas} loading={loading} error={error} editHandler={editHandler} deleteHandler={deleteHandler}/>
+        <Table title='Kelas' data={dataKelas} loading={loading} error={error} viewHandler={'/kelas/'} editHandler={editHandler} deleteHandler={deleteHandler}/>
     </Index>
   )
 }

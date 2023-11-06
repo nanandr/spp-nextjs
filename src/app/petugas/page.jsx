@@ -41,7 +41,7 @@ export default function Petugas() {
 
   return (
     <Index title='Petugas' placeholder='Cari Petugas (NIP, Nama)...'>
-        <Table title='Petugas' data={dataPetugas} loading={loading} error={error}/>
+        <Table title='Petugas' data={dataPetugas} viewHandler={'/petugas/'} loading={loading} error={error}/>
     </Index>
   )
 }

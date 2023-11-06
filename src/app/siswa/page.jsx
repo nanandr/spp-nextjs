@@ -83,7 +83,7 @@ export default function Siswa() {
           <Create loading={loading} submitHandler={submitHandler} />
         </InputData>
       </div>
-      <Table title='Siswa' data={dataSiswa} loading={loading} error={error} editHandler={editHandler} deleteHandler={deleteHandler} />
+      <Table title='Siswa' data={dataSiswa} loading={loading} error={error} viewHandler={'/siswa/'} editHandler={editHandler} deleteHandler={deleteHandler} />
       {/* DONT FORGET TO CHANGE TOTAL TO VALUE FROM API */}
       <Pagination page={page} setPage={setPage} loading={loading} total={total} />
     </Index>

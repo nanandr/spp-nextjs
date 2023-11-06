@@ -1,11 +1,11 @@
 "use client"
 
-import { useState } from "react"
-import { Delete, Edit } from "../../public/svg"
-import PopUp from "./PopUp"
-import Create from "@/app/siswa/create"
+import { useState } from "react";
+import { Delete, Edit } from "../../public/svg";
+import PopUp from "./PopUp";
+import Link from 'next/link';
 
-export default function Table({ data, deleteHandler, editHandler, error, loading, title }) {
+export default function Table({ data, deleteHandler, editHandler, viewHandler, error, loading, title }) {
     const [showPopUp, setPopUp] = useState(false)
 
     const handlePopUp = () => {
@@ -69,7 +69,9 @@ export default function Table({ data, deleteHandler, editHandler, error, loading
                                                     {Object.keys(row).map((key) => (
                                                         key !== 'id' &&
                                                         <td key={key} className="whitespace-nowrap max-w-[200px] text-ellipsis overflow-hidden xl:px-6 xl:py-4 px-4 py-3">
-                                                            {key === 'Status' ? (<p className={(row[key] ? 'bg-green-700' : 'bg-red-700') + " p-1 whitespace-normal text-center rounded"}>{row[key] ? 'Lunas' : 'Belum Lunas'}</p>) : row[key]}
+                                                            <Link href={ viewHandler ? viewHandler + row.id : '' } title={row[key]}>
+                                                                {key === 'Status' ? (<p className={(row[key] ? 'bg-green-700' : 'bg-red-700') + " p-1 whitespace-normal text-center rounded"}>{row[key] ? 'Lunas' : 'Belum Lunas'}</p>) : row[key]}
+                                                            </Link>
                                                         </td>
                                                     ))}
                                                     <td className="flex flex-row gap-2 py-3 justify-end">
