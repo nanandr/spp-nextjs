@@ -2,7 +2,7 @@ export default function PageLoading() {
     return (
     <>
         <div className="flex flex-row bg-black bg-opacity-90 min-h-screen">
-            <aside className="fixed top-0 left-0 z-40 w-80 h-screen">
+            <aside className="fixed top-0 left-0 z-40 w-80 h-screen sm:block hidden">
                 <div className="h-full px-3 py-4 bg-zinc-800">
                     <div className="flex flex-row align-middle animate-pulse">
                         <div className="rounded-3xl w-12 h-12 my-3 bg-gray-400" />

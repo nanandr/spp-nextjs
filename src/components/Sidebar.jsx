@@ -2,13 +2,18 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Book, Document, Menu, Money, People } from '../../public/svg.js'
+import { Book, Document, Menu, Money, People, Logout } from '../../public/svg.js'
 import logo from '../../assets/image/logo90x90.png';
+import { signOut } from 'next-auth/react'
 import { useState } from 'react';
+import { useSelector } from "react-redux";
+import { selectVisibility } from '../redux/features/visibleSlice'
 
 export default function Sidebar(props) {
+    const isVisible = useSelector(selectVisibility)
+
     return (
-        <aside className="fixed top-0 left-0 z-40 w-80 h-screen transition-transform -translate-x-full sm:translate-x-0">
+        <aside className={(isVisible ? "" : "hidden ") + "sm:block fixed top-0 left-0 z-40 max-w-[calc(100vw/1.5)] sm:w-80 h-screen sm:translate-x-0"}>
             <div className="h-full px-3 py-4 overflow-y-auto bg-zinc-800 relative">
                 <div className="flex flex-row align-middle">
                     <Image 
@@ -30,6 +35,9 @@ export default function Sidebar(props) {
                     <Dropdown title="Akun" links={[{name: 'Siswa', href: '/siswa', active: props.active}, {name: 'Petugas', href: '/petugas', active: props.active}]} icon={<People/>}/>
                     <Navigation title="Kelas" href="/kelas" active={props.active == 'Kelas' ? true : false } icon={<Book/>}/>
                 </ul>
+                <div className="absolute left-0 bottom-0 py-4 px-3 w-full">
+                    <button className="flex w-full text-gray-50 flex-row justify-between items-center px-2 py-4 bg-zinc-700 hover:bg-gray-600 hover:cursor-pointer transition duration-200 rounded-lg my-2" type='button' onClick={() => signOut()}><span>Logout</span><Logout /></button>
+                </div>
             </div>
         </aside>
     )
@@ -57,7 +65,7 @@ function Dropdown(props) {
                     <span className="ml-3">{ props.title }</span>
                 </div>
                 <svg className="w-3 h-3 mx-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4"/>
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
                 </svg>
             </button>
             <ul id="sidebar-dropdown" className={(visible ? "" : "hidden ") + "py-2 space-y-2"}>
