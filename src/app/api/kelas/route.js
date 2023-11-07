@@ -5,7 +5,7 @@ import { dateTimeFormat } from "../../../../utils/format";
 export const GET = async (req) => {
     try {
         const kelas = await prisma.kelas.findMany({
-            take: 5,
+            // take: 5,
         });
 
         const data = kelas.map(item => {
@@ -17,10 +17,9 @@ export const GET = async (req) => {
             }
         });
 
-        return NextResponse.json({
-            message: "Successfully fetched data",
-            kelas: data
-        });
+        const total = await prisma.kelas.count();
+
+        return NextResponse.json({ message: "Successfully fetched data", kelas: data, total: total });
     }
     catch(error) {
         return NextResponse.json({ message: "Error fetching data" }, { status: 500 });

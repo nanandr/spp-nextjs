@@ -4,14 +4,25 @@ import { prisma } from "../../../../../../utils/prisma";
 
 export const GET = async (req, context) => {
     try {
+        const url = new URL(req.url);
+        let tahun = url.searchParams.get("tahun");
+
+        const tahunAjar = await prisma.tahunAjar.findFirst({
+            where: {tahun: tahun}
+        });
+        
+        const kelas = await prisma.kelas.findFirst({
+            where: { id: context.params.id }
+        });
         const siswa = await prisma.kelasSiswa.findMany({
-            where: { kelasId: context.params.id },
+            where: { kelasId: context.params.id, tahunAjarId: parseInt(tahunAjar.id) },
             include: {
                 siswa: true,
                 kelas: true,
                 tahunAjar: true
             }
         });
+
         const data = siswa.map(item => {
             return {
                 id: parseInt(item.id),
@@ -38,7 +49,12 @@ export const GET = async (req, context) => {
             }
         });
 
-        return NextResponse.json({ message: "Successfully fetched data", kelasSiswa: data });
+        return NextResponse.json({ message: "Successfully fetched data", kelas: {
+            id: parseInt(kelas.id),
+            namaKelas: kelas.namaKelas,
+            createdAt: dateTimeFormat(kelas.createdAt),
+            updatedAt: dateTimeFormat(kelas.updatedAt)
+        }, kelasSiswa: data });
     }
     catch(error) {
         console.log(error);
