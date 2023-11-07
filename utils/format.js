@@ -1,29 +1,33 @@
-// export const take = parseInt(process.env.TAKE);
-export const take = 5;
+// export const take = parseInt(process.env.TAKE)
+export const take = 5
 
 export const dateTimeFormat = (dateTime) => {
     if (dateTime !== null) {
-        const input = new Date(dateTime);
+        const input = new Date(dateTime)
         return input.toLocaleDateString('en-GB', {
             hour: '2-digit',
             minute: '2-digit',
             day: '2-digit',
             month: 'short',
             year: 'numeric'
-        });
+        })
     }
-    return null;
+    return null
 }
 
 export const getUrl = (path) => {
-    return `${window.location.protocol}//${window.location.host}${path}`;
+    return `${window.location.protocol}//${window.location.host}${path}`
+}
+
+const getNum = (page) => {
+    return (page - 1) * take + 1
 }
 
 export const siswaFormat = async (data, page = 1, tahunParams) => {
 
-    let no = (page - 1) * take + 1;
+    let no = getNum(page)
     const siswa = data.map(item => {
-        const kelas = item.kelas.find(i => i.tahunAjar === tahunParams);
+        const kelas = item.kelas.find(i => i.tahunAjar === tahunParams)
 
         return {
             "No": no++,
@@ -38,12 +42,12 @@ export const siswaFormat = async (data, page = 1, tahunParams) => {
             "Data dibuat": item.createdAt,
             "Data diubah": item.updatedAt
         }
-    });
-    return siswa;
+    })
+    return siswa
 }
 
 export const petugasFormat = async (data, page = 1) => {
-    let no = (page - 1) * 5 + 1;
+    let no = getNum(page)
     const petugas = data.map(item => {
         return {
             "No": no++,
@@ -56,12 +60,12 @@ export const petugasFormat = async (data, page = 1) => {
             "Data dibuat": item.createdAt,
             "Data diubah": item.updatedAt
         }
-    });
-    return petugas;
+    })
+    return petugas
 }
 
 export const kelasFormat = async (data, page = 1) => {
-    let no = (page - 1) * 5 + 1;
+    let no = getNum(page)
     const kelas = data.map(item => {
         return {
             "No": no++,
@@ -70,12 +74,32 @@ export const kelasFormat = async (data, page = 1) => {
             "Data dibuat": item.createdAt,
             "Data diubah": item.updatedAt
         }
-    });
-    return kelas;
+    })
+    return kelas
+}
+
+export const kelasSiswaFormat = async (data, page = 1) => {
+    let no = getNum(page)
+    const kelasSiswa = data.map(item => {
+        return {
+            "No": no++,
+            "id": item.siswa.id,
+            "NIS": item.siswa.nis,
+            "Nama": item.siswa.nama,
+            // "Kelas": kelas ? kelas.namaKelas : '',
+            "Angkatan": item.siswa.angkatan,
+            "JK": item.siswa.jk,
+            "Hp": item.siswa.hp,
+            "Alamat": item.siswa.alamat,
+            "Data dibuat": item.createdAt,
+            "Data diubah": item.updatedAt
+        }
+    })
+    return kelasSiswa
 }
 
 export const pembayaranFormat = async (data, page = 1) => {
-    let no = (page - 1) * 5 + 1;
+    let no = getNum(page)
     const pembayaran = data.map(item => {
         return {
             "No": no++,
@@ -88,6 +112,6 @@ export const pembayaranFormat = async (data, page = 1) => {
             "Data diubah": item.createdAt,
             "Data diubah": item.updatedAt,
         }
-    });
-    return pembayaran;
+    })
+    return pembayaran
 }

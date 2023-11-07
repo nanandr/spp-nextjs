@@ -1,17 +1,45 @@
-import Index from "../../index";
-import Table from "@/components/Table";
-import InputData from "@/components/InputData";
-import Create from "./create";
+"use client"
 
-export default function Kelas() {
+import Index from "../../index"
+import Table from "@/components/Table"
+import InputData from "@/components/InputData"
+import Create from "./create"
+import { useState } from "react"
+import { useEffect } from "react"
+import axios from "axios"
+import { getUrl, kelasSiswaFormat } from "../../../../utils/format"
+import { useSearchParams } from "next/navigation"
+
+export default function Kelas({ params }) {
+  const [kelas, setKelas] = useState({})
+  const [data, setData] = useState([])
+
+  const searchParams = useSearchParams()
+
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(getUrl(`/api/kelas/${params.id}/siswa?tahun=${searchParams.get('tahun')}`))
+      setKelas(res.data.kelas)
+      const formattedData = await kelasSiswaFormat(res.data.kelasSiswa)
+      setData(formattedData)
+    }
+    catch(err) {
+      console.error(err)
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [searchParams.get('tahun')])
+  
   return (
-		<Index title='Kelas > 10 RPL B' placeholder='Cari Siswa...'>
+		<Index title={`Kelas > ${kelas.namaKelas || ''}`} placeholder='Cari Siswa...'>
     	<div className="flex flex-row gap-2 justify-end">
-        <InputData title="Input Data Siswa" form="Form Tambah Data Siswa">
+        <InputData title="Input Data Siswa" form={`Form Tambah Data Siswa Kelas ${kelas.namaKelas || ''}`}>
           <Create/>
         </InputData>
       </div>
-      <Table title='Kelas' data={[]}/>
+      <Table title={`Kelas ${kelas.namaKelas || ''}`} data={data}/>
     </Index>
   )
 }
