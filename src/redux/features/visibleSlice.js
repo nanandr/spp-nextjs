@@ -9,11 +9,11 @@ const visibleSlice = createSlice({
     },
     reducers: {
         toggleVisibility: (state) => {
-            state.isVisible = !state.isVisible;
+            state.isVisible = !state.isVisible
         },
     },
-});
+})
 
-export const { toggleVisibility } = visibleSlice.actions;
-export const selectVisibility = (state) => state.visible.isVisible;
-export default visibleSlice.reducer;
+export const { toggleVisibility } = visibleSlice.actions
+export const selectVisibility = (state) => state.visible.isVisible
+export default visibleSlice.reducer

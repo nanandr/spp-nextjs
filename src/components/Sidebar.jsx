@@ -1,13 +1,13 @@
-"use client";
+"use client"
 
-import Link from 'next/link';
-import Image from 'next/image';
+import Link from 'next/link'
+import Image from 'next/image'
 import { Book, Document, Menu, Money, People, Logout } from '../../public/svg.js'
-import logo from '../../assets/image/logo90x90.png';
+import logo from '../../assets/image/logo90x90.png'
 import { signOut } from 'next-auth/react'
-import { useState } from 'react';
-import { useSelector } from "react-redux";
-import { selectVisibility } from '../redux/features/visibleSlice'
+import { useState } from 'react'
+import { useSelector } from "react-redux"
+import { selectVisibility } from '@/redux/features/visibleSlice.js'
 
 export default function Sidebar(props) {
     const isVisible = useSelector(selectVisibility)
@@ -55,7 +55,7 @@ function Navigation(props) {
 }
 
 function Dropdown(props) {
-    const [visible, setVisible] = useState(true);
+    const [visible, setVisible] = useState(true)
     
     return (
         <li>
