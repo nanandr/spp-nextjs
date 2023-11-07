@@ -30,8 +30,21 @@ export const deleteDialog = () => {
     return false
 }
 
-export const siswaFormat = async (data, page = 1, tahunParams) => {
+export const tahunFormat = async (data, page = 1) => {
+    let no = getNum(page)
+    const tahun = data.map(item => {
+        return {
+            "No": no++,
+            "id": item.id,
+            "tahun": item.tahun,
+            "Data dibuat": item.createdAt,
+            "Data diubah": item.updatedAt
+        }
+    })
+    return tahun
+}
 
+export const siswaFormat = async (data, page = 1, tahunParams) => {
     let no = getNum(page)
     const siswa = data.map(item => {
         const kelas = item.kelas.find(i => i.tahunAjar === tahunParams)

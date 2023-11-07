@@ -3,6 +3,7 @@
 import Index from "../../index"
 import Table from "@/components/Table"
 import InputData from "@/components/InputData"
+import UploadSheet from "@/components/UploadSheet"
 import Create from "./create"
 import { useState } from "react"
 import { useEffect } from "react"
@@ -13,6 +14,7 @@ import { useSearchParams } from "next/navigation"
 export default function Kelas({ params }) {
   const [kelas, setKelas] = useState({})
   const [data, setData] = useState([])
+  const [loading, setLoading] = useState(true)
 
   const searchParams = useSearchParams()
 
@@ -26,6 +28,9 @@ export default function Kelas({ params }) {
     catch(err) {
       console.error(err)
     }
+    finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -35,11 +40,12 @@ export default function Kelas({ params }) {
   return (
 		<Index title={`Kelas > ${kelas.namaKelas || ''}`} placeholder='Cari Siswa...'>
     	<div className="flex flex-row gap-2 justify-end">
+        <UploadSheet />
         <InputData title="Input Data Siswa" form={`Form Tambah Data Siswa Kelas ${kelas.namaKelas || ''}`}>
           <Create/>
         </InputData>
       </div>
-      <Table title={`Kelas ${kelas.namaKelas || ''}`} data={data}/>
+      <Table title={`Kelas ${kelas.namaKelas || ''}`} loading={loading} data={data}/>
     </Index>
   )
 }

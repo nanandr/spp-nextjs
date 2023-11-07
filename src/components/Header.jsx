@@ -45,8 +45,10 @@ export default function Header(props) {
 
     return (
         <div className="flex flex-row items-center w-full justify-between">
-            <button onClick={handleToggle} className={(isVisible ? 'ml-60 ' : '') + 'block sm:hidden text-white mx-2'}><BurgerMenu /></button>
-            <h1 className="text-4xl font-bold">{props.title}</h1>
+            <div className="flex flex-row items-center">
+                <button onClick={handleToggle} className={(isVisible ? 'ml-60 ' : '') + 'block sm:hidden text-white mx-2'}><BurgerMenu /></button>
+                <h1 className="text-4xl font-bold">{props.title}</h1>
+            </div>
             <div className='flex flex-row items-center gap-2'>
                 <Dropdown data={data} active={active} setActive={activeHandler} />
                 <HeaderProfile />

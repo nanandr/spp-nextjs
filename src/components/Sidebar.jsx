@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { Book, Document, Menu, Money, People, Logout } from '../../public/svg.js'
+import { Book, Document, Menu, Money, People, Logout, Calendar } from '../../public/svg.js'
 import logo from '../../assets/image/logo90x90.png'
 import { signOut } from 'next-auth/react'
 import { useState } from 'react'
@@ -34,9 +34,10 @@ export default function Sidebar(props) {
                     <Navigation title="Laporan" href="/laporan" active={props.active == 'Laporan' ? true : false } icon={<Document/>}/>
                     <Dropdown title="Akun" links={[{name: 'Siswa', href: '/siswa', active: props.active}, {name: 'Petugas', href: '/petugas', active: props.active}]} icon={<People/>}/>
                     <Navigation title="Kelas" href="/kelas" active={props.active == 'Kelas' ? true : false } icon={<Book/>}/>
+                    <Navigation title="Tahun Ajar" href="/tahunajar" active={props.active == 'Tahun Ajar' ? true : false } icon={<Calendar/>}/>
                 </ul>
                 <div className="absolute left-0 bottom-0 py-4 px-3 w-full">
-                    <button className="flex w-full text-gray-50 flex-row justify-between items-center px-2 py-4 bg-zinc-700 hover:bg-gray-600 hover:cursor-pointer transition duration-200 rounded-lg my-2" type='button' onClick={() => signOut()}><span>Logout</span><Logout /></button>
+                    <button className="flex w-full text-gray-200 flex-row justify-between items-center px-2 py-4 bg-zinc-700 hover:bg-gray-600 hover:cursor-pointer transition duration-200 rounded-lg my-2" type='button' onClick={() => signOut()}><span>Logout</span><Logout /></button>
                 </div>
             </div>
         </aside>

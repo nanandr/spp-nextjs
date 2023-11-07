@@ -76,9 +76,15 @@ export default function Table({ data, deleteHandler, editHandler, viewHandler, e
                                                         </td>
                                                     ))}
                                                     <td className="flex flex-row gap-2 py-3 justify-end">
-                                                        <button onClick={() => handleEditClick(index)} className="w-9 h-9 bg-orange-500 p-2 rounded-md"><Edit /></button>
-                                                        <button onClick={() => { deleteDialog() && deleteHandler(row.id) }} className="w-9 h-9 bg-red-500 p-2 rounded-md"><Delete /></button>
-                                                    </td>
+                                                        {
+                                                            editHandler &&
+                                                            <button onClick={() => handleEditClick(index)} className="w-9 h-9 bg-orange-500 p-2 rounded-md"><Edit /></button>
+                                                        }
+                                                        {
+                                                            deleteHandler &&
+                                                            <button onClick={() => { deleteDialog() && deleteHandler(row.id) }} className="w-9 h-9 bg-red-500 p-2 rounded-md"><Delete /></button>
+                                                        }
+                                                        </td>
                                                 </tr>
                                             ))}
                                         </tbody>

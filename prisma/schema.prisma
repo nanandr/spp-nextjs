@@ -19,9 +19,11 @@ model User {
   email       String
   password    String        @db.VarChar(255)
   hp          String
+  foto        String?       @db.VarChar(255)
   role        Role          @default(Staff)
   createdAt   DateTime?     @db.Timestamp(0) @default(now())
   updatedAt   DateTime?     @db.Timestamp(0)
+  deletedAt   DateTime?     @db.Timestamp(0)
 
   transaksi   Transaksi[]   @relation("UserToTransaksi")
 
@@ -31,11 +33,11 @@ model User {
 model TahunAjar {
   id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
   tahun       String        @unique
-  createdAt   DateTime?     @db.Timestamp() @default(now())
-  updatedAt   DateTime?     @db.Timestamp()
-  deletedAt   DateTime?     @db.Timestamp()
+  createdAt   DateTime?     @db.Timestamp(0) @default(now())
+  updatedAt   DateTime?     @db.Timestamp(0)
+  deletedAt   DateTime?     @db.Timestamp(0)
 
-  kelas       kelasSiswa[]  @relation("TahunToKelas")
+  kelas       KelasSiswa[]  @relation("TahunToKelas")
   spp         Spp[]         @relation("TahunToSpp")
 }
 
@@ -47,10 +49,9 @@ model Spp {
   updatedAt   DateTime?     @db.Timestamp(0)
   deletedAt   DateTime?     @db.Timestamp(0)
 
-  siswa       SppSiswa[]    @relation("SppToSiswa")
-  detail      Detail[]      @relation("SppToDetail")
+  transaksi   Transaksi[]   @relation("SppToTransaksi")
 
-  tahunAjar   TahunAjar     @relation("TahunToSpp", fields: [tahunAjarId], references: [id])
+  tahunAjar   TahunAjar     @relation("TahunToSpp", fields: [tahunAjarId], references: [id], onDelete: Cascade)
 
   @@map("spp")
 }
@@ -62,7 +63,7 @@ model Kelas {
   updatedAt   DateTime?     @db.Timestamp(0)
   deletedAt   DateTime?     @db.Timestamp(0)
 
-  siswa       kelasSiswa[]  @relation("KelasToSiswa")
+  siswa       KelasSiswa[]  @relation("KelasToSiswa")
 
   @@map("kelas")
 }
@@ -71,66 +72,55 @@ model Siswa {
   id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
   nama        String        @db.VarChar(255)
   nis         String
+  nisn        String
+  password    String?       @db.VarChar(255)
+  foto        String?       @db.VarChar(255)
   alamat      String        @db.Text
   jk          JenisKelamin
   angkatan    BigInt
   hp          String
-  createdAt   DateTime?     @db.Timestamp() @default(now())
-  updatedAt   DateTime?     @db.Timestamp()
-  deletedAt   DateTime?     @db.Timestamp()
+  createdAt   DateTime?     @db.Timestamp(0) @default(now())
+  updatedAt   DateTime?     @db.Timestamp(0)
+  deletedAt   DateTime?     @db.Timestamp(0)
 
-  kelas       kelasSiswa[]  @relation("SiswaToKelas")
+  kelas       KelasSiswa[]  @relation("SiswaToKelas")
   transaksi   Transaksi[]   @relation("SiswaToTransaksi")
-  spp         SppSiswa[]    @relation("SiswaToSpp")
-  diskon      diskonSiswa[] @relation("SiswaToDiskon")
+  diskon      DiskonSiswa[] @relation("SiswaToDiskon")
 
   @@map("siswa")
 }
 
-model kelasSiswa {
+model KelasSiswa {
   id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
   siswaId     BigInt        @db.UnsignedBigInt
   kelasId     BigInt        @db.UnsignedBigInt
   tahunAjarId BigInt        @db.UnsignedBigInt
-  createdAt   DateTime?     @db.Timestamp() @default(now())
-  updatedAt   DateTime?     @db.Timestamp()
-  deletedAt   DateTime?     @db.Timestamp()
+  createdAt   DateTime?     @db.Timestamp(0) @default(now())
+  updatedAt   DateTime?     @db.Timestamp(0)
+  deletedAt   DateTime?     @db.Timestamp(0)
 
-  kelas       Kelas         @relation("KelasToSiswa", fields: [kelasId], references: [id])
-  siswa       Siswa         @relation("SiswaToKelas", fields: [siswaId], references: [id])
-  tahunAjar   TahunAjar     @relation("TahunToKelas", fields: [tahunAjarId], references: [id])
+  kelas       Kelas         @relation("KelasToSiswa", fields: [kelasId], references: [id], onDelete: Cascade)
+  siswa       Siswa         @relation("SiswaToKelas", fields: [siswaId], references: [id], onDelete: Cascade)
+  tahunAjar   TahunAjar     @relation("TahunToKelas", fields: [tahunAjarId], references: [id], onDelete: Cascade)
 }
 
-model diskonSiswa {
+model DiskonSiswa {
   id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
   siswaId     BigInt        @db.UnsignedBigInt
   diskonId    BigInt        @db.UnsignedBigInt
-  createdAt   DateTime?     @db.Timestamp() @default(now())
-  updatedAt   DateTime?     @db.Timestamp()
-  deletedAt   DateTime?     @db.Timestamp()
+  createdAt   DateTime?     @db.Timestamp(0) @default(now())
+  updatedAt   DateTime?     @db.Timestamp(0)
+  deletedAt   DateTime?     @db.Timestamp(0)
 
-  diskon      Diskon        @relation("DiskonToSiswa", fields: [diskonId], references: [id])
-  siswa       Siswa         @relation("SiswaToDiskon", fields: [siswaId], references: [id])
-}
-
-model SppSiswa {
-  id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
-  siswaId     BigInt        @db.UnsignedBigInt
-  sppId       BigInt        @db.UnsignedBigInt
-  createdAt   DateTime?     @db.Timestamp() @default(now())
-  updatedAt   DateTime?     @db.Timestamp()
-  deletedAt   DateTime?     @db.Timestamp()
-
-  siswa       Siswa         @relation("SiswaToSpp", fields: [siswaId], references: [id])
-  spp         Spp           @relation("SppToSiswa", fields: [sppId], references: [id])
-
-  @@map("spp_siswa")
+  diskon      Diskon        @relation("DiskonToSiswa", fields: [diskonId], references: [id], onDelete: Cascade)
+  siswa       Siswa         @relation("SiswaToDiskon", fields: [siswaId], references: [id], onDelete: Cascade)
 }
 
 model Transaksi {
   id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
   siswaId     BigInt        @db.UnsignedBigInt
   userId      BigInt        @db.UnsignedBigInt
+  sppId       BigInt        @db.UnsignedBigInt
   tanggal     DateTime      @db.Date
   totalBayar  BigInt
   bulan       String
@@ -138,29 +128,11 @@ model Transaksi {
   updatedAt   DateTime?     @db.Timestamp(0)
   deletedAt   DateTime?     @db.Timestamp(0)
 
-  siswa       Siswa         @relation("SiswaToTransaksi", fields: [siswaId], references: [id])
-  user        User          @relation("UserToTransaksi", fields: [userId], references: [id])
-
-  detail      Detail[]      @relation("TransaksiToDetail")
+  siswa       Siswa         @relation("SiswaToTransaksi", fields: [siswaId], references: [id], onDelete: Cascade)
+  user        User          @relation("UserToTransaksi", fields: [userId], references: [id], onDelete: Cascade)
+  spp         Spp           @relation("SppToTransaksi", fields: [sppId], references: [id], onDelete: Cascade)
 
   @@map("transaksi")
-}
-
-model Detail {
-  id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
-  transaksiId BigInt        @db.UnsignedBigInt
-  sppId       BigInt        @db.UnsignedBigInt
-  jumlahBayar BigInt
-  sisa        BigInt
-  keterangan  String
-  createdAt   DateTime?     @db.Timestamp(0) @default(now())
-  updatedAt   DateTime?     @db.Timestamp(0)
-  deletedAt   DateTime?     @db.Timestamp(0)
-
-  transaksi   Transaksi     @relation("TransaksiToDetail", fields: [transaksiId], references: [id])
-  spp         Spp           @relation("SppToDetail", fields: [sppId], references: [id])
-  
-  @@map("details")
 }
 
 model Diskon {
@@ -170,7 +142,7 @@ model Diskon {
   updatedAt   DateTime?     @db.Timestamp(0)
   deletedAt   DateTime?     @db.Timestamp(0)
 
-  siswa       diskonSiswa[] @relation("DiskonToSiswa")
+  siswa       DiskonSiswa[] @relation("DiskonToSiswa")
 
   @@map("diskon")
 }
