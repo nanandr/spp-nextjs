@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Delete, Edit } from "../../public/svg";
 import PopUp from "./PopUp";
 import Link from 'next/link';
+import { deleteDialog } from "../../utils/format";
 
 export default function Table({ data, deleteHandler, editHandler, viewHandler, error, loading, title }) {
     const [showPopUp, setPopUp] = useState(false)
@@ -76,7 +77,7 @@ export default function Table({ data, deleteHandler, editHandler, viewHandler, e
                                                     ))}
                                                     <td className="flex flex-row gap-2 py-3 justify-end">
                                                         <button onClick={() => handleEditClick(index)} className="w-9 h-9 bg-orange-500 p-2 rounded-md"><Edit /></button>
-                                                        <button onClick={() => deleteHandler(row.id)} className="w-9 h-9 bg-red-500 p-2 rounded-md"><Delete /></button>
+                                                        <button onClick={() => { deleteDialog() && deleteHandler(row.id) }} className="w-9 h-9 bg-red-500 p-2 rounded-md"><Delete /></button>
                                                     </td>
                                                 </tr>
                                             ))}

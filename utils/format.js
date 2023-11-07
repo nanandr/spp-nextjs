@@ -23,6 +23,13 @@ const getNum = (page) => {
     return (page - 1) * take + 1
 }
 
+export const deleteDialog = () => {
+    if(confirm('Konfirmasi hapus data?')) {
+        return true
+    }
+    return false
+}
+
 export const siswaFormat = async (data, page = 1, tahunParams) => {
 
     let no = getNum(page)
