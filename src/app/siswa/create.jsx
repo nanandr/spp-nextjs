@@ -1,9 +1,14 @@
 "use client"
-import Input from "@/components/Input";
-import { useState } from "react";
+import Input from "@/components/Input"
+import { getId } from "@/redux/features/tahunAjarSlice"
+import { useState } from "react"
+import { useSelector } from "react-redux"
 
 export default function Create(props) {
-    const currentData = props.dataSiswa ?? '';
+    const tahunAjarId = useSelector(getId)
+
+    const currentData = props.dataSiswa ?? ''
+    const dataKelas = props.kelas ?? ''
     const [form, setForm] = useState({
         id: currentData.id ?? '',
         nama: currentData.Nama ?? '',
@@ -11,23 +16,25 @@ export default function Create(props) {
         alamat: currentData.Alamat ?? '',
         angkatan: currentData.Angkatan ?? '',
         jk: currentData.JK ?? 'LakiLaki',
-        angkatan: currentData.Angkatan ??  '',
-        hp: currentData.Hp ??  '',
-    });
-    
+        kelas: currentData.kelas ?? 1,
+        angkatan: currentData.Angkatan ?? '',
+        hp: currentData.Hp ?? '',
+        tahunAjar: tahunAjarId
+    })
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value } = e.target
         setForm(prevForm => ({
             ...prevForm,
             [name]: ['angkatan'].includes(name) ? parseInt(value) : value,
-        }));
-    };    
-    
-    
+        }))
+    }
+
+
     const submit = (e) => {
-        e.preventDefault();    
-        props.submitHandler(form);
+        e.preventDefault()
+        console.log(form)
+        props.submitHandler(form)
     }
 
     return (
@@ -35,103 +42,104 @@ export default function Create(props) {
             <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="nama">Nama Siswa</label>
                 <Input
-                    autoComplete='off' 
-                    type="text" 
-                    id='nama' 
-                    name='nama' 
+                    type="text"
+                    id='nama'
+                    name='nama'
                     value={form['nama']}
                     onChange={handleChange}
-                    required
                 />
             </div>
             <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="nis">NIS</label>
                 <Input
-                    autoComplete='off' 
-                    type="number" 
-                    id='nis' 
-                    name='nis' 
+                    type="number"
+                    id='nis'
+                    name='nis'
                     value={form['nis']}
                     onChange={handleChange}
-                    required
                 />
             </div>
             <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="alamat">Alamat</label>
                 <Input
-                    autoComplete='off' 
-                    type="text" 
-                    id='alamat' 
-                    name='alamat' 
+                    type="text"
+                    id='alamat'
+                    name='alamat'
                     value={form['alamat']}
                     onChange={handleChange}
-                    required
                 />
             </div>
             <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="jk">Jenis Kelamin</label>
-                <select 
+                <select
                     defaultValue={"LakiLaki"}
                     className="text-sm transition-all bg-zinc-800 bg-opacity-20 appearance-none border border-gray-600 rounded w-full py-3 px-3 text-gray-300 leading-tight focus:outline-none focus-within:bg-zinc-800 focus:bg-opacity-50 focus:outline focus:outline-zinc-700 focus:outline-offset-2"
                     id='jk'
                     name='jk'
                     value={form['jk']}
                     onChange={(e) => setForm(prev => ({
-                      ...prev,
-                      jk: e.target.value
+                        ...prev,
+                        jk: e.target.value
                     }))}
-                    required
                 >
                     <option value="LakiLaki">Laki-laki</option>
                     <option value="Perempuan">Perempuan</option>
                 </select>
             </div>
-            {/* <div className="my-3">
+            <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="kelas">Kelas</label>
-                <Input
-                    autoComplete='off' 
-                    type="text" 
-                    id='kelas' 
-                    name='kelas' 
+                <select
+                    className="text-sm transition-all bg-zinc-800 bg-opacity-20 appearance-none border border-gray-600 rounded w-full py-3 px-3 text-gray-300 leading-tight focus:outline-none focus-within:bg-zinc-800 focus:bg-opacity-50 focus:outline focus:outline-zinc-700 focus:outline-offset-2"
+                    id='kelas'
+                    name='kelas'
                     value={form['kelas']}
-                    onChange={handleChange}
-                    required
-                />
-            </div> */}
+                    onChange={(e) => setForm(prev => ({
+                        ...prev,
+                        kelas: parseInt(e.target.value)
+                    }))}
+                >
+                    {
+                        dataKelas.length > 0 ?
+                            <>
+                                {dataKelas.map((row, index) => (
+                                    <>
+                                        <option key={index} value={row.id}>{row.Nama}</option>
+                                    </>
+                                ))}
+                            </>
+                            :
+                            <option value="" disabled>Data Kelas Tidak Tersedia</option>
+                    }
+                </select>
+            </div>
             <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="angkatan">Angkatan</label>
                 <Input
-                    autoComplete='off' 
-                    type="number" 
-                    id='angkatan' 
-                    name='angkatan' 
+                    type="number"
+                    id='angkatan'
+                    name='angkatan'
                     value={form['angkatan']}
                     onChange={handleChange}
-                    required
                 />
             </div>
             <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="hp">Nomor Telepon</label>
                 <Input
-                    autoComplete='off' 
-                    type="number" 
-                    id='hp' 
-                    name='hp' 
+                    type="number"
+                    id='hp'
+                    name='hp'
                     value={form['hp']}
                     onChange={handleChange}
-                    required
                 />
             </div>
             {/* <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="diskon">Diskon</label>
-                <Input
-                    autoComplete='off' 
+                <Input 
                     type="number" 
                     id='diskon' 
                     name='diskon' 
                     value={form['diskon']}
                     onChange={handleChange}
-                    required
                 />
             </div> */}
             <button disabled={props.loading} type='submit' className={"w-full my-5 py-3 px-3 transition font-semibold " + (props.loading ? "bg-gray-700 font-semibold" : "bg-blue-400 hover:bg-blue-500")}>{props.loading ? "Loading..." : "Submit"}</button>

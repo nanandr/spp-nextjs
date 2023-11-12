@@ -1,47 +1,51 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from 'react';
-import HeaderProfile from './HeaderProfile';
-import { useDispatch, useSelector } from "react-redux";
-import { toggleVisibility, selectVisibility } from '../redux/features/visibleSlice';
-import axios from 'axios';
-import { BurgerMenu } from '../../public/svg';
-import { getUrl } from '../../utils/format';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react'
+import HeaderProfile from './HeaderProfile'
+import { useDispatch, useSelector } from "react-redux"
+import { toggleVisibility, selectVisibility } from '../redux/features/visibleSlice'
+import { setId } from '@/redux/features/tahunAjarSlice'
+import axios from 'axios'
+import { BurgerMenu } from '../../public/svg'
+import { getUrl } from '../../utils/format'
+import { useRouter } from 'next/navigation'
 
 export default function Header(props) {
-    const [data, setData] = useState([]);
-    const [active, setActive] = useState({ id: 0, tahun: '' });
-    const dispatch = useDispatch();
-    const isVisible = useSelector(selectVisibility);
-    const router = useRouter();
+    const [data, setData] = useState([])
+    const [active, setActive] = useState({ id: 0, tahun: '' })
+    const dispatch = useDispatch()
+    const isVisible = useSelector(selectVisibility)
+    const router = useRouter()
 
     const fetchData = async () => {
         try {
-            const res = await axios.get(getUrl('/api/tahun'));
-            setData(res.data.tahun);
-            setActive(res.data.tahun[0]);
+            const res = await axios.get(getUrl('/api/tahun'))
+            const fetchedData = res.data.tahun
+            setData(fetchedData)
+            setActive(fetchedData[0])
+            dispatch(setId(fetchedData[0].id))
         }
-        catch (err) { 
-            console.error(err);
-        };
+        catch (err) {
+            console.error(err)
+        }
     }
 
     const activeHandler = (link) => {
-        setActive(link);
+        setActive(link)
+        dispatch(setId(link.id))
     }
 
     const handleToggle = () => {
-        dispatch(toggleVisibility());
+        dispatch(toggleVisibility())
     }
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        fetchData()
+    }, [])
 
     useEffect(() => {
-        router.push(`${window.location.origin}${window.location.pathname}?tahun=${active.tahun}`);
-    }, [active]);
+        router.push(`${window.location.origin}${window.location.pathname}?tahun=${active.tahun}`)
+    }, [active])
 
     return (
         <div className="flex flex-row items-center w-full justify-between">
@@ -75,8 +79,8 @@ function Dropdown({ data, active, setActive }) {
                 <li>
                     <button disabled={true} className={"text-black flex items-center w-full p-2 transition duration-200 rounded-lg group"}>Tahun Ajaran</button>
                 </li>
-                {data.map(link => (
-                    <li>
+                {data.map((link, index) => (
+                    <li key={index}>
                         <button disabled={link.id == active.id} onClick={() => setActive(link)} className={(link.id == active.id ? 'bg-blue-500 text-white ' : 'text-black hover:bg-gray-400 ') + "flex items-center w-full p-2 transition duration-200 rounded-lg group hover:text-white active:bg-blue-500"}>{link.tahun}</button>
                     </li>
                 ))}

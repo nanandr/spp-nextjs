@@ -1,11 +1,18 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../utils/prisma";
-import { dateTimeFormat } from "../../../../utils/format";
+import { take, dateTimeFormat } from "../../../../utils/format";
 
 export const GET = async (req) => {
+    const url = new URL(req.url);
+    let page = url.searchParams.get("page");
+    let takes = url.searchParams.get("take");
+    let skip = (page - 1) * take
     try {
+        const total = await prisma.kelas.count();
+
         const kelas = await prisma.kelas.findMany({
-            // take: 5,
+            skip: skip > 1 ? skip : 0,
+            take: takes ? total : take 
         });
 
         const data = kelas.map(item => {
@@ -16,9 +23,6 @@ export const GET = async (req) => {
                 updatedAt: dateTimeFormat(item.updatedAt)
             }
         });
-
-        const total = await prisma.kelas.count();
-
         return NextResponse.json({ message: "Successfully fetched data", kelas: data, total: total });
     }
     catch(error) {

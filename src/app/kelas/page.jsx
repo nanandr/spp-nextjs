@@ -7,17 +7,22 @@ import InputData from "@/components/InputData"
 import Create from "./create"
 import axios from "axios"
 import { getUrl, kelasFormat } from "../../../utils/format"
+import Pagination from "@/components/Pagination"
 
 export default function Kelas() {
   const [dataKelas, setDataKelas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [index, setIndex] = useState(0);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(getUrl('/api/kelas'))
-      const formattedData = await kelasFormat(res.data.kelas)
+      const res = await axios.get(getUrl(`/api/kelas?page=${page}`))
+      setTotal(res.data.total);
+      const formattedData = await kelasFormat(res.data.kelas, page)
       setDataKelas(formattedData)
     } catch (err) {
       console.error(err)
@@ -30,12 +35,12 @@ export default function Kelas() {
   const submitHandler = async (data) => {
     setLoading(true)
     await axios.post(getUrl('/api/kelas'), data)
-    .then(res => console.log(res))
-    .catch(err => {
-      console.error(err)
-      setError(err.response.data.message)
-    })
-    .finally(() => fetchData())
+      .then(res => console.log(res))
+      .catch(err => {
+        console.error(err)
+        setError(err.response.data.message)
+      })
+      .finally(() => fetchData())
   }
 
   const editHandler = {
@@ -53,26 +58,28 @@ export default function Kelas() {
   const deleteHandler = async (id) => {
     setLoading(true)
     await axios.delete(getUrl(`/api/kelas/${id}`))
-    .then(res => console.log(res))
-    .catch(err => {
-      console.error(err)
-      setError(err.response.data.message)
-    })
-    .finally(() => fetchData())
+      .then(res => console.log(res))
+      .catch(err => {
+        console.error(err)
+        setError(err.response.data.message)
+      })
+      .finally(() => fetchData())
   }
 
   useEffect(() => {
+    setLoading(true)
     fetchData()
-  }, [])
+  }, [page])
 
   return (
     <Index title='Kelas' placeholder='Cari Kelas...'>
-        <div className="flex flex-row gap-2 justify-end">
-          <InputData title="Input Data Kelas" form="Form Tambah Data Kelas">
-            <Create loading={loading} submitHandler={submitHandler}/>
-          </InputData>
-        </div>
-        <Table title='Kelas' data={dataKelas} loading={loading} error={error} viewHandler={'/kelas/'} editHandler={editHandler} deleteHandler={deleteHandler}/>
+      <div className="flex flex-row gap-2 justify-end">
+        <InputData title="Input Data Kelas" form="Form Tambah Data Kelas">
+          <Create loading={loading} submitHandler={submitHandler} />
+        </InputData>
+      </div>
+      <Table title='Kelas' data={dataKelas} loading={loading} error={error} viewHandler={'/kelas/'} editHandler={editHandler} deleteHandler={deleteHandler} />
+      <Pagination page={page} setPage={setPage} loading={loading} total={total} />
     </Index>
   )
 }

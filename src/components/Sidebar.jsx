@@ -70,8 +70,8 @@ function Dropdown(props) {
                 </svg>
             </button>
             <ul id="sidebar-dropdown" className={(visible ? "" : "hidden ") + "py-2 space-y-2"}>
-                {props.links.map(link => (
-                    <li>
+                {props.links.map((link, index) => (
+                    <li key={index}>
                         <Link href={link.href} className={(link.name == link.active ? "bg-blue-400 text-white " : " hover:bg-blue-400 text-gray-200 ") + "flex items-center w-full p-2 text-gray-200 transition duration-200 rounded-lg group hover:text-white hover:bg-blue-400 active:bg-blue-500"}>{link.name}</Link>
                     </li>
                 ))}

@@ -10,10 +10,12 @@ export default function Petugas() {
   const [dataPetugas, setDataPetugas] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [index, setIndex] = useState(0)
+  const url = "/api/petugas/";
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(getUrl('/api/petugas'))
+      const res = await axios.get(getUrl(url))
       const formattedData = await petugasFormat(res.data.petugas)
       setDataPetugas(formattedData)
     } catch (err) {
@@ -26,13 +28,25 @@ export default function Petugas() {
 
   const submitHandler = async (data) => {
     setLoading(true)
-    await axios.post(getUrl('/api/petugas'), data)
+    await axios.post(getUrl(url), data)
     .then(res => console.log(res))
     .catch(err => {
       console.error(err)
       setError(err.response.data.message)
     })
     .finally(() => fetchData())
+  }
+
+  const editHandler = {
+    title: "Edit Data Petugas",
+    indexHandler: (index) => setIndex(index),
+    form: () => <Create loading={loading} dataPetugas={dataPetugas[index]} submitHandler={async (data) => {
+      setLoading(true)
+      await axios.put(getUrl(`${url}${data.id}`), data)
+        .then(res => console.log(res))
+        .catch(err => console.error(err))
+        .finally(() => fetchData());
+    }} />,
   }
 
   useEffect(() => {

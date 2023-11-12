@@ -52,7 +52,7 @@ export const GET = async (req, res) => {
 export const POST = async (req, res) => {
     const body = await req.json();
     try {
-        const { nama, nis, jk, angkatan, alamat, hp } = body;
+        const { nama, nis, jk, angkatan, kelas, alamat, hp, tahunAjar } = body;
 
         const siswa = await prisma.siswa.create({
             data: {
@@ -64,8 +64,17 @@ export const POST = async (req, res) => {
                 hp: hp,
             },
         });
+        // const siswaId = siswa.id;
 
-        return NextResponse.json({ message: "Successfully created data" }, { status: 201 });
+        // const createKelas = await prisma.kelasSiswa.create({
+        //     data: {
+        //         siswaId: siswaId,
+        //         kelasId: kelas,
+        //         tahunAjarId: tahunAjar,
+        //     }
+        // }) 
+
+        return NextResponse.json({ message: "Successfully created data", id: siswa.id }, { status: 201 });
     }
     catch (error) {
         return NextResponse.json({ message: error }, { status: 500 });
