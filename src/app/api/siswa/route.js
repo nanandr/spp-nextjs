@@ -5,7 +5,7 @@ import { take, dateTimeFormat } from "../../../../utils/format";
 export const GET = async (req, res) => {
     const url = new URL(req.url);
     let page = url.searchParams.get("page");
-    if(!page) {
+    if (!page) {
         page = 1;
     }
     try {
@@ -64,17 +64,16 @@ export const POST = async (req, res) => {
                 hp: hp,
             },
         });
-        // const siswaId = siswa.id;
 
-        // const createKelas = await prisma.kelasSiswa.create({
-        //     data: {
-        //         siswaId: siswaId,
-        //         kelasId: kelas,
-        //         tahunAjarId: tahunAjar,
-        //     }
-        // }) 
+        const createKelas = await prisma.kelasSiswa.create({
+            data: {
+                siswaId: parseInt(siswa.id),
+                kelasId: kelas,
+                tahunAjarId: tahunAjar,
+            }
+        })
 
-        return NextResponse.json({ message: "Successfully created data", id: siswa.id }, { status: 201 });
+        return NextResponse.json({ message: "Successfully created data" }, { status: 201 });
     }
     catch (error) {
         return NextResponse.json({ message: error }, { status: 500 });
