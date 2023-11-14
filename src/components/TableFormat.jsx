@@ -1,4 +1,5 @@
-import TableLoading from "./TableLoading";
+import TableLoading from "./TableLoading"
+import NextLink from 'next/link'
 
 export default function TableFormat({ format, children, loading, title }) {
     return (
@@ -43,10 +44,22 @@ export function Tr({ key, children }) {
     )
 }
 
-export function Td( { children } ) {
+export function Td({ className, children }) {
     return (
-        <td className="whitespace-nowrap max-w-[200px] text-ellipsis overflow-hidden xl:px-6 xl:py-4 px-4 py-3">
+        <td className={`whitespace-nowrap max-w-[200px] text-ellipsis overflow-hidden xl:px-6 xl:py-4 px-4 py-3 ${className}`}>
             { children }
         </td>
+    )
+}
+
+export function Link({ title, href }) {
+    return (
+        <NextLink title={title} href={href ? href : ''}>{title}</NextLink>
+    )
+}
+
+export function Button({ clickHandler, backgroundColor, children }) {
+    return (
+        <button onClick={clickHandler} className={`w-9 h-9 ${backgroundColor} p-2 rounded-md`} type='button'>{children}</button>
     )
 }
