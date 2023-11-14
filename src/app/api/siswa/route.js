@@ -29,6 +29,7 @@ export const GET = async (req, res) => {
             return {
                 id: parseInt(item.id),
                 nis: item.nis,
+                nisn: item.nisn,
                 alamat: item.alamat,
                 nama: item.nama,
                 kelas: kelasSiswa,
@@ -57,7 +58,7 @@ export const POST = async (req, res) => {
             data: {
                 nama: nama,
                 nis: nis,
-                //nisn
+                nisn: nisn,
                 alamat: alamat,
                 jk: jk,
                 angkatan: angkatan,

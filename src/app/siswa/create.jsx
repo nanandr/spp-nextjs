@@ -109,17 +109,16 @@ export default function Create({ data, kelas, submitHandler, loading }) {
                         kelas: parseInt(e.target.value)
                     }))}
                 >
-                    {
-                        dataKelas.length > 0 ?
-                            <>
-                                {dataKelas.map((row, index) => (
-                                    <>
-                                        <option key={index} value={row.id}>{row.Nama}</option>
-                                    </>
-                                ))}
-                            </>
-                            :
-                            <option value="" disabled>Data Kelas Tidak Tersedia</option>
+                    {dataKelas.length > 0 ?
+                        <>
+                            {dataKelas.map((row, index) => (
+                                <>
+                                    <option key={index} value={row.id}>{row.Nama}</option>
+                                </>
+                            ))}
+                        </>
+                        :
+                        <option value="" disabled>Data Kelas Tidak Tersedia</option>
                     }
                 </select>
             </div>

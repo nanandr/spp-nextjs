@@ -12,6 +12,7 @@ export const GET = async (req, context) => {
             id: parseInt(siswa.id),
             nama: siswa.nama,
             nis: siswa.nis,
+            nisn: siswa.nisn,
             alamat: siswa.alamat,
             jk: siswa.jk,
             angkatan: parseInt(siswa.angkatan),
@@ -36,7 +37,7 @@ export const PUT = async (req, context) => {
             data: {
                 nama: nama,
                 nis: nis,
-                //nisn
+                nisn: nisn,
                 alamat: alamat,
                 jk: jk,
                 angkatan: angkatan,

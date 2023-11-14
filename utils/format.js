@@ -79,6 +79,7 @@ export const siswaFormat = async (data, page = 1, tahunParams) => {
             "No": no++,
             "id": item.id,
             "NIS": item.nis,
+            "NISN": item.nisn,
             "Nama": item.nama,
             "Kelas": kelas ? kelas.namaKelas : '',
             "Angkatan": item.angkatan,
