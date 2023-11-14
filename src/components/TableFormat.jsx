@@ -46,7 +46,7 @@ export function Tr({ key, children }) {
 
 export function Td({ className, children }) {
     return (
-        <td className={`whitespace-nowrap max-w-[200px] text-ellipsis overflow-hidden xl:px-6 xl:py-4 px-4 py-3 ${className}`}>
+        <td className={`${!className ? 'whitespace-nowrap max-w-[200px]' : ''} text-ellipsis overflow-hidden xl:px-6 xl:py-4 px-4 py-3 ${className}`}>
             { children }
         </td>
     )

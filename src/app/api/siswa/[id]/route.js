@@ -29,13 +29,14 @@ export const GET = async (req, context) => {
 export const PUT = async (req, context) => {
     const body = await req.json();
     try {
-        const { nama, nis, alamat, jk, angkatan, hp } = body;
+        const { nama, nis, nisn, alamat, jk, angkatan, hp, kelas, tahunAjar } = body;
 
         const siswa = await prisma.siswa.update({
             where: { id: context.params.id },
             data: {
                 nama: nama,
                 nis: nis,
+                //nisn
                 alamat: alamat,
                 jk: jk,
                 angkatan: angkatan,
@@ -43,6 +44,14 @@ export const PUT = async (req, context) => {
                 updatedAt: new Date()
             }
         });
+
+        if(kelas) {
+            const kelasSiswa = await prisma.kelasSiswa.upsert({
+                where: { siswaId_tahunAjarId: { siswaId: parseInt(siswa.id), tahunAjarId: tahunAjar } },
+                update: { kelasId: kelas, updatedAt: new Date() },
+                create: { siswaId: parseInt(siswa.id), kelasId: kelas, tahunAjarId: tahunAjar }
+            })
+        }
 
         return NextResponse.json({ message: "Successfully edited data", siswa: {
             id: parseInt(siswa.id),

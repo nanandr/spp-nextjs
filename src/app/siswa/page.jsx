@@ -12,15 +12,17 @@ import TableFormat, { Td, Tr, Link, Button } from "@/components/TableFormat"
 import { useSelector } from "react-redux"
 import { getId } from "@/redux/features/tahunAjarSlice"
 import { Delete, Edit } from "../../../public/svg"
+import PopUp from "@/components/PopUp"
 
 export default function Siswa() {
   const [dataSiswa, setDataSiswa] = useState([])
   const [kelas, setKelas] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [index, setIndex] = useState(0)
   const [page, setPage] = useState(1)
+  const [view, setView] = useState(0)
   const [total, setTotal] = useState(0)
+  const [showPopUp, setPopUp] = useState(false)
   const url = "/api/siswa/"
 
   const tahunId = useSelector(getId)
@@ -52,31 +54,40 @@ export default function Siswa() {
       .finally(() => fetchData())
   }
 
-  const editHandler = {
-    title: "Edit Data Siswa",
-    indexHandler: (index) => setIndex(index),
-    form: () => <Create loading={loading} dataSiswa={dataSiswa[index]} kelas={kelas} submitHandler={async (data) => {
-      setLoading(true)
-      await axios.put(getUrl(`${url}${data.id}`), data)
-        .then(res => console.log('Success'))
-        .catch(err => console.error(err))
-        .finally(() => fetchData())
-    }} />,
-  }
+  // const editHandler = {
+  //   title: "Edit Data Siswa",
+  //   indexHandler: (index) => setIndex(index),
+  //   form: () => <Create loading={loading} dataSiswa={dataSiswa[index]} kelas={kelas} submitHandler={async (data) => {
+  //     setLoading(true)
+  //     await axios.put(getUrl(`${url}${data.id}`), data)
+  //       .then(res => console.log('Success'))
+  //       .catch(err => console.error(err))
+  //       .finally(() => fetchData())
+  //   }} />,
+  // }
 
-  const deleteHandler = async (id) => {
-    if(!deleteDialog()) {
-      return;
-    }
-
+  const editHandler = async (form) => {
     setLoading(true)
-    await axios.delete(getUrl(`${url}${id}`))
+    await axios.put(getUrl(`${url}${form.id}`), form)
       .then(res => console.log(res))
       .catch(err => {
         console.error(err)
         setError(err.response.data.message)
       })
       .finally(() => fetchData())
+  } 
+
+  const deleteHandler = async (id) => {
+    if(deleteDialog()) {
+      setLoading(true)
+      await axios.delete(getUrl(`${url}${id}`))
+        .then(res => console.log(res))
+        .catch(err => {
+          console.error(err)
+          setError(err.response.data.message)
+        })
+        .finally(() => fetchData())
+    }
   }
 
   useEffect(() => {
@@ -107,14 +118,23 @@ export default function Siswa() {
               <Td><Link title={siswa.hp}/></Td>
               <Td><Link title={siswa.createdAt}/></Td>
               <Td><Link title={siswa.updatedAt}/></Td>
-              <Td className='flex flex-row flex-wrap gap-2'>
-                <Button backgroundColor={'bg-orange-500'}><Edit/></Button>
+              <Td className='flex flex-row gap-2'>
+                <Button clickHandler={() => {
+                  setPopUp(true)
+                  setView(index)
+                  }} backgroundColor={'bg-orange-500'}><Edit/></Button>
                 <Button clickHandler={() => deleteHandler(siswa.id)} backgroundColor={'bg-red-500'}><Delete/></Button>
               </Td>
             </Tr>
           ))
         }
       </TableFormat>
+      {
+        showPopUp &&
+        <PopUp title="Edit Data Siswa" onClose={() => setPopUp(false)}>
+          <Create data={dataSiswa[view]} kelas={kelas} submitHandler={(form) => editHandler(form)} loading={loading}/>
+        </PopUp>
+      }
       <Pagination page={page} setPage={setPage} loading={loading} total={total} />
     </Index>
   )

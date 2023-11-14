@@ -102,6 +102,8 @@ model KelasSiswa {
   kelas       Kelas         @relation("KelasToSiswa", fields: [kelasId], references: [id], onDelete: Cascade)
   siswa       Siswa         @relation("SiswaToKelas", fields: [siswaId], references: [id], onDelete: Cascade)
   tahunAjar   TahunAjar     @relation("TahunToKelas", fields: [tahunAjarId], references: [id], onDelete: Cascade)
+
+  @@unique([siswaId, tahunAjarId])
 }
 
 model DiskonSiswa {

@@ -3,22 +3,24 @@ import Input from "@/components/Input"
 import { getId } from "@/redux/features/tahunAjarSlice"
 import { useState } from "react"
 import { useSelector } from "react-redux"
+import { getKelas } from "../../../utils/format"
 
-export default function Create(props) {
+export default function Create({ data, kelas, submitHandler, loading }) {
     const tahunAjarId = useSelector(getId)
 
-    const currentData = props.dataSiswa ?? ''
-    const dataKelas = props.kelas ?? ''
+    const currentData = data ?? ''
+    const dataKelas = kelas ?? ''
     const [form, setForm] = useState({
         id: currentData.id ?? '',
-        nama: currentData.Nama ?? '',
-        nis: currentData.NIS ?? '',
-        alamat: currentData.Alamat ?? '',
-        angkatan: currentData.Angkatan ?? '',
-        jk: currentData.JK ?? 'LakiLaki',
-        kelas: currentData.kelas ?? 1,
-        angkatan: currentData.Angkatan ?? '',
-        hp: currentData.Hp ?? '',
+        nama: currentData.nama ?? '',
+        nis: currentData.nis ?? '',
+        nisn: currentData.nisn ?? '',
+        alamat: currentData.alamat ?? '',
+        angkatan: currentData.angkatan ?? '',
+        jk: currentData.jk ?? 'LakiLaki',
+        kelas: currentData.kelas ? getKelas(currentData.kelas, tahunAjarId) : 1,
+        angkatan: currentData.angkatan ?? '',
+        hp: currentData.hp ?? '',
         tahunAjar: tahunAjarId
     })
 
@@ -30,11 +32,10 @@ export default function Create(props) {
         }))
     }
 
-
     const submit = (e) => {
         e.preventDefault()
         console.log(form)
-        props.submitHandler(form)
+        submitHandler(form)
     }
 
     return (
@@ -56,6 +57,16 @@ export default function Create(props) {
                     id='nis'
                     name='nis'
                     value={form['nis']}
+                    onChange={handleChange}
+                />
+            </div>
+            <div className="my-3">
+                <label className='block text-sm font-light mb-1' htmlFor="nisn">NISN</label>
+                <Input
+                    type="number"
+                    id='nisn'
+                    name='nisn'
+                    value={form['nisn']}
                     onChange={handleChange}
                 />
             </div>
@@ -92,7 +103,7 @@ export default function Create(props) {
                     className="text-sm transition-all bg-zinc-800 bg-opacity-20 appearance-none border border-gray-600 rounded w-full py-3 px-3 text-gray-300 leading-tight focus:outline-none focus-within:bg-zinc-800 focus:bg-opacity-50 focus:outline focus:outline-zinc-700 focus:outline-offset-2"
                     id='kelas'
                     name='kelas'
-                    value={form['kelas']}
+                    value={form['kelas']?.kelasId}
                     onChange={(e) => setForm(prev => ({
                         ...prev,
                         kelas: parseInt(e.target.value)
@@ -142,7 +153,7 @@ export default function Create(props) {
                     onChange={handleChange}
                 />
             </div> */}
-            <button disabled={props.loading} type='submit' className={"w-full my-5 py-3 px-3 transition font-semibold " + (props.loading ? "bg-gray-700 font-semibold" : "bg-blue-400 hover:bg-blue-500")}>{props.loading ? "Loading..." : "Submit"}</button>
+            <button disabled={loading} type='submit' className={"w-full my-5 py-3 px-3 transition font-semibold " + (loading ? "bg-gray-700 font-semibold" : "bg-blue-400 hover:bg-blue-500")}>{loading ? "Loading..." : "Submit"}</button>
         </form>
     )
 } 

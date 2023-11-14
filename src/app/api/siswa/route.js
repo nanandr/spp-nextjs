@@ -23,7 +23,7 @@ export const GET = async (req, res) => {
                 const dataKelas = await prisma.kelas.findFirst({ where: { id: kelas.kelasId } });
                 const dataTahun = await prisma.tahunAjar.findFirst({ where: { id: kelas.tahunAjarId } });
 
-                return { tahunId: parseInt(dataTahun.id), namaKelas: dataKelas.namaKelas, tahunAjar: dataTahun.tahun };
+                return { tahunId: parseInt(dataTahun.id), kelasId: parseInt(dataKelas.id), namaKelas: dataKelas.namaKelas, tahunAjar: dataTahun.tahun };
             }));
 
             return {
@@ -51,12 +51,13 @@ export const GET = async (req, res) => {
 export const POST = async (req, res) => {
     const body = await req.json();
     try {
-        const { nama, nis, jk, angkatan, kelas, alamat, hp, tahunAjar } = body;
+        const { nama, nis, nisn, jk, angkatan, kelas, alamat, hp, tahunAjar } = body;
 
         const siswa = await prisma.siswa.create({
             data: {
                 nama: nama,
                 nis: nis,
+                //nisn
                 alamat: alamat,
                 jk: jk,
                 angkatan: angkatan,
