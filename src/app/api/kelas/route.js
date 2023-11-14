@@ -1,19 +1,14 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../utils/prisma";
-import { take, dateTimeFormat } from "../../../../utils/format";
+import { dateTimeFormat, paginate } from "../../../../utils/format";
 
 export const GET = async (req) => {
     const url = new URL(req.url);
     let page = url.searchParams.get("page");
-    let takes = url.searchParams.get("take");
-    let skip = (page - 1) * take
     try {
         const total = await prisma.kelas.count();
 
-        const kelas = await prisma.kelas.findMany({
-            skip: skip > 1 ? skip : 0,
-            take: takes ? total : take 
-        });
+        const kelas = await prisma.kelas.findMany(paginate(page, total));
 
         const data = kelas.map(item => {
             return {

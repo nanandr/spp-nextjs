@@ -1,6 +1,25 @@
 // export const take = parseInt(process.env.TAKE)
 export const take = 5
 
+export const paginate = (page, total) => {
+    let skip = 0
+    let itemsPerPage = take
+
+    if (page) {
+        if (page === 'all') {
+            itemsPerPage = total
+        }
+        else {
+            skip = (page - 1) * take
+        }
+    }
+
+    return {
+        skip: skip > 1 ? skip : 0,
+        take: items 
+    }
+}
+
 export const dateTimeFormat = (dateTime) => {
     if (dateTime !== null) {
         const input = new Date(dateTime)

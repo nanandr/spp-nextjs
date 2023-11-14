@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../utils/prisma";
-import { take, dateTimeFormat } from "../../../../utils/format";
+import { take, dateTimeFormat, paginate } from "../../../../utils/format";
 
 export const GET = async (req, res) => {
     const url = new URL(req.url);
@@ -9,9 +9,12 @@ export const GET = async (req, res) => {
         page = 1;
     }
     try {
+        const total = await prisma.siswa.count()
+        const pagination = paginate(page, total)
+
         const siswa = await prisma.siswa.findMany({
-            skip: (page - 1) * take,
-            take: take,
+            skip: pagination.skip,
+            take: pagination.take,
             include: {
                 kelas: true
             }
@@ -38,8 +41,6 @@ export const GET = async (req, res) => {
                 updatedAt: dateTimeFormat(item.updatedAt)
             }
         }));
-
-        const total = await prisma.siswa.count();
 
         return NextResponse.json({ message: "Successfully fetched data", siswa: data, total: total });
     }

@@ -25,7 +25,7 @@ export default function Siswa() {
   const fetchData = async () => {
     try {
       const res = await axios.get(getUrl(`/api/siswa?page=${page}`))
-      const resKelas = await axios.get(getUrl('/api/kelas?take=0'))
+      const resKelas = await axios.get(getUrl('/api/kelas?page=all'))
       const formattedKelas = await kelasFormat(resKelas.data.kelas)
       setKelas(formattedKelas)
       setTotal(res.data.total)
