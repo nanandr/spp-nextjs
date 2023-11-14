@@ -13,6 +13,7 @@ export default function Create(props) {
         id: currentData.id ?? '',
         nama: currentData.Nama ?? '',
         nis: currentData.NIS ?? '',
+        nisn: currentData.NISN ?? '',
         alamat: currentData.Alamat ?? '',
         angkatan: currentData.Angkatan ?? '',
         jk: currentData.JK ?? 'LakiLaki',
@@ -60,6 +61,16 @@ export default function Create(props) {
                 />
             </div>
             <div className="my-3">
+                <label className='block text-sm font-light mb-1' htmlFor="nisn">NISN</label>
+                <Input
+                    type="number"
+                    id='nisn'
+                    name='nisn'
+                    value={form['nisn']}
+                    onChange={handleChange}
+                />
+            </div>
+            <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="alamat">Alamat</label>
                 <Input
                     type="text"
@@ -98,17 +109,16 @@ export default function Create(props) {
                         kelas: parseInt(e.target.value)
                     }))}
                 >
-                    {
-                        dataKelas.length > 0 ?
-                            <>
-                                {dataKelas.map((row, index) => (
-                                    <>
-                                        <option key={index} value={row.id}>{row.Nama}</option>
-                                    </>
-                                ))}
-                            </>
-                            :
-                            <option value="" disabled>Data Kelas Tidak Tersedia</option>
+                    {dataKelas.length > 0 ?
+                        <>
+                            {dataKelas.map((row, index) => (
+                                <>
+                                    <option key={index} value={row.id}>{row.Nama}</option>
+                                </>
+                            ))}
+                        </>
+                        :
+                        <option value="" disabled>Data Kelas Tidak Tersedia</option>
                     }
                 </select>
             </div>
