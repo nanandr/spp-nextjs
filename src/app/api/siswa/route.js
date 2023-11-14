@@ -1,13 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../utils/prisma";
-import { take, dateTimeFormat, paginate } from "../../../../utils/format";
+import { dateTimeFormat, paginate } from "../../../../utils/format";
 
 export const GET = async (req, res) => {
     const url = new URL(req.url);
     let page = url.searchParams.get("page");
-    if (!page) {
-        page = 1;
-    }
+    
     try {
         const total = await prisma.siswa.count()
         const pagination = paginate(page, total)

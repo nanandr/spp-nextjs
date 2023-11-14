@@ -1,3 +1,6 @@
+import { useSelector } from "react-redux"
+import { getId } from "@/redux/features/tahunAjarSlice"
+
 // export const take = parseInt(process.env.TAKE)
 export const take = 5
 
@@ -38,8 +41,12 @@ export const getUrl = (path) => {
     return `${window.location.protocol}//${window.location.host}${path}`
 }
 
-const getNum = (page) => {
+const getNumber = (page) => {
     return (page - 1) * take + 1
+}
+
+export const getNum = (page, index) => {
+    return (page - 1) * take + index + 1
 }
 
 export const deleteDialog = () => {
@@ -50,7 +57,7 @@ export const deleteDialog = () => {
 }
 
 export const tahunFormat = async (data, page = 1) => {
-    let no = getNum(page)
+    let no = getNumber(page)
     const tahun = data.map(item => {
         return {
             "No": no++,
@@ -64,7 +71,7 @@ export const tahunFormat = async (data, page = 1) => {
 }
 
 export const siswaFormat = async (data, page = 1, tahunParams) => {
-    let no = getNum(page)
+    let no = getNumber(page)
     const siswa = data.map(item => {
         const kelas = item.kelas.find(i => i.tahunAjar === tahunParams)
 
@@ -87,7 +94,7 @@ export const siswaFormat = async (data, page = 1, tahunParams) => {
 }
 
 export const petugasFormat = async (data, page = 1) => {
-    let no = getNum(page)
+    let no = getNumber(page)
     const petugas = data.map(item => {
         return {
             "No": no++,
@@ -105,7 +112,7 @@ export const petugasFormat = async (data, page = 1) => {
 }
 
 export const kelasFormat = async (data, page = 1) => {
-    let no = getNum(page)
+    let no = getNumber(page)
     const kelas = data.map(item => {
         return {
             "No": no++,
@@ -118,8 +125,12 @@ export const kelasFormat = async (data, page = 1) => {
     return kelas
 }
 
+export const getKelas = (kelasSiswa, tahunId) => {
+    return kelasSiswa.find(kelas => kelas.tahunId === tahunId)
+}
+
 export const kelasSiswaFormat = async (data, page = 1) => {
-    let no = getNum(page)
+    let no = getNumber(page)
     const kelasSiswa = data.map(item => {
         return {
             "No": no++,
@@ -139,7 +150,7 @@ export const kelasSiswaFormat = async (data, page = 1) => {
 }
 
 export const pembayaranFormat = async (data, page = 1) => {
-    let no = getNum(page)
+    let no = getNumber(page)
     const pembayaran = data.map(item => {
         return {
             "No": no++,
