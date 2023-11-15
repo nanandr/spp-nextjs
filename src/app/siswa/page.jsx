@@ -75,10 +75,10 @@ export default function Siswa() {
         setError(err.response.data.message)
       })
       .finally(() => fetchData())
-  } 
+  }
 
   const deleteHandler = async (id) => {
-    if(deleteDialog()) {
+    if (deleteDialog()) {
       setLoading(true)
       await axios.delete(getUrl(`${url}${id}`))
         .then(res => console.log(res))
@@ -104,38 +104,42 @@ export default function Siswa() {
           <Create loading={loading} submitHandler={submitHandler} kelas={kelas} />
         </InputData>
       </div>
-      <TableFormat title='Akun Siswa' format={['No', 'Nama Siswa', 'Kelas', 'NIS', 'NISN', 'JK', 'Alamat', 'HP', 'Data Dibuat', 'Data Diubah']} loading={loading} error={error}>
-        {
-          dataSiswa.map((siswa, index) => (
-            <Tr>
-              <Td>{getNum(page, index)}</Td>
-              <Td><Link title={siswa.nama}/></Td>
-              <Td><Link title={getKelas(siswa.kelas, tahunId)?.namaKelas}/></Td>
-              <Td><Link title={siswa.nis}/></Td>
-              <Td><Link title={siswa.nisn}/></Td>
-              <Td><Link title={siswa.jk}/></Td>
-              <Td><Link title={siswa.alamat}/></Td>
-              <Td><Link title={siswa.hp}/></Td>
-              <Td><Link title={siswa.createdAt}/></Td>
-              <Td><Link title={siswa.updatedAt}/></Td>
-              <Td className='flex flex-row gap-2'>
-                <Button clickHandler={() => {
-                  setPopUp(true)
-                  setView(index)
-                  }} backgroundColor={'bg-orange-500'}><Edit/></Button>
-                <Button clickHandler={() => deleteHandler(siswa.id)} backgroundColor={'bg-red-500'}><Delete/></Button>
-              </Td>
-            </Tr>
-          ))
-        }
-      </TableFormat>
-      {
-        showPopUp &&
-        <PopUp title="Edit Data Siswa" onClose={() => setPopUp(false)}>
-          <Create data={dataSiswa[view]} kelas={kelas} submitHandler={(form) => editHandler(form)} loading={loading}/>
-        </PopUp>
+      {dataSiswa.length > 0 ?
+        <>
+          <TableFormat title='Akun Siswa' format={['No', 'Nama Siswa', 'Kelas', 'NIS', 'NISN', 'JK', 'Alamat', 'HP', 'Data Dibuat', 'Data Diubah']} loading={loading} error={error}>
+            {dataSiswa.map((siswa, index) => (
+              <Tr>
+                <Td>{getNum(page, index)}</Td>
+                <Td><Link title={siswa.nama} /></Td>
+                <Td><Link title={getKelas(siswa.kelas, tahunId)?.namaKelas} /></Td>
+                <Td><Link title={siswa.nis} /></Td>
+                <Td><Link title={siswa.nisn} /></Td>
+                <Td><Link title={siswa.jk} /></Td>
+                <Td><Link title={siswa.alamat} /></Td>
+                <Td><Link title={siswa.hp} /></Td>
+                <Td><Link title={siswa.createdAt} /></Td>
+                <Td><Link title={siswa.updatedAt} /></Td>
+                <Td className='flex flex-row gap-2'>
+                  <Button clickHandler={() => {
+                    setPopUp(true)
+                    setView(index)
+                  }} backgroundColor={'bg-orange-500'}><Edit /></Button>
+                  <Button clickHandler={() => deleteHandler(siswa.id)} backgroundColor={'bg-red-500'}><Delete /></Button>
+                </Td>
+              </Tr>
+            ))
+            }
+          </TableFormat>
+          {
+            showPopUp &&
+            <PopUp title="Edit Data Siswa" onClose={() => setPopUp(false)}>
+              <Create data={dataSiswa[view]} kelas={kelas} submitHandler={(form) => editHandler(form)} loading={loading} />
+            </PopUp>
+          }
+          <Pagination page={page} setPage={setPage} loading={loading} total={total} />
+        </>
+        : <div className="py-5 text-center">Data Tidak Tersedia, Tambah Data Akun Siswa Untuk Melihat</div>
       }
-      <Pagination page={page} setPage={setPage} loading={loading} total={total} />
     </Index>
   )
 }
