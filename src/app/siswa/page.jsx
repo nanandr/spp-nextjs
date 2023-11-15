@@ -117,7 +117,7 @@ export default function Siswa() {
             <Td><Link title={siswa.hp} /></Td>
             <Td><Link title={siswa.createdAt} /></Td>
             <Td><Link title={siswa.updatedAt} /></Td>
-            <Td className='flex flex-row gap-2'>
+            <Td className='flex flex-row gap-2 justify-end'>
               <Button clickHandler={() => {
                 setPopUp(true)
                 setView(index)
