@@ -34,7 +34,6 @@ export default function Create({ data, kelas, submitHandler, loading }) {
 
     const submit = (e) => {
         e.preventDefault()
-        console.log(form)
         submitHandler(form)
     }
 
