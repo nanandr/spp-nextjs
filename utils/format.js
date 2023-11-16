@@ -1,7 +1,3 @@
-import { useSelector } from "react-redux"
-import { getId } from "@/redux/features/tahunAjarSlice"
-
-// export const take = parseInt(process.env.TAKE)
 export const take = 5
 
 export const paginate = (page, total) => {

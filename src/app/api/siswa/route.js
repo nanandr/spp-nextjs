@@ -5,12 +5,25 @@ import { dateTimeFormat, paginate } from "../../../../utils/format"
 export const GET = async (req, res) => {
     const url = new URL(req.url)
     let page = url.searchParams.get("page")
+    let search = url.searchParams.get("search") ?? ''
 
     try {
-        const total = await prisma.siswa.count()
+        let whereCondition = {}
+
+        if (search) {
+            whereCondition.OR = [
+                { nis: search },
+                { nisn: search },
+            ]
+        }
+        const total = await prisma.siswa.count({
+            where: whereCondition,
+        })
+
         const pagination = paginate(page, total)
 
         const siswa = await prisma.siswa.findMany({
+            where: whereCondition,
             skip: pagination.skip,
             take: pagination.take,
             include: {

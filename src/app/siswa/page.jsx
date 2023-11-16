@@ -54,18 +54,6 @@ export default function Siswa() {
       .finally(() => fetchData())
   }
 
-  // const editHandler = {
-  //   title: "Edit Data Siswa",
-  //   indexHandler: (index) => setIndex(index),
-  //   form: () => <Create loading={loading} dataSiswa={dataSiswa[index]} kelas={kelas} submitHandler={async (data) => {
-  //     setLoading(true)
-  //     await axios.put(getUrl(`${url}${data.id}`), data)
-  //       .then(res => console.log('Success'))
-  //       .catch(err => console.error(err))
-  //       .finally(() => fetchData())
-  //   }} />,
-  // }
-
   const editHandler = async (form) => {
     setLoading(true)
     await axios.put(getUrl(`${url}${form.id}`), form)
