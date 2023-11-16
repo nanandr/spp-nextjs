@@ -66,13 +66,15 @@ export const POST = async (req, res) => {
             },
         })
 
-        const createKelas = await prisma.kelasSiswa.create({
-            data: {
-                siswaId: parseInt(siswa.id),
-                kelasId: kelas,
-                tahunAjarId: tahunAjar,
-            }
-        })
+        if(kelas && tahunAjar) {
+            const createKelas = await prisma.kelasSiswa.create({
+                data: {
+                    siswaId: parseInt(siswa.id),
+                    kelasId: kelas,
+                    tahunAjarId: tahunAjar,
+                }
+            })
+        }
 
         return NextResponse.json({ message: "Successfully created data" }, { status: 201 })
     }

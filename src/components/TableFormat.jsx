@@ -33,7 +33,7 @@ export default function TableFormat({ data, format, children, loading, title, er
                                 </table>
                             </div>
                             :
-                            <div className="py-5 text-center">{error ? error : 'Data Tidak Tersedia, Tambah Data Akun Siswa Untuk Melihat'}</div>
+                            <div className="py-5 text-center">{error ? error : `Data Tidak Tersedia, Tambah Data ${title}`}</div>
                     }
                 </div>
             }

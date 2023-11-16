@@ -1,36 +1,45 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { Upload } from "../../public/svg";
-import * as XLSX from "xlsx";
-import PopUp from "./PopUp";
-import Table from "./Table";
+import { useState, useEffect } from "react"
+import { Upload } from "../../public/svg"
+import * as XLSX from "xlsx"
+import PopUp from "./PopUp"
+import TableFormat, { Tr, Td, Link } from "./TableFormat"
+import { getNum } from "../../utils/format"
 
 export default function UploadSheet() {
-    const [data, setData] = useState([]);
-    const [showPopUp, setPopUp] = useState(false);
+    const [data, setData] = useState([])
+    const [workBook, setWorkBook] = useState(null)
+    const [page, setPage] = useState(0)
+    const [showPopUp, setPopUp] = useState(false)
+    const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        if(workBook) {
+            const sheetName = workBook.SheetNames[page]
+            const sheet = workBook.Sheets[sheetName]
+            const parsedData = XLSX.utils.sheet_to_json(sheet)
+            
+            setData(parsedData)
+            setPopUp(true)
+        }
+    }, [workBook, page])
 
     const fileUpload = (e) => {
-        const reader = new FileReader();
-        reader.readAsBinaryString(e.target.files[0]);
+        const reader = new FileReader()
+        reader.readAsBinaryString(e.target.files[0])
         reader.onload = (e) => {
-            const data = e.target.result;
-            const workBook = XLSX.read(data, { type: "binary" });
-            const sheetName = workBook.SheetNames[0];
-            const sheet = workBook.Sheets[sheetName];
-            const parsedData = XLSX.utils.sheet_to_json(sheet);
-            setData(parsedData);
-            setPopUp(true);
-            console.log(parsedData);
+            const data = e.target.result
+            setWorkBook(XLSX.read(data, { type: "binary" }))
         }
     }
 
     const resetPath  = (e) => {
-        e.target.value = null;
+        e.target.value = null
     }
 
     const handlePopUp = () => {
-        setPopUp(false);
+        setPopUp(false)
     }
 
     return (
@@ -42,10 +51,47 @@ export default function UploadSheet() {
             <input id="fileInput" type={"file"} accept=".xlsx, .xls" className="hidden" aria-hidden="true" onChange={fileUpload} onClick={resetPath}/>
             {
                 showPopUp &&
-                <PopUp title="Unggah Data Siswa" onClose={handlePopUp}>
-                    <Table data={data}/>
+                <PopUp title="Unggah Data Siswa" onClose={handlePopUp}>    
+                    <div className="w-full flex flex-row justify-between items-center">
+                        <Pagination workBook={workBook} page={page} setPage={setPage}/>
+                        <button type="button" className={"py-3 px-3 transition font-semibold rounded-lg " + (loading ? "bg-gray-700 font-semibold" : "bg-blue-400 hover:bg-blue-500")}>Input Data Siswa</button>
+                    </div>
+                    <TableFormat format={['no', 'nama', 'kelasId', 'nis', 'nisn', 'angkatan', 'jk', 'alamat', 'hp']} data={data}>
+                        <Tr>                        
+                            <Td>no</Td>
+                            {Object.keys(data[0]).map(key => (
+                                <Td key={key}>{key}</Td>
+                            ))}
+                        </Tr>
+                        {data.map((siswa, index) => (
+                            <>
+                                <Tr key={index}>
+                                    <Td>{getNum(1, index)}</Td>
+                                    {Object.keys(siswa).map(key => (
+                                        <Td key={key}><Link href='' title={siswa[key]}>{siswa[key]}</Link></Td>
+                                    ))}         
+                                </Tr>
+                            </>
+                        ))}
+                    </TableFormat>
                 </PopUp>
             }
         </>
+    )
+}
+
+function Pagination({page, setPage, workBook}) {
+    return (
+        <div className="flex flex-col px-3">
+            <span className="mb-3">{workBook.SheetNames[page]}</span>
+            {
+                workBook.SheetNames.length > 1 &&
+                <div className="flex flex-row gap-2 w-full">
+                    <button className="rounded-lg aspect-square p-2 bg-black" disabled={page == 0} onClick={() => setPage(page - 1)}><span>&#8592;</span></button>
+                    <span className="p-2 bg-black rounded-lg">{page + 1} / {workBook.SheetNames.length}</span>
+                    <button className="rounded-lg aspect-square p-2 bg-black" disabled={page == workBook.SheetNames.length - 1} onClick={() => setPage(page + 1)}><span>&#8594;</span></button>
+                </div>
+            }
+        </div>
     )
 }

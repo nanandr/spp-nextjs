@@ -30,11 +30,14 @@ export const GET = async (req, context) => {
                     id: parseInt(item.siswa.id),
                     nama: item.siswa.nama,
                     nis: item.siswa.nis,
+                    //nisn
                     alamat: item.siswa.alamat,
                     nama: item.siswa.nama,
                     jk: item.siswa.jk,
                     angkatan: parseInt(item.siswa.angkatan),
                     hp: item.siswa.hp,
+                    createdAt: dateTimeFormat(item.siswa.createdAt),
+                    updatedAt: dateTimeFormat(item.siswa.updatedAt),
                 },
                 kelas: {
                     id: parseInt(item.kelas.id),

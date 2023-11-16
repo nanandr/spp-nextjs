@@ -1,19 +1,23 @@
-import { useSelector } from "react-redux"
-import { getId } from "@/redux/features/tahunAjarSlice"
-
 // export const take = parseInt(process.env.TAKE)
 export const take = 5
+export const takeTahun = 5
 
-export const paginate = (page, total) => {
+export const paginate = (page, total, itemsPerPage = take, type = 'sql') => {
     let skip = 0
-    let itemsPerPage = take
 
     if (page) {
         if (page === 'all') {
             itemsPerPage = total
         }
         else {
-            skip = (page - 1) * take
+            skip = (page - 1) * itemsPerPage
+        }
+    }
+
+    if(type === 'array') {
+        return {
+            start: skip > 1 ? skip : 0,
+            end: skip + itemsPerPage
         }
     }
 

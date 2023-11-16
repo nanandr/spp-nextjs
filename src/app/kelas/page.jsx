@@ -45,18 +45,6 @@ export default function Kelas() {
       .finally(() => fetchData())
   }
 
-  // const editHandler = {
-  //   title: "Form Edit Data Kelas",
-  //   indexHandler: (index) => setIndex(index),
-  //   form: () => <Create loading={loading} data={dataKelas[index]} submitHandler={async (data) => {
-  //     setLoading(true)
-  //     await axios.put(getUrl(`/api/kelas/${data.id}`), data)
-  //       .then(res => console.log(res))
-  //       .catch(err => console.error(err))
-  //       .finally(() => fetchData());
-  //   }} />,
-  // }
-
   const editHandler = async (form) => {
     setLoading(true)
     await axios.put(getUrl(`/api/kelas/${form.id}`), form)
@@ -97,7 +85,7 @@ export default function Kelas() {
         {dataKelas.map((kelas, index) => (
           <Tr>
             <Td>{getNum(page, index)}</Td>
-            <Td><Link title={kelas.namaKelas} /></Td>
+            <Td><Link title={kelas.namaKelas} href={`kelas/${kelas.id}`} /></Td>
             <Td><Link title={kelas.createdAt} /></Td>
             <Td><Link title={kelas.updatedAt} /></Td>
             <Td className='flex flex-row gap-2 justify-end'>
