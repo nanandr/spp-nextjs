@@ -8,13 +8,15 @@ import Create from "./create"
 import { useState } from "react"
 import { useEffect } from "react"
 import axios from "axios"
-import { getUrl, kelasSiswaFormat } from "../../../../utils/format"
+import { getNum, getUrl, kelasSiswaFormat } from "../../../../utils/format"
 import { useSearchParams } from "next/navigation"
+import TableFormat, { Tr, Td, Link } from "@/components/TableFormat"
 
 export default function Kelas({ params }) {
   const [kelas, setKelas] = useState({})
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
+  const [page, setPage] = useState(1)
 
   const searchParams = useSearchParams()
 
@@ -22,8 +24,8 @@ export default function Kelas({ params }) {
     try {
       const res = await axios.get(getUrl(`/api/kelas/${params.id}/siswa?tahun=${searchParams.get('tahun')}`))
       setKelas(res.data.kelas)
-      const formattedData = await kelasSiswaFormat(res.data.kelasSiswa)
-      setData(formattedData)
+      setData(res.data.kelasSiswa)
+      console.log(res.data)
     }
     catch(err) {
       console.error(err)
@@ -34,8 +36,9 @@ export default function Kelas({ params }) {
   }
 
   useEffect(() => {
+    setLoading(true)
     fetchData()
-  }, [searchParams.get('tahun')])
+  }, [page, searchParams.get('tahun')])
   
   return (
 		<Index title={`Kelas > ${kelas.namaKelas || ''}`} placeholder='Cari Siswa...'>
@@ -45,7 +48,21 @@ export default function Kelas({ params }) {
           <Create/>
         </InputData>
       </div>
-      <Table title={`Kelas ${kelas.namaKelas || ''}`} loading={loading} data={data}/>
+      <TableFormat title={`Kelas ${kelas.namaKelas || ''}`} format={['No', 'Nama Siswa', 'NIS', 'NISN', 'JK', 'Alamat', 'HP', 'Data Dibuat', 'Data Diubah']} loading={loading} data={data}>
+        {data.map((kelas, index) => (
+          <Tr>
+            <Td>{getNum(page, index)}</Td>
+            <Td><Link title={kelas.siswa.nama} /></Td>
+            <Td><Link title={kelas.siswa.nis} /></Td>
+            <Td><Link title={kelas.siswa.nisn} /></Td>
+            <Td><Link title={kelas.siswa.jk} /></Td>
+            <Td><Link title={kelas.siswa.alamat} /></Td>
+            <Td><Link title={kelas.siswa.hp} /></Td>
+            <Td><Link title={kelas.siswa.createdAt} /></Td>
+            <Td><Link title={kelas.siswa.updatedAt} /></Td>
+          </Tr>
+        ))}
+      </TableFormat>
     </Index>
   )
 }

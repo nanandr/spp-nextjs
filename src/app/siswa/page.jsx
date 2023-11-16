@@ -92,7 +92,7 @@ export default function Siswa() {
           <Create loading={loading} submitHandler={submitHandler} kelas={kelas} />
         </InputData>
       </div>
-      <TableFormat title='Akun Siswa' format={['No', 'Nama Siswa', 'Kelas', 'NIS', 'NISN', 'JK', 'Alamat', 'HP', 'Data Dibuat', 'Data Diubah']} loading={loading} error={error} data={dataSiswa}>
+      <TableFormat title='Akun Siswa' format={['No', 'Nama Siswa', 'Kelas', 'NIS', 'NISN', 'Angkatan', 'JK', 'Alamat', 'HP', 'Data Dibuat', 'Data Diubah']} loading={loading} error={error} data={dataSiswa}>
         {dataSiswa.map((siswa, index) => (
           <Tr>
             <Td>{getNum(page, index)}</Td>
@@ -100,6 +100,7 @@ export default function Siswa() {
             <Td><Link title={getKelas(siswa.kelas, tahunId)?.namaKelas} /></Td>
             <Td><Link title={siswa.nis} /></Td>
             <Td><Link title={siswa.nisn} /></Td>
+            <Td><Link title={siswa.angkatan} /></Td>
             <Td><Link title={siswa.jk} /></Td>
             <Td><Link title={siswa.alamat} /></Td>
             <Td><Link title={siswa.hp} /></Td>
