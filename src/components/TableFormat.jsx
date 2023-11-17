@@ -19,7 +19,7 @@ export default function TableFormat({ data, format, children, loading, title, er
                                     <thead className="border-b font-medium dark:border-neutral-500 sticky top-0 bg-zinc-800">
                                         <tr>
                                             {format.map((key, index) => (
-                                                <th key={index} scope="col" className="xl:px-6 xl:py-4 px-4 py-3">
+                                                <th key={index} scope="col" className="xl:px-6 xl:py-4 px-4 py-3 whitespace-nowrap">
                                                     {key}
                                                 </th>
                                             ))}
@@ -41,9 +41,9 @@ export default function TableFormat({ data, format, children, loading, title, er
     )
 }
 
-export function Tr({ key, children }) {
+export function Tr({ key, children, className }) {
     return (
-        <tr key={key} className="border-b dark:border-neutral-500">
+        <tr key={key} className={`${className} border-b dark:border-neutral-500`}>
             {children}
         </tr>
     )
@@ -51,7 +51,7 @@ export function Tr({ key, children }) {
 
 export function Td({ className, children }) {
     return (
-        <td className={`${!className ? 'whitespace-nowrap max-w-[200px]' : ''} text-ellipsis overflow-hidden xl:px-6 xl:py-4 px-4 py-3 ${className}`}>
+        <td className={`${!className ? 'whitespace-nowrap max-w-[200px]' : ''} text-ellipsis overflow-hidden xl:px-6 xl:py-4 px-4 py-3 ${className} whitespace-nowrap`}>
             {children}
         </td>
     )
@@ -63,8 +63,8 @@ export function Link({ title, href }) {
     )
 }
 
-export function Button({ clickHandler, backgroundColor, children }) {
+export function Button({ clickHandler, backgroundColor, customSize, children }) {
     return (
-        <button onClick={clickHandler} className={`w-9 h-9 ${backgroundColor} p-2 rounded-md`} type='button'>{children}</button>
+        <button onClick={clickHandler} className={`${customSize? customSize : 'w-9 h-9'} ${backgroundColor} p-2 rounded-md`} type='button'>{children}</button>
     )
 }

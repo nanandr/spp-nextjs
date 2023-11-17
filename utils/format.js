@@ -172,5 +172,10 @@ export const pembayaranFormat = async (data, page = 1) => {
 }
 
 export const isEmpty = (object) => {
-    return Object.keys(object).length > 0
+    for (const prop in object){
+        if(Object.hasOwn(object, prop)) {
+            return false
+        }
+    }
+    return true
 }

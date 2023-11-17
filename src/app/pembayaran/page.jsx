@@ -5,7 +5,7 @@ import axios from "axios"
 import { getKelas, getNum, getUrl, isEmpty, pembayaranFormat } from "../../../utils/format"
 import Sidebar from "@/components/Sidebar"
 import Header from "@/components/Header"
-import { Add, Delete, Edit, Search as SearchIcon } from "../../../public/svg"
+import { Info, Search as SearchIcon } from "../../../public/svg"
 import TableFormat, { Button, Link, Td, Tr } from "@/components/TableFormat"
 import { useSession } from "next-auth/react"
 import { useSelector } from "react-redux"
@@ -16,6 +16,7 @@ export default function Pembayaran() {
   const [dataPembayaran, setDataPembayaran] = useState([])
   const [dataSpp, setDataSpp] = useState([])
   const [dataSiswa, setDataSiswa] = useState({})
+  const [status, setStatus] = useState([])
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -39,10 +40,10 @@ export default function Pembayaran() {
       const siswa = res.data.siswa[0] || {}
       setDataSiswa(siswa)
 
-      if(!isEmpty(siswa)) {
+      if (!isEmpty(siswa)) {
         const resPembayaran = await axios.get(getUrl(`/api/pembayaran?siswa=${siswa.id}`))
         setDataPembayaran(resPembayaran.data.transaksi)
-  
+
         const resSpp = await axios.get(getUrl(`/api/spp?tahunAjar=${tahunId}`))
         setDataSpp(resSpp.data.spp[0] || {})
         setLoading(true)
@@ -53,7 +54,6 @@ export default function Pembayaran() {
     } finally {
       setLoading(false)
       // fetchData()
-      console.log(dataPembayaran)
     }
   }
 
@@ -123,7 +123,7 @@ export default function Pembayaran() {
             </form>
           </div>
           {Object.keys(dataSiswa).length > 0 && <>
-            <div className="w-full bg-zinc-700 p-2 md:p-4 rounded-lg flex flex-col">
+            <div className="w-full bg-zinc-700 p-3 md:p-4 rounded-lg flex flex-col">
               <h2 className="font-semibold">Data Siswa</h2>
               <div className="w-full flex flex-row py-2">
                 <table className="w-full">
@@ -157,19 +157,19 @@ export default function Pembayaran() {
               </div>
             </div>
             <div className="w-full bg-zinc-700 p-2 md:p-4 rounded-lg flex flex-col">
-              <TableFormat title='Data Tagihan' format={['No', 'Nama Petugas', 'Jenis SPP', 'Total Tagihan', 'Bulan', 'Status']} loading={loading} error={error} data={bulan} status={dataPembayaran?.bulan}>
+              <TableFormat title='Tagihan' format={['No', 'Nama Petugas', 'Jenis SPP', 'Total Tagihan', 'Bulan', 'Status', 'Detail']} loading={loading} error={error} data={bulan}>
                 {bulan.map((bulan, i) => (
-                  <Tr key={i}>
+                  <Tr className={dataPembayaran[i]? '' : 'opacity-80'} key={i}>
                     <Td>{getNum(1, i)}</Td>
-                    {console.log({dataPembayaran})}
+                    {/* {console.log({ dataPembayaran })} */}
                     <Td><Link title={dataPembayaran[i]?.namaPetugas} /></Td>
                     <Td><Link title={`SPP Bulan ${bulan}`} /></Td>
                     <Td><Link title={dataSpp.spp} /></Td>
                     <Td><Link title={bulan} /></Td>
                     {/* <Td><Link title={siswa.updatedAt} /></Td> */}
-                    <Td className="bg-green-700 text-center"><span>Lunas</span></Td>
-                    <Td className='flex flex-row gap-2 justify-end'>
-                      <Button clickHandler={() => deleteHandler(siswa.id)} backgroundColor={'bg-green-700'}><Add /></Button>
+                    <Td className={`${dataPembayaran[i]? 'bg-green-700' : 'bg-red-700'} text-center w-fit`}>{dataPembayaran[i]? <span>Lunas</span> : <span>Belum Lunas</span>}</Td>
+                    <Td>
+                      <Button clickHandler={() => deleteHandler(siswa.id)} backgroundColor={'bg-zinc-800'} customSize={'w-11 h-11'}><Info /></Button>
                     </Td>
                   </Tr>
                 ))
