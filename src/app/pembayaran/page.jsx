@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import axios from "axios"
-import { getNum, getUrl, pembayaranFormat, siswaFormat } from "../../../utils/format"
+import { getKelas, getNum, getUrl, isEmpty, pembayaranFormat } from "../../../utils/format"
 import Sidebar from "@/components/Sidebar"
 import Header from "@/components/Header"
 import { Add, Delete, Edit, Search as SearchIcon } from "../../../public/svg"
@@ -15,7 +15,7 @@ export default function Pembayaran() {
   const { data: session } = useSession()
   const [dataPembayaran, setDataPembayaran] = useState([])
   const [dataSpp, setDataSpp] = useState([])
-  const [dataSiswa, setDataSiswa] = useState([])
+  const [dataSiswa, setDataSiswa] = useState({})
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -23,32 +23,37 @@ export default function Pembayaran() {
   const tahunId = useSelector(getId)
 
 
-  const fetchData = async () => {
-    try {
-      const res = await axios.get(getUrl('/api/pembayaran'))
-      const formattedData = await pembayaranFormat(res.data.transaksi)
-      setDataPembayaran(formattedData)
-    } catch (err) {
-      console.error(err)
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
-  }
+  // const fetchData = async () => {
+  //   try {
+  //   } catch (err) {
+  //     console.error(err)
+  //     setError(err.message)
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
 
   const getSiswa = async (search) => {
     try {
       const res = await axios.get(getUrl(`/api/siswa?page=all&search=${search}`))
-      const formattedSiswa = await siswaFormat(res.data.siswa)
-      setDataSiswa(formattedSiswa)
-      const resSpp = await axios.get(getUrl(`/api/spp?tahunAjar=${tahunId}`))
-      setDataSpp(resSpp.data.spp)
+      const siswa = res.data.siswa[0] || {}
+      setDataSiswa(siswa)
+
+      if(!isEmpty(siswa)) {
+        const resPembayaran = await axios.get(getUrl(`/api/pembayaran?siswa=${siswa.id}`))
+        setDataPembayaran(resPembayaran.data.transaksi)
+  
+        const resSpp = await axios.get(getUrl(`/api/spp?tahunAjar=${tahunId}`))
+        setDataSpp(resSpp.data.spp[0] || {})
+        setLoading(true)
+      }
     } catch (err) {
       console.error(err)
       setError(err.message)
     } finally {
       setLoading(false)
-      fetchData()
+      // fetchData()
+      console.log(dataPembayaran)
     }
   }
 
@@ -89,25 +94,9 @@ export default function Pembayaran() {
     // .finally(() => fetchData())
   }
 
-  useEffect(() => {
-    fetchData()
-    // setDataSiswa([
-    //   {
-    //     "Alamat": "Jl. Panembakan No 234",
-    //     "Angkatan": 48,
-    //     "Data dibuat": "16 Nov 2023, 00:04",
-    //     "Data diubah": null,
-    //     "Hp": "081572071823",
-    //     "JK": "LakiLaki",
-    //     "Kelas": "",
-    //     "NIS": "211115744",
-    //     "NISN": "0061534825",
-    //     "Nama": "Rafi Ikhwan Purnama",
-    //     "No": 1,
-    //     "id": 2
-    //   }
-    // ])
-  }, [])
+  // useEffect(() => {
+  //   fetchData()
+  // }, [])
 
   return (
     <div className="flex flex-row bg-black bg-opacity-90 min-h-screen">
@@ -133,61 +122,61 @@ export default function Pembayaran() {
               </div>
             </form>
           </div>
-          {dataSiswa.length > 0 ? <>
+          {Object.keys(dataSiswa).length > 0 && <>
             <div className="w-full bg-zinc-700 p-2 md:p-4 rounded-lg flex flex-col">
               <h2 className="font-semibold">Data Siswa</h2>
               <div className="w-full flex flex-row py-2">
                 <table className="w-full">
-                  {dataSiswa.map((siswa, index) => (
-                    <tbody key={index} className="font-light w-fit">
-                      <tr>
-                        <th scope="row" className="text-zinc-300 text-left py-1 sm:max-w-[20px]">NIS</th>
-                        <td>: {siswa.NIS}</td>
-                      </tr>
-                      <tr>
-                        <th scope="row" className="text-zinc-300 text-left py-1 sm:max-w-[20px]">NISN</th>
-                        <td>: {siswa.NISN}</td>
-                      </tr>
-                      <tr>
-                        <th scope="row" className="text-zinc-300 text-left py-1 sm:max-w-[20px]">Nama Siswa</th>
-                        <td>: {siswa.Nama}</td>
-                      </tr>
-                      <tr>
-                        <th scope="row" className="text-zinc-300 text-left py-1 sm:max-w-[20px]">No Hp</th>
-                        <td>: {siswa.Hp}</td>
-                      </tr>
-                      <tr>
-                        <th scope="row" className="text-zinc-300 text-left py-1 sm:max-w-[20px]">Alamat</th>
-                        <td>: {siswa.Alamat}</td>
-                      </tr>
-                    </tbody>
-                  ))}
+                  <tbody className="font-light w-fit">
+                    <tr>
+                      <th scope="row" className="text-zinc-300 text-left py-1 sm:max-w-[20px]">NIS</th>
+                      <td>: {dataSiswa.nis}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" className="text-zinc-300 text-left py-1 sm:max-w-[20px]">NISN</th>
+                      <td>: {dataSiswa.nisn}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" className="text-zinc-300 text-left py-1 sm:max-w-[20px]">Nama Siswa</th>
+                      <td>: {dataSiswa.nama}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" className="text-zinc-300 text-left py-1 sm:max-w-[20px]">Kelas</th>
+                      <td>: {getKelas(dataSiswa.kelas, tahunId)?.namaKelas}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" className="text-zinc-300 text-left py-1 sm:max-w-[20px]">No Hp</th>
+                      <td>: {dataSiswa.hp}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" className="text-zinc-300 text-left py-1 sm:max-w-[20px]">Alamat</th>
+                      <td>: {dataSiswa.alamat}</td>
+                    </tr>
+                  </tbody>
                 </table>
               </div>
             </div>
             <div className="w-full bg-zinc-700 p-2 md:p-4 rounded-lg flex flex-col">
-              <TableFormat title='Data Tagihan' format={['No', 'Nama Petugas', 'Jenis SPP', 'Total Tagihan', 'Bulan', 'Status']} loading={loading} error={error} data={dataSiswa}>
+              <TableFormat title='Data Tagihan' format={['No', 'Nama Petugas', 'Jenis SPP', 'Total Tagihan', 'Bulan', 'Status']} loading={loading} error={error} data={bulan} status={dataPembayaran?.bulan}>
                 {bulan.map((bulan, i) => (
-                  dataSiswa.map((siswa) => (
-                    <Tr>
-                      <Td>{getNum(1, i)}</Td>
-                      <Td><Link title={session ? session.user.nama : ''} /></Td>
-                      <Td><Link title={`SPP Bulan ${bulan}`} /></Td>
-                      {dataSpp.map((spp, index) => (
-                        <Td><Link title={spp.spp} /></Td>
-                      ))}
-                      <Td><Link title={bulan} /></Td>
-                      <Td><Link title={siswa.updatedAt} /></Td>
-                      <Td className='flex flex-row gap-2 justify-end'>
-                        <Button clickHandler={() => deleteHandler(siswa.id)} backgroundColor={'bg-green-700'}><Add /></Button>
-                      </Td>
-                    </Tr>
-                  ))
+                  <Tr key={i}>
+                    <Td>{getNum(1, i)}</Td>
+                    {console.log({dataPembayaran})}
+                    <Td><Link title={dataPembayaran[i]?.namaPetugas} /></Td>
+                    <Td><Link title={`SPP Bulan ${bulan}`} /></Td>
+                    <Td><Link title={dataSpp.spp} /></Td>
+                    <Td><Link title={bulan} /></Td>
+                    {/* <Td><Link title={siswa.updatedAt} /></Td> */}
+                    <Td className="bg-green-700 text-center"><span>Lunas</span></Td>
+                    <Td className='flex flex-row gap-2 justify-end'>
+                      <Button clickHandler={() => deleteHandler(siswa.id)} backgroundColor={'bg-green-700'}><Add /></Button>
+                    </Td>
+                  </Tr>
                 ))
                 }
               </TableFormat>
             </div>
-          </> : <></>}
+          </>}
         </main>
       </div>
     </div>

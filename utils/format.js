@@ -170,3 +170,7 @@ export const pembayaranFormat = async (data, page = 1) => {
     })
     return pembayaran
 }
+
+export const isEmpty = (object) => {
+    return Object.keys(object).length > 0
+}
