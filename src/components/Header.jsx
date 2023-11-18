@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { toggleVisibility, selectVisibility } from '../redux/features/visibleSlice'
 import { setId } from '@/redux/features/tahunAjarSlice'
 import axios from 'axios'
-import { BurgerMenu } from '../../public/svg'
+import { BurgerMenu, LeftArrow, RightArrow } from '../../public/svg'
 import { getUrl, takeTahun } from '../../utils/format'
 import { useRouter } from 'next/navigation'
 
@@ -59,11 +59,11 @@ export default function Header(props) {
     return (
         <div className="flex flex-row items-center w-full justify-between">
             <div className="flex flex-row items-center">
-                <button onClick={handleToggle} className={(isVisible ? 'ml-60 ' : '') + 'block sm:hidden text-white mx-2'}><BurgerMenu /></button>
+                <button onClick={handleToggle} className={(isVisible ? 'ml-56 pl-1 z-20 text-zinc-400  ' : '-ml-4 ') + 'bg-zinc-800 rounded-e-md py-2 pr-1 mr-2 block sm:hidden text-white transition-all duration-100'}>{isVisible ? <LeftArrow /> : <RightArrow />}</button>
                 <h1 className="text-4xl font-bold">{props.title}</h1>
             </div>
             <div className='flex flex-row items-center gap-2'>
-                <Dropdown data={data} active={active} setActive={activeHandler} total={total} page={page} setPage={setPage}/>
+                <Dropdown data={data} active={active} setActive={activeHandler} total={total} page={page} setPage={setPage} />
                 <HeaderProfile />
             </div>
         </div>
@@ -95,15 +95,15 @@ function Dropdown({ data, active, setActive, total, page, setPage }) {
                 ))}
                 {
                     total > takeTahun &&
-                    <Pagination total={total} page={page} setPage={setPage}/>
+                    <Pagination total={total} page={page} setPage={setPage} />
                 }
             </ul>
         </div>
     )
 }
 
-function Pagination({total, page, setPage}) {
-    const max = Math.ceil(total/takeTahun);
+function Pagination({ total, page, setPage }) {
+    const max = Math.ceil(total / takeTahun);
 
     return (
         <li>
@@ -115,7 +115,7 @@ function Pagination({total, page, setPage}) {
     )
 }
 
-function Button({onClick, className, disabled, children}) {
+function Button({ onClick, className, disabled, children }) {
     return (
         <button onClick={onClick} type='button' className={`w-1/2 p-2 hover:bg-gray-400 hover:text-white ${className} ${disabled ? 'text-white' : 'active:bg-blue-500'}`} disabled={disabled}>{children}</button>
     )
