@@ -59,7 +59,7 @@ export default function Header(props) {
     return (
         <div className="flex flex-row items-center w-full justify-between">
             <div className="flex flex-row items-center">
-                <button onClick={handleToggle} className={(isVisible ? 'ml-56 pl-1 z-20 text-zinc-400  ' : '-ml-4 ') + 'bg-zinc-800 rounded-e-md py-2 pr-1 mr-2 block sm:hidden text-white transition-all duration-100'}>{isVisible ? <LeftArrow /> : <RightArrow />}</button>
+                <button title={`${isVisible ? 'Tutup Sidebar' : 'Buka Sidebar' }`} onClick={handleToggle} className={(isVisible ? 'ml-56 pl-1 z-20 text-zinc-400  ' : '-ml-4 ') + 'bg-zinc-800 rounded-e-md py-2 pr-1 mr-2 block sm:hidden text-white transition-all duration-100'}>{isVisible ? <LeftArrow /> : <RightArrow />}</button>
                 <h1 className="text-4xl font-bold">{props.title}</h1>
             </div>
             <div className='flex flex-row items-center gap-2'>

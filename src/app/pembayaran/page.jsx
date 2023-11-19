@@ -17,7 +17,8 @@ export default function Pembayaran() {
   const [dataSpp, setDataSpp] = useState([])
   const [dataSiswa, setDataSiswa] = useState({})
   const [status, setStatus] = useState([])
-  const [search, setSearch] = useState('')
+  // MUST BE FIXED ON API NULL SEARCHPARAM
+  const [search, setSearch] = useState('HANDLING_ERROR')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const bulan = ['Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni']
@@ -36,17 +37,19 @@ export default function Pembayaran() {
 
   const getSiswa = async (search) => {
     try {
-      const res = await axios.get(getUrl(`/api/siswa?page=all&search=${search}`))
+      const res = await axios.get(getUrl(`/api/siswa?page=all&search=${search}&tahun=${tahunId}`))
       const siswa = res.data.siswa[0] || {}
-      setDataSiswa(siswa)
 
       if (!isEmpty(siswa)) {
-        const resPembayaran = await axios.get(getUrl(`/api/pembayaran?siswa=${siswa.id}`))
+        setDataSiswa(siswa)
+        const resPembayaran = await axios.get(getUrl(`/api/pembayaran?siswa=${siswa.id}&tahun=${tahunId}`))
         setDataPembayaran(resPembayaran.data.transaksi)
 
-        const resSpp = await axios.get(getUrl(`/api/spp?tahunAjar=${tahunId}`))
+        const resSpp = await axios.get(getUrl(`/api/spp?tahunAjar=${siswa.kelas[0].tahunId}`))
         setDataSpp(resSpp.data.spp[0] || {})
         setLoading(true)
+      } else {
+        setDataSiswa(siswa)
       }
     } catch (err) {
       console.error(err)
@@ -122,7 +125,7 @@ export default function Pembayaran() {
               </div>
             </form>
           </div>
-          {Object.keys(dataSiswa).length > 0 && <>
+          {Object.keys(dataSiswa).length > 0 && !(getKelas(dataSiswa.kelas, tahunId) == undefined) && <>
             <div className="w-full bg-zinc-700 p-3 md:p-4 rounded-lg flex flex-col">
               <h2 className="font-semibold">Data Siswa</h2>
               <div className="w-full flex flex-row py-2">
@@ -158,22 +161,27 @@ export default function Pembayaran() {
             </div>
             <div className="w-full bg-zinc-700 p-2 md:p-4 rounded-lg flex flex-col">
               <TableFormat title='Tagihan' format={['No', 'Nama Petugas', 'Jenis SPP', 'Total Tagihan', 'Bulan', 'Status', 'Detail']} loading={loading} error={error} data={bulan}>
-                {bulan.map((bulan, i) => (
-                  <Tr className={dataPembayaran[i]? '' : 'opacity-80'} key={i}>
-                    <Td>{getNum(1, i)}</Td>
-                    {/* {console.log({ dataPembayaran })} */}
-                    <Td><Link title={dataPembayaran[i]?.namaPetugas} /></Td>
-                    <Td><Link title={`SPP Bulan ${bulan}`} /></Td>
-                    <Td><Link title={dataSpp.spp} /></Td>
-                    <Td><Link title={bulan} /></Td>
-                    {/* <Td><Link title={siswa.updatedAt} /></Td> */}
-                    <Td className={`${dataPembayaran[i]? 'bg-green-700' : 'bg-red-700'} text-center w-fit`}>{dataPembayaran[i]? <span>Lunas</span> : <span>Belum Lunas</span>}</Td>
-                    <Td>
-                      <Button clickHandler={() => deleteHandler(siswa.id)} backgroundColor={'bg-zinc-800'} customSize={'w-11 h-11'}><Info /></Button>
-                    </Td>
-                  </Tr>
-                ))
-                }
+                {bulan.map((bulan, i) => {
+                  const transaksi = dataPembayaran.find(item => item.bulan === bulan);
+
+                  return (
+                    <Tr className={transaksi ? '' : 'opacity-80'} key={i}>
+                      <Td>{getNum(1, i)}</Td>
+                      <Td><Link title={transaksi ? transaksi.namaPetugas : '-'} /></Td>
+                      <Td><Link title={`SPP Bulan ${bulan}`} /></Td>
+                      <Td><Link title={dataSpp.spp} /></Td>
+                      <Td><Link title={bulan} /></Td>
+                      <Td className={`${transaksi ? 'bg-green-700' : 'bg-red-700'} text-center w-fit`}>
+                        {transaksi ? <span>Lunas</span> : <span>Belum Lunas</span>}
+                      </Td>
+                      <Td>
+                        <Button clickHandler={() => deleteHandler(siswa.id)} backgroundColor={'bg-zinc-800'} customSize={'w-11 h-11'}>
+                          <Info />
+                        </Button>
+                      </Td>
+                    </Tr>
+                  );
+                })}
               </TableFormat>
             </div>
           </>}
