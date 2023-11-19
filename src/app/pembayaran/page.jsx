@@ -5,11 +5,13 @@ import axios from "axios"
 import { getKelas, getNum, getUrl, isEmpty, pembayaranFormat } from "../../../utils/format"
 import Sidebar from "@/components/Sidebar"
 import Header from "@/components/Header"
-import { Info, Search as SearchIcon } from "../../../public/svg"
+import Create from "./create"
+import { Add, Info, Search as SearchIcon } from "../../../public/svg"
 import TableFormat, { Button, Link, Td, Tr } from "@/components/TableFormat"
 import { useSession } from "next-auth/react"
 import { useSelector } from "react-redux"
 import { getId } from "@/redux/features/tahunAjarSlice"
+import InputData from "@/components/InputData"
 
 export default function Pembayaran() {
   const { data: session } = useSession()
@@ -21,6 +23,7 @@ export default function Pembayaran() {
   const [search, setSearch] = useState('HANDLING_ERROR')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [showPopUp, setPopUp] = useState(false)
   const bulan = ['Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni']
   const tahunId = useSelector(getId)
 
@@ -72,7 +75,7 @@ export default function Pembayaran() {
         console.error(err)
         setError(err.response.data.message)
       })
-      .finally(() => fetchData())
+      .finally(() => getSiswa(search))
   }
 
   const editHandler = {
@@ -97,9 +100,9 @@ export default function Pembayaran() {
     // .finally(() => fetchData())
   }
 
-  // useEffect(() => {
-  //   fetchData()
-  // }, [])
+  useEffect(() => {
+    getSiswa(search)
+  }, [])
 
   return (
     <div className="flex flex-row bg-black bg-opacity-90 min-h-screen">
@@ -117,6 +120,7 @@ export default function Pembayaran() {
                   className="w-full text-sm transition-all bg-zinc-700 appearance-none border border-zinc-600 rounded py-3 px-3 mr-2 text-gray-300 leading-tight focus:outline-none focus:bg-zinc-800 focus:bg-opacity-50 focus:outline focus:outline-zinc-700 focus:outline-offset-2"
                   type="search" placeholder='Cari Akun Siswa Dengan NIS/NISN'
                   name="search"
+                  value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
                 <button type="submit" className="text-white p-2 rounded-lg hover:bg-zinc-800 hover:bg-opacity-50">
@@ -160,12 +164,17 @@ export default function Pembayaran() {
               </div>
             </div>
             <div className="w-full bg-zinc-700 p-2 md:p-4 rounded-lg flex flex-col">
+              <div className="flex flex-row-reverse">
+                <InputData title="Bayar SPP" form="From Pembayaran SPP">
+                  <Create loading={loading} submitHandler={submitHandler} siswa={dataSiswa} data={dataPembayaran}/>
+                </InputData>
+              </div>
               <TableFormat title='Tagihan' format={['No', 'Nama Petugas', 'Jenis SPP', 'Total Tagihan', 'Bulan', 'Status', 'Detail']} loading={loading} error={error} data={bulan}>
                 {bulan.map((bulan, i) => {
                   const transaksi = dataPembayaran.find(item => item.bulan === bulan);
 
                   return (
-                    <Tr className={transaksi ? '' : 'opacity-80'} key={i}>
+                    <Tr className={transaksi ? '' : 'opacity-60 cursor-default'} key={i}>
                       <Td>{getNum(1, i)}</Td>
                       <Td><Link title={transaksi ? transaksi.namaPetugas : '-'} /></Td>
                       <Td><Link title={`SPP Bulan ${bulan}`} /></Td>
@@ -174,8 +183,8 @@ export default function Pembayaran() {
                       <Td className={`${transaksi ? 'bg-green-700' : 'bg-red-700'} text-center w-fit`}>
                         {transaksi ? <span>Lunas</span> : <span>Belum Lunas</span>}
                       </Td>
-                      <Td>
-                        <Button clickHandler={() => deleteHandler(siswa.id)} backgroundColor={'bg-zinc-800'} customSize={'w-11 h-11'}>
+                      <Td className='flex flex-row gap-2'>
+                        <Button clickHandler={() => alert('Belum di handle')}>
                           <Info />
                         </Button>
                       </Td>

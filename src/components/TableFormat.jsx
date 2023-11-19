@@ -51,7 +51,7 @@ export function Tr({ key, children, className }) {
 
 export function Td({ className, children }) {
     return (
-        <td className={`${!className ? 'whitespace-nowrap max-w-[200px]' : ''} text-ellipsis overflow-hidden xl:px-6 xl:py-4 px-4 py-3 ${className} whitespace-nowrap`}>
+        <td className={`${!className ? 'whitespace-nowrap max-w-[200px]' : ''} text-ellipsis overflow-hidden xl:px-6 px-4 py-2 ${className} whitespace-nowrap`}>
             {children}
         </td>
     )
@@ -63,8 +63,8 @@ export function Link({ title, href }) {
     )
 }
 
-export function Button({ clickHandler, backgroundColor, customSize, children }) {
+export function Button({ clickHandler, backgroundColor, custom, children }) {
     return (
-        <button onClick={clickHandler} className={`${customSize? customSize : 'w-9 h-9'} ${backgroundColor} p-2 rounded-md`} type='button'>{children}</button>
+        <button onClick={clickHandler} className={`${custom? custom : 'w-9 h-9 px-2'} ${backgroundColor} rounded-md`} type='button'>{children}</button>
     )
 }
