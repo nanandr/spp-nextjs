@@ -13,7 +13,7 @@ datasource db {
 model User {
   id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
   nama        String        @db.VarChar(255)
-  nip         String
+  nip         String        @unique
   alamat      String        @db.Text
   jk          JenisKelamin
   email       String
@@ -71,8 +71,8 @@ model Kelas {
 model Siswa {
   id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
   nama        String        @db.VarChar(255)
-  nis         String
-  nisn        String
+  nis         String        @unique
+  nisn        String        @unique
   password    String?       @db.VarChar(255)
   foto        String?       @db.VarChar(255)
   alamat      String        @db.Text
