@@ -69,23 +69,25 @@ model Kelas {
 }
 
 model Siswa {
-  id          BigInt        @id @db.UnsignedBigInt @default(autoincrement())
-  nama        String        @db.VarChar(255)
-  nis         String        @unique
-  nisn        String        @unique
-  password    String?       @db.VarChar(255)
-  foto        String?       @db.VarChar(255)
-  alamat      String        @db.Text
-  jk          JenisKelamin
-  angkatan    BigInt
-  hp          String
-  createdAt   DateTime?     @db.Timestamp(0) @default(now())
-  updatedAt   DateTime?     @db.Timestamp(0)
-  deletedAt   DateTime?     @db.Timestamp(0)
+  id            BigInt        @id @db.UnsignedBigInt @default(autoincrement())
+  nama          String        @db.VarChar(255)
+  nis           String        @unique
+  nisn          String        @unique
+  password      String?       @db.VarChar(255)
+  foto          String?       @db.VarChar(255)
+  alamat        String        @db.Text
+  jk            JenisKelamin
+  angkatan      BigInt
+  hp            String
+  tempatLahir   String
+  tanggalLahir  DateTime      @db.Date
+  createdAt     DateTime?     @db.Timestamp(0) @default(now())
+  updatedAt     DateTime?     @db.Timestamp(0)
+  deletedAt     DateTime?     @db.Timestamp(0)
 
-  kelas       KelasSiswa[]  @relation("SiswaToKelas")
-  transaksi   Transaksi[]   @relation("SiswaToTransaksi")
-  diskon      DiskonSiswa[] @relation("SiswaToDiskon")
+  kelas         KelasSiswa[]  @relation("SiswaToKelas")
+  transaksi     Transaksi[]   @relation("SiswaToTransaksi")
+  diskon        DiskonSiswa[] @relation("SiswaToDiskon")
 
   @@map("siswa")
 }

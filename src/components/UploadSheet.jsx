@@ -5,14 +5,35 @@ import { Upload } from "../../public/svg"
 import * as XLSX from "xlsx"
 import PopUp from "./PopUp"
 import TableFormat, { Tr, Td, Link } from "./TableFormat"
-import { getNum } from "../../utils/format"
+import { getNum, getUrl } from "../../utils/format"
+import Input from "./Input"
+import axios from "axios"
+import { getId } from "@/redux/features/tahunAjarSlice"
+import { useSelector } from "react-redux"
 
 export default function UploadSheet() {
+    const [kelas, setKelas] = useState([])
+    const [index, setIndex] = useState(0)
+    const [search, setSearch] = useState('')
     const [data, setData] = useState([])
     const [workBook, setWorkBook] = useState(null)
     const [page, setPage] = useState(0)
     const [showPopUp, setPopUp] = useState(false)
     const [loading, setLoading] = useState(false)
+
+    const format = ['nis', 'nisn', 'nama', 'angkatan', 'jk', 'alamat', 'hp', 'tempatLahir', 'tanggalLahir']
+
+    const tahunAjarId = useSelector(getId)
+
+    const fetchKelas = async () => {
+        await axios.get(getUrl('/api/kelas?page=all'))
+            .then(res => setKelas(res.data.kelas))
+            .catch(err => console.error(err))
+    }
+
+    useEffect(() => {
+        fetchKelas()
+    }, [])
 
     useEffect(() => {
         if(workBook) {
@@ -42,6 +63,21 @@ export default function UploadSheet() {
         setPopUp(false)
     }
 
+    const handleSelect = (e) => {
+        if(e.target.options) {
+            setIndex(e.target.options.selectedIndex)
+        }
+        setSearch(e.target.value)
+    }
+
+    const submitHandler = async () => {
+        setLoading(true)
+        await axios.post(getUrl('/api/siswa/bulk'), {siswa: data, kelasId: 1, tahunAjar: tahunAjarId})
+            .then(res => console.log(res))
+            .catch(err => console.error(err))
+            .finally(() => setLoading(false))
+    }
+
     return (
         <>
             <label htmlFor="fileInput" className="bg-zinc-800 px-5 py-2 hover:cursor-pointer rounded-lg flex w-fit hover:bg-zinc-900 transition duration-200 text-white" aria-label="Upload File">
@@ -54,24 +90,32 @@ export default function UploadSheet() {
                 <PopUp title="Unggah Data Siswa" onClose={handlePopUp}>    
                     <div className="w-full flex flex-row justify-between items-center">
                         <Pagination workBook={workBook} page={page} setPage={setPage}/>
-                        <button type="button" className={"py-3 px-3 transition font-semibold rounded-lg " + (loading ? "bg-gray-700 font-semibold" : "bg-blue-400 hover:bg-blue-500")}>Input Data Siswa</button>
+                        <form onSubmit={submitHandler} className="flex flex-row gap-2">
+                            <Input list="kelasList" type="text" id="nama_kelas" name="nama_kelas" value={search} onChange={handleSelect}/>
+                            <datalist id="kelasList">
+                                {
+                                    kelas.map(i => (
+                                        <option data-value={i.id} value={i.namaKelas}/>                                        
+                                    ))
+                                }
+                            </datalist>
+                            <button disabled={loading} type="submit" className={"py-3 px-3 transition font-semibold rounded-lg whitespace-nowrap " + (loading ? "bg-gray-700 font-semibold" : "bg-blue-400 hover:bg-blue-500")}>Input Data Siswa</button>
+                        </form>
                     </div>
-                    <TableFormat format={['no', 'nama', 'kelasId', 'nis', 'nisn', 'angkatan', 'jk', 'alamat', 'hp']} data={data}>
-                        <Tr>                        
+                    <TableFormat format={['no', ...format]} data={data}>
+                        <Tr>
                             <Td>no</Td>
                             {Object.keys(data[0]).map(key => (
                                 <Td key={key}>{key}</Td>
                             ))}
                         </Tr>
                         {data.map((siswa, index) => (
-                            <>
-                                <Tr key={index}>
-                                    <Td>{getNum(1, index)}</Td>
-                                    {Object.keys(siswa).map(key => (
-                                        <Td key={key}><Link href='' title={siswa[key]}>{siswa[key]}</Link></Td>
-                                    ))}         
-                                </Tr>
-                            </>
+                            <Tr key={index}>
+                                <Td>{getNum(1, index)}</Td>
+                                {Object.keys(siswa).map(key => (
+                                    <Td key={key}><Link href='' title={siswa[key]}>{siswa[key]}</Link></Td>
+                                ))}         
+                            </Tr>
                         ))}
                     </TableFormat>
                 </PopUp>
