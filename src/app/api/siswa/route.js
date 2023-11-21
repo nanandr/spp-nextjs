@@ -31,7 +31,7 @@ export const GET = async (req, res) => {
             include: {
                 kelas: {
                     include: { kelas: true, tahunAjar: true },
-                    where: tahunAjar ? { where: { tahunAjarId: tahunAjar }} : undefined
+                    where: tahunAjar ? { tahunAjarId: tahunAjar } : undefined
                 },
             },
         })
