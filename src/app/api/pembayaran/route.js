@@ -2,41 +2,63 @@ import { NextResponse } from "next/server";
 import { prisma } from "../../../../utils/prisma";
 import { dateTimeFormat } from "../../../../utils/format";
 
-export const GET = async (req) => { 
+export const GET = async (req) => {
+    BigInt.prototype.toJSON = function () {
+        return this.toString();
+    };
+
     const url = new URL(req.url)
     let siswa = url.searchParams.get("siswa")
+    let tahunAjar = url.searchParams.get("tahun")
 
     try {
-        const transaksi = await prisma.transaksi.findMany({
-            where: {
+        let whereCondition = {}
+
+        if (siswa) {
+            whereCondition = {
                 siswaId: siswa
             }
+        }
+
+        const transaksi = await prisma.transaksi.findMany({
+            where: whereCondition,
+            include: {
+                spp: true
+            }
         });
-   
+
         const data = await Promise.all(transaksi.map(async (item) => {
             const siswa = await prisma.siswa.findFirst({
-                where: {
-                    id: item.siswaId
-                }
+                where: { id: item.siswaId }
+            });
+            const spp = await prisma.spp.findFirst({
+                where: tahunAjar
+                    ? {
+                        id: item.spp.id,
+                        tahunAjarId: tahunAjar,
+                    } : { id: item.spp.id }
             });
             const petugas = await prisma.user.findFirst({
-                where: {
-                    id: item.userId
-                }
+                where: { id: item.userId }
             })
-            return {
-                id: parseInt(item.id),
-                namaSiswa: siswa.nama, 
-                namaPetugas: petugas.nama, 
-                tanggalBayar: dateTimeFormat(item.tanggal),
-                totalBayar: parseInt(item.totalBayar),
-                bulan: item.bulan,
-                createdAt: dateTimeFormat(item.createdAt),
-                updatedAt: dateTimeFormat(item.updatedAt)
-            };
+            if (spp) {
+                return {
+                    id: parseInt(item.id),
+                    namaSiswa: siswa.nama,
+                    namaPetugas: petugas.nama,
+                    tanggalBayar: dateTimeFormat(item.tanggal),
+                    totalBayar: parseInt(item.totalBayar),
+                    bulan: item.bulan,
+                    spp: spp,
+                    createdAt: dateTimeFormat(item.createdAt),
+                    updatedAt: dateTimeFormat(item.updatedAt)
+                };
+            }
+            return null
         }));
+        const filteredData = data.filter(item => item !== null);
 
-        return NextResponse.json({ message: "Successfully fetched data", transaksi: data });
+        return NextResponse.json({ message: "Successfully fetched data", transaksi: filteredData });
     }
     catch (error) {
         console.log(error)

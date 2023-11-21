@@ -5,7 +5,8 @@ import { dateTimeFormat, paginate } from "../../../../utils/format"
 export const GET = async (req, res) => {
     const url = new URL(req.url)
     let page = url.searchParams.get("page")
-    let search = url.searchParams.get("search") ?? ''
+    let search = url.searchParams.get("search")
+    let tahunAjar = url.searchParams.get("tahun")
 
     try {
         let whereCondition = {}
@@ -16,6 +17,7 @@ export const GET = async (req, res) => {
                 { nisn: search },
             ]
         }
+
         const total = await prisma.siswa.count({
             where: whereCondition,
         })
@@ -27,14 +29,20 @@ export const GET = async (req, res) => {
             skip: pagination.skip,
             take: pagination.take,
             include: {
-                kelas: true
-            }
+                kelas: tahunAjar
+                    ? {
+                        where: {
+                            tahunAjarId: tahunAjar,
+                        },
+                    }
+                    : true,
+            },
         })
 
         const data = await Promise.all(siswa.map(async (item) => {
-            let kelasSiswa = await Promise.all(item.kelas.map(async (kelas) => {
-                const dataKelas = await prisma.kelas.findFirst({ where: { id: kelas.kelasId } })
-                const dataTahun = await prisma.tahunAjar.findFirst({ where: { id: kelas.tahunAjarId } })
+            let kelasSiswa = await Promise.all(item.kelas.map(async (siswaKelas) => {
+                const dataKelas = await prisma.kelas.findFirst({ where: { id: siswaKelas.kelasId } })
+                const dataTahun = await prisma.tahunAjar.findFirst({ where: { id: siswaKelas.tahunAjarId } })
 
                 return { tahunId: parseInt(dataTahun.id), kelasId: parseInt(dataKelas.id), namaKelas: dataKelas.namaKelas, tahunAjar: dataTahun.tahun }
             }))
@@ -54,7 +62,7 @@ export const GET = async (req, res) => {
             }
         }))
 
-        return NextResponse.json({ message: "Successfully fetched data", siswa: data, total: total })
+        return NextResponse.json({ message: "Succesfully fetched data", siswa: data, total: total })
     }
     catch (error) {
         console.log(error)
@@ -79,7 +87,7 @@ export const POST = async (req, res) => {
             },
         })
 
-        if(kelas && tahunAjar) {
+        if (kelas && tahunAjar) {
             const createKelas = await prisma.kelasSiswa.create({
                 data: {
                     siswaId: parseInt(siswa.id),
