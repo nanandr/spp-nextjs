@@ -1,4 +1,24 @@
 import { NextResponse } from "next/server"
+import { prisma } from "../../../../../utils/prisma"
+
+//EXAMPLE CODE DONT FORGET TO DELETE THIS
+export const GET = async () => {
+    try {
+        const data = await prisma.siswa.findMany({
+            include: {
+                kelas: {
+                    include: { kelas: true, tahunAjar: true }
+                }
+            }
+        })
+
+        console.log(data)
+        console.log(data[0].kelas)
+    }
+    catch(err) {
+        console.log(err)
+    }
+}
 
 export const POST = async (req) => {
     const body = await req.json()

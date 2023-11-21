@@ -29,38 +29,35 @@ export const GET = async (req, res) => {
             skip: pagination.skip,
             take: pagination.take,
             include: {
-                kelas: tahunAjar
-                    ? {
-                        where: {
-                            tahunAjarId: tahunAjar,
-                        },
-                    }
-                    : true,
+                kelas: {
+                    include: { kelas: true, tahunAjar: true },
+                    where: tahunAjar ? { where: { tahunAjarId: tahunAjar }} : undefined
+                },
             },
         })
 
-        const data = await Promise.all(siswa.map(async (item) => {
-            let kelasSiswa = await Promise.all(item.kelas.map(async (siswaKelas) => {
-                const dataKelas = await prisma.kelas.findFirst({ where: { id: siswaKelas.kelasId } })
-                const dataTahun = await prisma.tahunAjar.findFirst({ where: { id: siswaKelas.tahunAjarId } })
-
-                return { tahunId: parseInt(dataTahun.id), kelasId: parseInt(dataKelas.id), namaKelas: dataKelas.namaKelas, tahunAjar: dataTahun.tahun }
-            }))
-
+        const data = siswa.map(item => {
             return {
                 id: parseInt(item.id),
                 nis: item.nis,
                 nisn: item.nisn,
-                alamat: item.alamat,
                 nama: item.nama,
-                kelas: kelasSiswa,
+                kelas: item.kelas.map(kelas => {
+                    return {
+                        tahunId: parseInt(kelas.tahunAjarId),
+                        kelasId: parseInt(kelas.kelasId),
+                        namaKelas: kelas.kelas.namaKelas,
+                        tahunAjar: kelas.tahunAjar.tahun
+                    }
+                }),
                 jk: item.jk,
+                alamat: item.alamat,
                 angkatan: parseInt(item.angkatan),
                 hp: item.hp,
                 createdAt: dateTimeFormat(item.createdAt),
                 updatedAt: dateTimeFormat(item.updatedAt)
             }
-        }))
+        })
 
         return NextResponse.json({ message: "Succesfully fetched data", siswa: data, total: total })
     }
