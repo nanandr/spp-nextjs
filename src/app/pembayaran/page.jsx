@@ -20,7 +20,7 @@ export default function Pembayaran() {
   const [dataSiswa, setDataSiswa] = useState({})
   const [status, setStatus] = useState([])
   // MUST BE FIXED ON API NULL SEARCHPARAM
-  const [search, setSearch] = useState('HANDLING_ERROR')
+  const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [showPopUp, setPopUp] = useState(false)
@@ -64,7 +64,9 @@ export default function Pembayaran() {
   }
 
   const searchHandler = () => {
-    getSiswa(search)
+    if(search.trim() !== '') {
+      getSiswa(search)
+    }   
   }
 
   const submitHandler = async (data) => {
