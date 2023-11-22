@@ -166,7 +166,7 @@ export default function Pembayaran() {
             <div className="w-full bg-zinc-700 p-2 md:p-4 rounded-lg flex flex-col">
               <div className="flex flex-row-reverse">
                 <InputData title="Bayar SPP" form="From Pembayaran SPP">
-                  <Create loading={loading} submitHandler={submitHandler} siswa={dataSiswa} data={dataPembayaran}/>
+                  <Create loading={loading} submitHandler={submitHandler} siswa={dataSiswa} data={dataPembayaran} spp={dataSpp}/>
                 </InputData>
               </div>
               <TableFormat title='Tagihan' format={['No', 'Nama Petugas', 'Jenis SPP', 'Total Tagihan', 'Bulan', 'Status', 'Detail']} loading={loading} error={error} data={bulan}>
