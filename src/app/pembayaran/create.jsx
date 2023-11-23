@@ -3,24 +3,25 @@ import Input from "@/components/Input"
 import { useState } from "react"
 import { useSession } from 'next-auth/react'
 
-export default function Create({ data, siswa, spp, submitHandler, loading }) {
+export default function Create({ data, bulan, siswa, spp, submitHandler, loading }) {
     const { data: session } = useSession()
-
-    console.log(siswa)
-    console.log(data)
-    console.log(spp)
-    
     const [totalBulan, setTotalBulan] = useState(1)
+    let curr = new Date();
+    const date = curr.toISOString().substring(0, 10);
+
+    const filterBulan = () => {
+        return bulan.filter(item => !data.map(obj => obj.bulan).includes(item))
+    }
 
     const [form, setForm] = useState({
         id: '',
         siswaId: siswa.id,
-        userId: '',
-        sppId: '',
-        tanggal: '',
+        userId: session.user.id,
+        sppId: spp.id,
+        tanggal: curr,
         totalBulan: totalBulan,
         totalBayar: totalBulan * spp.spp,
-        bulan: '',
+        bulan: JSON.stringify(bulan) !== JSON.stringify(filterBulan()) ? filterBulan() : undefined,
     })
 
     const handleChange = (e) => {
@@ -46,8 +47,8 @@ export default function Create({ data, siswa, spp, submitHandler, loading }) {
                     type="text"
                     id='nama_siswa'
                     name='nama_siswa'
-                    disabled
                     value={siswa.nama}
+                    disabled={true}
                 />
             </div>
             <div className="my-3">
@@ -56,8 +57,19 @@ export default function Create({ data, siswa, spp, submitHandler, loading }) {
                     type="text"
                     id='nama_petugas'
                     name='nama_petugas'
-                    disabled
                     value={session ? session.user.nama : ''}
+                    disabled={true}
+                />
+            </div>
+            <div className="my-3">
+                <label className='block text-sm font-light mb-1' htmlFor="tanggal">Tanggal Bayar</label>
+                <Input
+                    default={date}
+                    type="date"
+                    id='tanggal'
+                    name='tanggal'
+                    value={form['tanggal']}
+                    onChange={handleChange}
                 />
             </div>
             <div className="my-3">
@@ -77,51 +89,10 @@ export default function Create({ data, siswa, spp, submitHandler, loading }) {
                     type="number"
                     id='totalBayar'
                     name='totalBayar'
-                    placeholder="Masukkan Jumlah Bulan"
                     value={form['totalBayar']}
-                    disabled
+                    disabled={true}
                 />
             </div>
-            {/* <div className="my-3">
-                <label className='block text-sm font-light mb-1' htmlFor="alamat">Alamat</label>
-                <Input
-                    type="text"
-                    id='alamat'
-                    name='alamat'
-                    value={form['alamat']}
-                    onChange={handleChange}
-                />
-            </div>
-            <div className="my-3">
-                <label className='block text-sm font-light mb-1' htmlFor="angkatan">Angkatan</label>
-                <Input
-                    type="number"
-                    id='angkatan'
-                    name='angkatan'
-                    value={form['angkatan']}
-                    onChange={handleChange}
-                />
-            </div>
-            <div className="my-3">
-                <label className='block text-sm font-light mb-1' htmlFor="hp">Nomor Telepon</label>
-                <Input
-                    type="number"
-                    id='hp'
-                    name='hp'
-                    value={form['hp']}
-                    onChange={handleChange}
-                />
-            </div> */}
-            {/* <div className="my-3">
-                <label className='block text-sm font-light mb-1' htmlFor="diskon">Diskon</label>
-                <Input 
-                    type="number" 
-                    id='diskon' 
-                    name='diskon' 
-                    value={form['diskon']}
-                    onChange={handleChange}
-                />
-            </div> */}
             <button disabled={loading} type='submit' className={"w-full my-5 py-3 px-3 transition font-semibold " + (loading ? "bg-gray-700 font-semibold" : "bg-blue-400 hover:bg-blue-500")}>{loading ? "Loading..." : "Submit"}</button>
         </form>
     )

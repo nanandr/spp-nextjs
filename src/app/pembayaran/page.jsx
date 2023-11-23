@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import axios from "axios"
-import { getKelas, getNum, getUrl, isEmpty, pembayaranFormat } from "../../../utils/format"
+import { getKelas, getNum, getUrl, isEmpty, bulan } from "../../../utils/format"
 import Sidebar from "@/components/Sidebar"
 import Header from "@/components/Header"
 import Create from "./create"
@@ -19,12 +19,10 @@ export default function Pembayaran() {
   const [dataSpp, setDataSpp] = useState([])
   const [dataSiswa, setDataSiswa] = useState({})
   const [status, setStatus] = useState([])
-  // MUST BE FIXED ON API NULL SEARCHPARAM
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [showPopUp, setPopUp] = useState(false)
-  const bulan = ['Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni']
   const tahunId = useSelector(getId)
 
 
@@ -39,18 +37,19 @@ export default function Pembayaran() {
   // }
 
   const getSiswa = async (search) => {
+    if(search.trim() == '') { return null }
     try {
       const res = await axios.get(getUrl(`/api/siswa?page=all&search=${search}&tahun=${tahunId}`))
       const siswa = res.data.siswa[0] || {}
 
       if (!isEmpty(siswa)) {
+        setLoading(true)
         setDataSiswa(siswa)
         const resPembayaran = await axios.get(getUrl(`/api/pembayaran?siswa=${siswa.id}&tahun=${tahunId}`))
         setDataPembayaran(resPembayaran.data.transaksi)
 
         const resSpp = await axios.get(getUrl(`/api/spp?tahunAjar=${siswa.kelas[0].tahunId}`))
         setDataSpp(resSpp.data.spp[0] || {})
-        setLoading(true)
       } else {
         setDataSiswa(siswa)
       }
@@ -64,9 +63,7 @@ export default function Pembayaran() {
   }
 
   const searchHandler = () => {
-    if(search.trim() !== '') {
-      getSiswa(search)
-    }   
+    getSiswa(search)
   }
 
   const submitHandler = async (data) => {
@@ -168,7 +165,7 @@ export default function Pembayaran() {
             <div className="w-full bg-zinc-700 p-2 md:p-4 rounded-lg flex flex-col">
               <div className="flex flex-row-reverse">
                 <InputData title="Bayar SPP" form="From Pembayaran SPP">
-                  <Create loading={loading} submitHandler={submitHandler} siswa={dataSiswa} data={dataPembayaran} spp={dataSpp}/>
+                  <Create loading={loading} submitHandler={submitHandler} siswa={dataSiswa} data={dataPembayaran} spp={dataSpp} bulan={bulan}/>
                 </InputData>
               </div>
               <TableFormat title='Tagihan' format={['No', 'Nama Petugas', 'Jenis SPP', 'Total Tagihan', 'Bulan', 'Status', 'Detail']} loading={loading} error={error} data={bulan}>

@@ -179,3 +179,6 @@ export const isEmpty = (object) => {
     }
     return true
 }
+
+export const bulan = 
+['Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni']

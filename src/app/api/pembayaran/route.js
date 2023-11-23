@@ -66,6 +66,31 @@ export const GET = async (req) => {
     }
 }
 
-// export const POST = async (req) => {
+export const POST = async (req) => {
+    const body = await req.json()
+    try {
+        const { siswaId, userId, sppId, tanggal, totalBayar, totalBulan, bulan } = body
 
-// }
+        let data = []
+        for (let i = 0; i < totalBulan; i++) {
+            data[i] = {
+                siswaId: siswaId,
+                userId: userId,
+                sppId: sppId,
+                tanggal: tanggal,
+                totalBayar: totalBayar / totalBulan,
+                bulan: bulan[i],
+            }
+        }
+
+        const transaksi = await prisma.transaksi.createMany({
+            data: data,
+        })
+
+        return NextResponse.json({ message: "Successfully created data" }, { status: 201 })
+    }
+    catch (error) {
+        console.log(error)
+        return NextResponse.json({ message: error }, { status: 500 })
+    }
+}
