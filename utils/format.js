@@ -180,5 +180,17 @@ export const isEmpty = (object) => {
     return true
 }
 
-export const bulan = 
-['Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni']
+export const bulan = ['Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni']
+
+export const ttl = (tempat, tanggal) => {
+    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+
+    const formattedDate = new Date(tanggal).toLocaleDateString('id-ID', options);
+
+    return `${tempat}, ${formattedDate}`;
+}
+
+export const formatDateForInputDate = (tanggal) => {
+    const isoDate = new Date(tanggal).toISOString().split('T')[0];
+    return isoDate;
+}

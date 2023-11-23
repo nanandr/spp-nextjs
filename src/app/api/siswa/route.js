@@ -52,6 +52,8 @@ export const GET = async (req, res) => {
                 }),
                 jk: item.jk,
                 alamat: item.alamat,
+                tempatLahir: item.tempatLahir,
+                tanggalLahir: item.tanggalLahir,
                 angkatan: parseInt(item.angkatan),
                 hp: item.hp,
                 createdAt: dateTimeFormat(item.createdAt),
@@ -70,7 +72,7 @@ export const GET = async (req, res) => {
 export const POST = async (req, res) => {
     const body = await req.json()
     try {
-        const { nama, nis, nisn, jk, angkatan, kelas, alamat, hp, tahunAjar } = body
+        const { nama, nis, nisn, jk, angkatan, kelas, alamat, hp, tahunAjar, tempatLahir, tanggalLahir } = body
 
         const siswa = await prisma.siswa.create({
             data: {
@@ -81,6 +83,8 @@ export const POST = async (req, res) => {
                 jk: jk,
                 angkatan: angkatan,
                 hp: hp,
+                tempatLahir: tempatLahir,
+                tanggalLahir: new Date(tanggalLahir),
             },
         })
 
