@@ -58,7 +58,6 @@ export default function Pembayaran() {
       setError(err.message)
     } finally {
       setLoading(false)
-      // fetchData()
     }
   }
 
