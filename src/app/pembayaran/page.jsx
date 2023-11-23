@@ -65,6 +65,7 @@ export default function Pembayaran() {
 
   const searchHandler = () => {
     if(search.trim() !== '') {
+      console.log({search: search})
       getSiswa(search)
     }   
   }
@@ -102,9 +103,9 @@ export default function Pembayaran() {
     // .finally(() => fetchData())
   }
 
-  useEffect(() => {
-    getSiswa(search)
-  }, [])
+  // useEffect(() => {
+  //   getSiswa(search)
+  // }, [])
 
   return (
     <div className="flex flex-row bg-black bg-opacity-90 min-h-screen">

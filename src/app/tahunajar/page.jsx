@@ -53,11 +53,12 @@ export default function TahunAjar() {
 				</InputData>
 			</div>
 			{/* <Table title='Tahun Ajar' data={dataTahun} loading={loading} error={error} /> */}
-			<TableFormat title="Tahun Ajar" format={['No', 'Tahun', 'Data Dibuat', 'Data Diubah']} data={dataTahun} loading={loading} error={error}>
+			<TableFormat title="Tahun Ajar" format={['No', 'Tahun', 'SPP', 'Data Dibuat', 'Data Diubah']} data={dataTahun} loading={loading} error={error}>
 				{dataTahun.map((tahun, index) => (
 					<Tr>
 						<Td>{getNum(page, index)}</Td>
 						<Td>{tahun.tahun}</Td>
+						<Td>200000</Td>
 						<Td>{tahun.createdAt}</Td>
 						<Td>{tahun.updatedAt}</Td>
 					</Tr>
