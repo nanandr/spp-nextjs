@@ -45,7 +45,11 @@ export const GET = async (req) => {
                     tanggalBayar: dateTimeFormat(item.tanggal),
                     totalBayar: parseInt(item.totalBayar),
                     bulan: item.bulan,
-                    spp: spp,
+                    spp: {
+                        id: parseInt(spp.id),
+                        tahunAjarId: parseInt(spp.tahunAjarId),
+                        spp: parseInt(spp.spp),
+                    },
                     createdAt: dateTimeFormat(item.createdAt),
                     updatedAt: dateTimeFormat(item.updatedAt)
                 };
