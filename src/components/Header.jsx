@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { toggleVisibility, selectVisibility } from '../redux/features/visibleSlice'
 import { setId } from '@/redux/features/tahunAjarSlice'
 import axios from 'axios'
-import { BurgerMenu, LeftArrow, RightArrow } from '../../public/svg'
+import { LeftArrow, RightArrow } from '../../public/svg'
 import { getUrl, takeTahun } from '../../utils/format'
 import { useRouter } from 'next/navigation'
 
