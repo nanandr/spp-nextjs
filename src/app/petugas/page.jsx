@@ -25,8 +25,9 @@ export default function Petugas() {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(getUrl(url))
+      const res = await axios.get(getUrl(`/api/petugas?page=${page}`))
       setDataPetugas(res.data.petugas)
+      setTotal(res.data.total)
     } catch (err) {
       console.error(err)
       setError(err.message)
@@ -72,8 +73,9 @@ export default function Petugas() {
   }
 
   useEffect(() => {
+    setLoading(true)
     fetchData()
-  }, [])
+  }, [page])
 
   return (
     <Index title='Petugas' placeholder='Cari Petugas (NIP, Nama)...'>
