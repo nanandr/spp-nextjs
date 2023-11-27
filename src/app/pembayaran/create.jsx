@@ -2,26 +2,26 @@
 import Input from "@/components/Input"
 import { useState } from "react"
 import { useSession } from 'next-auth/react'
+import { filterBulan } from "../../../utils/format"
+import { closePopUp } from "@/redux/features/inputPopUpSlice"
+import { useDispatch } from "react-redux"
 
 export default function Create({ data, bulan, siswa, spp, submitHandler, loading }) {
     const { data: session } = useSession()
     const [totalBulan, setTotalBulan] = useState(1)
     let curr = new Date();
     const date = curr.toISOString().substring(0, 10);
-
-    const filterBulan = () => {
-        return bulan.filter(item => !data.map(obj => obj.bulan).includes(item))
-    }
+    const dispatch = useDispatch()
 
     const [form, setForm] = useState({
         id: '',
         siswaId: siswa.id,
         userId: session.user.id,
         sppId: spp.id,
-        tanggal: curr,
+        tanggal: date,
         totalBulan: totalBulan,
         totalBayar: totalBulan * spp.spp,
-        bulan: JSON.stringify(bulan) !== JSON.stringify(filterBulan()) ? filterBulan() : undefined,
+        bulan: filterBulan(data, bulan),
     })
 
     const handleChange = (e) => {
@@ -37,6 +37,7 @@ export default function Create({ data, bulan, siswa, spp, submitHandler, loading
     const submit = (e) => {
         e.preventDefault()
         submitHandler(form)
+        dispatch(closePopUp())
     }
 
     return (
@@ -81,6 +82,7 @@ export default function Create({ data, bulan, siswa, spp, submitHandler, loading
                     placeholder="Masukkan Jumlah Bulan"
                     value={totalBulan}
                     onChange={handleChange}
+                    onClick={(e) => e.target.select()}
                 />
             </div>
             <div className="my-3">

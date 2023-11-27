@@ -1,13 +1,25 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../utils/prisma";
-import { dateTimeFormat } from "../../../../utils/format";
+import { dateTimeFormat, paginate } from "../../../../utils/format";
 
 export const GET = async (req) => {
+	const url = new URL(req.url)
+	let page = url.searchParams.get("page")
 	try {
+		let whereCondition = {
+			role: 'Staff',
+		}
+
+		const total = await prisma.user.count({
+			where: whereCondition
+		})
+
+		const pagination = paginate(page, total)
+
 		const petugas = await prisma.user.findMany({
-			where: {
-				role: 'Staff'
-			}
+			where: whereCondition,
+			skip: pagination.skip,
+			take: pagination.take,
 		});
 
 		const data = petugas.map(item => {
@@ -25,10 +37,7 @@ export const GET = async (req) => {
 			}
 		});
 
-		return NextResponse.json({
-			message: "Successfully fetched data",
-			petugas: data
-		});
+		return NextResponse.json({ message: "Successfully fetched data", petugas: data, total: total });
 	}
 	catch (error) {
 		return NextResponse.json({ message: "Error fetching data" }, { status: 500 });

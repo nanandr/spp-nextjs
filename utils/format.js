@@ -14,7 +14,7 @@ export const paginate = (page, total, itemsPerPage = take, type = 'sql') => {
         }
     }
 
-    if(type === 'array') {
+    if (type === 'array') {
         return {
             start: skip > 1 ? skip : 0,
             end: skip + itemsPerPage
@@ -54,7 +54,7 @@ export const getNum = (page, index) => {
 }
 
 export const deleteDialog = () => {
-    if(confirm('Konfirmasi hapus data?')) {
+    if (confirm('Konfirmasi hapus data?')) {
         return true
     }
     return false
@@ -172,8 +172,8 @@ export const pembayaranFormat = async (data, page = 1) => {
 }
 
 export const isEmpty = (object) => {
-    for (const prop in object){
-        if(Object.hasOwn(object, prop)) {
+    for (const prop in object) {
+        if (Object.hasOwn(object, prop)) {
             return false
         }
     }
@@ -193,4 +193,12 @@ export const ttl = (tempat, tanggal) => {
 export const formatDateForInputDate = (tanggal) => {
     const isoDate = new Date(tanggal).toISOString().split('T')[0];
     return isoDate;
+}
+
+export const filterBulan = (data, bulan) => {
+    if (!data || !data.length || !data[0].bulan) {
+        return bulan;
+    }
+    
+    return bulan.filter(item => !data.map(obj => obj.bulan).includes(item))
 }

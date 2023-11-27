@@ -3,10 +3,6 @@ import { prisma } from "../../../../utils/prisma";
 import { dateTimeFormat } from "../../../../utils/format";
 
 export const GET = async (req) => {
-    BigInt.prototype.toJSON = function () {
-        return this.toString();
-    };
-
     const url = new URL(req.url)
     let siswa = url.searchParams.get("siswa")
     let tahunAjar = url.searchParams.get("tahun")
@@ -49,7 +45,11 @@ export const GET = async (req) => {
                     tanggalBayar: dateTimeFormat(item.tanggal),
                     totalBayar: parseInt(item.totalBayar),
                     bulan: item.bulan,
-                    spp: spp,
+                    spp: {
+                        id: parseInt(spp.id),
+                        tahunAjarId: parseInt(spp.tahunAjarId),
+                        spp: parseInt(spp.spp),
+                    },
                     createdAt: dateTimeFormat(item.createdAt),
                     updatedAt: dateTimeFormat(item.updatedAt)
                 };
@@ -77,7 +77,7 @@ export const POST = async (req) => {
                 siswaId: siswaId,
                 userId: userId,
                 sppId: sppId,
-                tanggal: tanggal,
+                tanggal: new Date(tanggal),
                 totalBayar: totalBayar / totalBulan,
                 bulan: bulan[i],
             }
