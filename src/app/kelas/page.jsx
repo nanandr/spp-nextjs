@@ -12,12 +12,12 @@ import { Delete, Edit } from "../../../public/svg"
 import PopUp from "@/components/PopUp"
 
 export default function Kelas() {
-  const [dataKelas, setDataKelas] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [page, setPage] = useState(1);
+  const [dataKelas, setDataKelas] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [page, setPage] = useState(1)
   const [view, setView] = useState(0)
-  const [total, setTotal] = useState(0);
+  const [total, setTotal] = useState(0)
   const [showPopUp, setPopUp] = useState(false)
 
 
@@ -25,7 +25,7 @@ export default function Kelas() {
     try {
       const res = await axios.get(getUrl(`/api/kelas?page=${page}`))
       setDataKelas(res.data.kelas)
-      setTotal(res.data.total);
+      setTotal(res.data.total)
     } catch (err) {
       console.error(err)
       setError(err.message)

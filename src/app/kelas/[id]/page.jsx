@@ -1,14 +1,13 @@
 "use client"
 
 import Index from "../../index"
-import Table from "@/components/Table"
 import InputData from "@/components/InputData"
 import UploadSheet from "@/components/UploadSheet"
 import Create from "./create"
 import { useState } from "react"
 import { useEffect } from "react"
 import axios from "axios"
-import { getNum, getUrl, kelasSiswaFormat } from "../../../../utils/format"
+import { getNum, getUrl } from "../../../../utils/format"
 import { useSearchParams } from "next/navigation"
 import TableFormat, { Tr, Td, Link } from "@/components/TableFormat"
 
@@ -27,7 +26,7 @@ export default function Kelas({ params }) {
       setData(res.data.kelasSiswa)
       console.log(res.data)
     }
-    catch(err) {
+    catch (err) {
       console.error(err)
     }
     finally {
@@ -39,13 +38,13 @@ export default function Kelas({ params }) {
     setLoading(true)
     fetchData()
   }, [page, searchParams.get('tahun')])
-  
+
   return (
-		<Index title={`Kelas > ${kelas.namaKelas || ''}`} placeholder='Cari Siswa...'>
-    	<div className="flex flex-row gap-2 justify-end">
+    <Index title={`Kelas > ${kelas.namaKelas || ''}`} placeholder='Cari Siswa...'>
+      <div className="flex flex-row gap-2 justify-end">
         <UploadSheet />
         <InputData title="Input Data Siswa" form={`Form Tambah Data Siswa Kelas ${kelas.namaKelas || ''}`}>
-          <Create/>
+          <Create />
         </InputData>
       </div>
       <TableFormat title={`Kelas ${kelas.namaKelas || ''}`} format={['No', 'Nama Siswa', 'NIS', 'NISN', 'JK', 'Alamat', 'HP', 'Data Dibuat', 'Data Diubah']} loading={loading} data={data}>

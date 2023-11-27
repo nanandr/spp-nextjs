@@ -17,11 +17,10 @@ export default function TahunAjar() {
 	const fetchData = async () => {
 		try {
 			const res = await axios.get(getUrl(`/api/tahun?take=${take}`))
-			// const formattedData = await tahunFormat(res.data.tahun)
 			setDataTahun(res.data.tahun)
 		}
 		catch (err) {
-      		setError(err.message)
+			setError(err.message)
 			console.log(err)
 		}
 		finally {
@@ -32,27 +31,26 @@ export default function TahunAjar() {
 	const submitHandler = async (data) => {
 		setLoading(true)
 		await axios.post(getUrl('/api/tahun'), data)
-		 .then(res => console.log(res))
-		 .catch(err => {
-			console.error(err)
-			setError(err.response.data.message)
-		 })
-		 .finally(() => fetchData())
+			.then(res => console.log(res))
+			.catch(err => {
+				console.error(err)
+				setError(err.response.data.message)
+			})
+			.finally(() => fetchData())
 	}
 
 	useEffect(() => {
 		fetchData()
 	}, [])
-	
 
-  return (
+
+	return (
 		<Index title='Tahun Ajar' placeholder='Cari Tahun Ajar (2022/2023)...'>
 			<div className="flex flex-row gap-2 justify-end">
 				<InputData title="Input Data Tahun Ajar" form="Form Tambah Data Tahun Ajar">
 					<Create loading={loading} submitHandler={submitHandler} />
 				</InputData>
 			</div>
-			{/* <Table title='Tahun Ajar' data={dataTahun} loading={loading} error={error} /> */}
 			<TableFormat title="Tahun Ajar" format={['No', 'Tahun', 'SPP', 'Data Dibuat', 'Data Diubah']} data={dataTahun} loading={loading} error={error}>
 				{dataTahun.map((tahun, index) => (
 					<Tr>

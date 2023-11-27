@@ -1,64 +1,64 @@
-'use client';
+'use client'
 
-import Image from 'next/image';
-import logo from '../../assets/image/logo90x90.png';
-import { useState, useEffect } from 'react';
-import { useRouter } from "next/navigation";
-import { signIn, useSession } from 'next-auth/react';
-import Input from '@/components/Input';
+import Image from 'next/image'
+import logo from '../../assets/image/logo90x90.png'
+import { useState, useEffect } from 'react'
+import { useRouter } from "next/navigation"
+import { signIn, useSession } from 'next-auth/react'
+import Input from '@/components/Input'
 
 export default function Login() {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   const [form, setForm] = useState({
     email: '',
     password: ''
-  });
+  })
 
-  const router = useRouter();
-  const { status } = useSession();
+  const router = useRouter()
+  const { status } = useSession()
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setForm(prevForm => ({
       ...prevForm,
       [name]: value,
-    }));
-  };
+    }))
+  }
 
   const login = async (event) => {
-    event.preventDefault();
-    setLoading(true);
+    event.preventDefault()
+    setLoading(true)
 
     try {
       const response = await signIn('credentials', {
         email: form.email,
         password: form.password
-      });
+      })
 
       if (!response || response.ok !== true) {
-        setLoading(false);
-        setError("Invalid Credentials");
+        setLoading(false)
+        setError("Invalid Credentials")
       }
     }
     catch (err) {
-      setLoading(false);
-      console.log(err);
+      setLoading(false)
+      console.log(err)
     }
   }
 
   useEffect(() => {
     if (status === 'authenticated') {
-      router.refresh();
-      router.push('dashboard');
+      router.refresh()
+      router.push('dashboard')
     }
-  }, [status]);
+  }, [status])
 
   useEffect(() => {
-    const url = new URL(window.location.href);
-    url.search = '';
-    window.history.replaceState({}, document.title, url.toString());
-  }, []);
+    const url = new URL(window.location.href)
+    url.search = ''
+    window.history.replaceState({}, document.title, url.toString())
+  }, [])
 
   return (
     <main className="flex justify-center bg-black bg-opacity-90 min-h-screen">

@@ -13,32 +13,32 @@ export default function Laporan() {
 
   const fetchData = async () => {
     await axios.get(getUrl('/api/laporan'))
-    .then(res => setDataLaporan(res.data.laporan))
-    .catch(err => {
-      console.error(err)
-      setError(err.response.data.message)
-    })
-    .finally(() => setLoading(false))
+      .then(res => setDataLaporan(res.data.laporan))
+      .catch(err => {
+        console.error(err)
+        setError(err.response.data.message)
+      })
+      .finally(() => setLoading(false))
   }
 
   const submitHandler = async (data) => {
     setLoading(true)
     await axios.post(getUrl('/api/laporan'), data)
-    .then(res => console.log(res))
-    .catch(err => {
-      console.error(err)
-      setError(err.response.data.message)
-    })
-    .finally(() => fetchData())
+      .then(res => console.log(res))
+      .catch(err => {
+        console.error(err)
+        setError(err.response.data.message)
+      })
+      .finally(() => fetchData())
   }
 
   useEffect(() => {
     fetchData()
   }, [])
 
-    return (
-        <Index title='Laporan' placeholder='Cari Laporan...'>
-            <Table title='Laporan' data={dataLaporan} loading={loading} error={error} />
-        </Index>
-    )
+  return (
+    <Index title='Laporan' placeholder='Cari Laporan...'>
+      <Table title='Laporan' data={dataLaporan} loading={loading} error={error} />
+    </Index>
+  )
 }

@@ -1,6 +1,7 @@
 "use client"
-import Input from "@/components/Input";
-import { useState } from "react";
+
+import Input from "@/components/Input"
+import { useState } from "react"
 
 export default function Create({ data, submitHandler, loading }) {
 	const curData = data ?? ''
@@ -13,20 +14,20 @@ export default function Create({ data, submitHandler, loading }) {
 		hp: curData.hp ?? '',
 		email: curData.email ?? '',
 		password: ''
-	});
+	})
 
 	const handleChange = (e) => {
-		const { name, value } = e.target;
+		const { name, value } = e.target
 		setForm(prevForm => ({
 			...prevForm,
 			[name]: ['angkatan'].includes(name) ? parseInt(value) : value,
-		}));
-	};
+		}))
+	}
 
 
 	const submit = (e) => {
-		e.preventDefault();
-		submitHandler(form);
+		e.preventDefault()
+		submitHandler(form)
 	}
 
 	return (

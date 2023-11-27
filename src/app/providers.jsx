@@ -1,7 +1,7 @@
-'use client';
+'use client'
 
-import { SessionProvider } from 'next-auth/react';
-import { Provider as ReduxProvider } from 'react-redux';
+import { SessionProvider } from 'next-auth/react'
+import { Provider as ReduxProvider } from 'react-redux'
 import { store } from '../redux/store'
 
 export const Providers = ({ children }) => {
@@ -11,6 +11,5 @@ export const Providers = ({ children }) => {
         {children}
       </SessionProvider>
     </ReduxProvider>
-    
   )
 }

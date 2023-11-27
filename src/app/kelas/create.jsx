@@ -1,27 +1,27 @@
 "use client"
-import Input from "@/components/Input";
-import { useState } from "react";
+import Input from "@/components/Input"
+import { useState } from "react"
 
-export default function Create({ data, submitHandler, loading}) {
+export default function Create({ data, submitHandler, loading }) {
 
-    const currentData = data ?? '';
+    const currentData = data ?? ''
     const [form, setForm] = useState({
         id: currentData.id ?? '',
         namaKelas: currentData.namaKelas ?? '',
-    });
+    })
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value } = e.target
         setForm(prevForm => ({
             ...prevForm,
             [name]: value,
-        }));
-    };    
-    
-    
+        }))
+    }
+
+
     const submit = (e) => {
-        e.preventDefault();    
-        submitHandler(form);
+        e.preventDefault()
+        submitHandler(form)
     }
 
     return (
@@ -29,9 +29,9 @@ export default function Create({ data, submitHandler, loading}) {
             <div className="my-3">
                 <label className='block text-sm font-light mb-1' htmlFor="namaKelas">Nama Kelas</label>
                 <Input
-                    type="text" 
-                    id='namaKelas' 
-                    name='namaKelas' 
+                    type="text"
+                    id='namaKelas'
+                    name='namaKelas'
                     value={form['namaKelas']}
                     onChange={handleChange}
                 />

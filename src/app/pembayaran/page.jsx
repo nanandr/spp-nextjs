@@ -123,18 +123,12 @@ export default function Pembayaran() {
     // .finally(() => fetchData())
   }
 
-<<<<<<< HEAD
-  // useEffect(() => {
-  //   getSiswa(search)
-  // }, [])
-=======
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const tahunParams = params.get('tahun')
     setTahun(tahunParams)
     dispatch(closeAlert())
   }, [])
->>>>>>> 3bb4a4e9423e83c3a8ac1b7eeda612d8181e8e5b
 
   return (
     <Index>

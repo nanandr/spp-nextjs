@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from "react"
 import Index from "../index"
-import Table from "@/components/Table"
 import axios from "axios"
-import { deleteDialog, getNum, getUrl, petugasFormat } from "../../../utils/format"
+import { deleteDialog, getNum, getUrl } from "../../../utils/format"
 import InputData from "@/components/InputData"
 import Create from "./create"
 import TableFormat, { Button, Link, Td, Tr } from "@/components/TableFormat"
@@ -16,7 +15,6 @@ export default function Petugas() {
   const [dataPetugas, setDataPetugas] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [index, setIndex] = useState(0)
   const [page, setPage] = useState(1)
   const [view, setView] = useState(0)
   const [total, setTotal] = useState(0)
