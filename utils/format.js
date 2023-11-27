@@ -1,5 +1,5 @@
 // export const take = parseInt(process.env.TAKE)
-export const take = 5
+export const take = 20
 export const takeTahun = 5
 
 export const paginate = (page, total, itemsPerPage = take, type = 'sql') => {

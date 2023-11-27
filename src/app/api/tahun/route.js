@@ -44,12 +44,17 @@ export const GET = async (req) => {
 export const POST = async (req) => {
     const body = await req.json()
     try {
-        const { tahun } = body
+        const { tahun, spp } = body
 
-        const tahunAjar = await prisma.tahunAjar    .create({
+        const tahunAjar = await prisma.tahunAjar.create({
+            data: { tahun: tahun },
+        })
+
+        const dataSpp = await prisma.spp.create({
             data: {
-                tahun: tahun,
-            },
+                tahunAjarId: tahunAjar.id,
+                spp: spp
+            }
         })
 
         return NextResponse.json({ message: "Successfully created data" }, { status: 201 })

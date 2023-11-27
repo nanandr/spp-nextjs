@@ -26,11 +26,16 @@ export const POST = async (req) => {
         const { siswa, kelasId, tahunAjar } = body
         await Promise.all(siswa.map(async (item, index) => {
             const { nama, nis, nisn, alamat, jk, angkatan, hp, tempatLahir, tanggalLahir } = item
-            const data = await prisma.siswa.upsert({
-                where: {nisn: nisn, nis: nis},
-                update: {nama: nama, alamat: alamat, jk: jk, angkatan: angkatan, hp: hp, tempatLahir: tempatLahir, tanggalLahir: tanggalLahir, updatedAt: new Date()},
-                create: {nama: nama, nis: nis, nisn: nisn, alamat: alamat, jk: jk, angkatan: angkatan, hp: hp, tempatLahir: tempatLahir, tanggalLahir: tanggalLahir},
-            })
+            if(isNaN(Date.parse(tanggalLahir))) {
+                console.log({nama: nama, tanggalLahir: tanggalLahir})
+            }
+            else {
+                const data = await prisma.siswa.upsert({
+                    where: {nisn: nisn, nis: nis},
+                    update: {nama: nama, alamat: alamat, jk: jk, angkatan: angkatan, hp: hp, tempatLahir: tempatLahir, tanggalLahir: new Date(tanggalLahir), updatedAt: new Date()},
+                    create: {nama: nama, nis: nis, nisn: nisn, alamat: alamat, jk: jk, angkatan: angkatan, hp: hp, tempatLahir: tempatLahir, tanggalLahir: new Date(tanggalLahir)},
+                })
+            }
 
             if(kelasId) {
                 const kelasSiswa = await prisma.kelasSiswa.upsert({

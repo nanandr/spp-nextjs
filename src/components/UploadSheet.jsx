@@ -39,7 +39,7 @@ export default function UploadSheet() {
         if(workBook) {
             const sheetName = workBook.SheetNames[page]
             const sheet = workBook.Sheets[sheetName]
-            const parsedData = XLSX.utils.sheet_to_json(sheet)
+            const parsedData = XLSX.utils.sheet_to_json(sheet, {raw: false, dateNF:'MM/dd/yyyy'})
             
             setData(parsedData)
             setPopUp(true)
@@ -51,7 +51,7 @@ export default function UploadSheet() {
         reader.readAsBinaryString(e.target.files[0])
         reader.onload = (e) => {
             const data = e.target.result
-            setWorkBook(XLSX.read(data, { type: "binary" }))
+            setWorkBook(XLSX.read(data, { type: "binary", cellText: false, cellDates: true }))
         }
     }
 
@@ -65,6 +65,7 @@ export default function UploadSheet() {
 
     const handleSelect = (e) => {
         if(e.target.options) {
+            console.log("hello world")
             setIndex(e.target.options.selectedIndex)
         }
         setSearch(e.target.value)
@@ -72,10 +73,11 @@ export default function UploadSheet() {
 
     const submitHandler = async () => {
         setLoading(true)
-        await axios.post(getUrl('/api/siswa/bulk'), {siswa: data, kelasId: kelas[index].id, tahunAjar: tahunAjarId})
-            .then(res => console.log(res))
-            .catch(err => console.error(err))
-            .finally(() => setLoading(false))
+        console.log(kelas[index].id)
+        // await axios.post(getUrl('/api/siswa/bulk'), {siswa: data, kelasId: kelas[index].id, tahunAjar: tahunAjarId})
+        //     .then(res => console.log(res))
+        //     .catch(err => console.error(err))
+        //     .finally(() => setLoading(false))
     }
 
     return (
@@ -90,15 +92,15 @@ export default function UploadSheet() {
                 <PopUp title="Unggah Data Siswa" onClose={handlePopUp}>    
                     <div className="w-full flex flex-row justify-between items-center">
                         <Pagination workBook={workBook} page={page} setPage={setPage}/>
-                        <form onSubmit={submitHandler} className="flex flex-row gap-2">
-                            <Input list="kelasList" type="text" id="nama_kelas" name="nama_kelas" value={search} onChange={handleSelect}/>
-                            <datalist id="kelasList">
+                        <form onSubmit={submitHandler} className="flex flex-row gap-2" method="post">
+                            {/* <Input list="kelasList" type="text" id="nama_kelas" name="nama_kelas" value={search} onChange={handleSelect}/> */}
+                            <select className="bg-black py-2 rounded-lg" id="kelasList" onChange={handleSelect} value={search}>
                                 {
                                     kelas.map(i => (
-                                        <option data-value={i.id} value={i.namaKelas}/>                                        
+                                        <option value={i.id}>{i.namaKelas}</option>                                        
                                     ))
                                 }
-                            </datalist>
+                            </select>
                             <button disabled={loading} type="submit" className={"py-3 px-3 transition font-semibold rounded-lg whitespace-nowrap " + (loading ? "bg-gray-700 font-semibold" : "bg-blue-400 hover:bg-blue-500")}>Input Data Siswa</button>
                         </form>
                     </div>

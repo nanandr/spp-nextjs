@@ -7,6 +7,7 @@ export default function Create({data, submitHandler, loading}) {
     const [form, setForm] = useState({
         id: currentData.id ?? '',
         tahun: currentData.tahun ?? '',
+        spp: currentData.spp ?? ''
     });
     
 
@@ -33,6 +34,17 @@ export default function Create({data, submitHandler, loading}) {
                     id='tahun' 
                     name='tahun' 
                     value={form['tahun']}
+                    onChange={handleChange}
+                />
+            </div>
+            <div className="my-3">
+                <label className='block text-sm font-light mb-1' htmlFor="spp">SPP</label>
+                <Input 
+                    type="number" 
+                    id='spp' 
+                    name='spp' 
+                    value={form['spp']}
+                    placeholder='XX0.000,-'
                     onChange={handleChange}
                 />
             </div>

@@ -53,7 +53,7 @@ export default function Header(props) {
         const tahunParams = params.get('tahun')
         // if (tahunParams || currentUrl.endsWith('?tahun=')) { return }
 
-        router.push(`${window.location.origin}${window.location.pathname}?tahun=${active.tahun}`)
+        router.push(`${window.location.origin}${window.location.pathname}?tahun=${active ? active.tahun : ''}`)
     }, [active])
 
     return (
@@ -78,7 +78,7 @@ function Dropdown({ data, active, setActive, total, page, setPage }) {
         <div className={(isVisible ? 'hidden' : '') + ' sm:block relative'}>
             <button onClick={() => setVisible(!visible)} type="button" className={"bg-white hover:bg-gray-200 text-black flex items-center justify-between px-2 py-2 transition duration-200 rounded-lg group w-40"} aria-controls="tahun-ajar-dropdown" data-collapse-toggle="tahun-ajar-dropdown">
                 <div className='flex items-center'>
-                    <span className="ml-1">{active.tahun}</span>
+                    <span className="ml-1">{active ? active.tahun : ''}</span>
                 </div>
                 <svg className="w-3 h-3 mx-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
