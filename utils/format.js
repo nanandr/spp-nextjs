@@ -3,202 +3,201 @@ export const take = 20
 export const takeTahun = 5
 
 export const paginate = (page, total, itemsPerPage = take, type = 'sql') => {
-    let skip = 0
+	let skip = 0
 
-    if (page) {
-        if (page === 'all') {
-            itemsPerPage = total
-        }
-        else {
-            skip = (page - 1) * itemsPerPage
-        }
-    }
+	if (page) {
+		if (page === 'all') {
+			itemsPerPage = total
+		}
+		else {
+			skip = (page - 1) * itemsPerPage
+		}
+	}
 
-    if (type === 'array') {
-        return {
-            start: skip > 1 ? skip : 0,
-            end: skip + itemsPerPage
-        }
-    }
+	if (type === 'array') {
+		return {
+			start: skip > 1 ? skip : 0,
+			end: skip + itemsPerPage
+		}
+	}
 
-    return {
-        skip: skip > 1 ? skip : 0,
-        take: itemsPerPage
-    }
+	return {
+		skip: skip > 1 ? skip : 0,
+		take: itemsPerPage
+	}
 }
 
 export const dateTimeFormat = (dateTime) => {
-    if (dateTime !== null) {
-        const input = new Date(dateTime)
-        return input.toLocaleDateString('en-GB', {
-            hour: '2-digit',
-            minute: '2-digit',
-            day: '2-digit',
-            month: 'short',
-            year: 'numeric'
-        })
-    }
-    return null
+	if (dateTime !== null) {
+		const input = new Date(dateTime)
+		return input.toLocaleDateString('en-GB', {
+			hour: '2-digit',
+			minute: '2-digit',
+			day: '2-digit',
+			month: 'short',
+			year: 'numeric'
+		})
+	}
+	return null
 }
 
 export const getUrl = (path) => {
-    return `${window.location.protocol}//${window.location.host}${path}`
+	return `${window.location.protocol}//${window.location.host}${path}`
 }
 
 const getNumber = (page) => {
-    return (page - 1) * take + 1
+	return (page - 1) * take + 1
 }
 
 export const getNum = (page, index) => {
-    return (page - 1) * take + index + 1
+	return (page - 1) * take + index + 1
 }
 
 export const deleteDialog = () => {
-    if (confirm('Konfirmasi hapus data?')) {
-        return true
-    }
-    return false
+	if (confirm('Konfirmasi hapus data?')) {
+		return true
+	}
+	return false
 }
 
 export const tahunFormat = async (data, page = 1) => {
-    let no = getNumber(page)
-    const tahun = data.map(item => {
-        return {
-            "No": no++,
-            "id": item.id,
-            "tahun": item.tahun,
-            "Data dibuat": item.createdAt,
-            "Data diubah": item.updatedAt
-        }
-    })
-    return tahun
+	let no = getNumber(page)
+	const tahun = data.map(item => {
+		return {
+			"No": no++,
+			"id": item.id,
+			"tahun": item.tahun,
+			"Data dibuat": item.createdAt,
+			"Data diubah": item.updatedAt
+		}
+	})
+	return tahun
 }
 
 export const siswaFormat = async (data, page = 1, tahunParams) => {
-    let no = getNumber(page)
-    const siswa = data.map(item => {
-        const kelas = item.kelas.find(i => i.tahunAjar === tahunParams)
+	let no = getNumber(page)
+	const siswa = data.map(item => {
+		const kelas = item.kelas.find(i => i.tahunAjar === tahunParams)
 
-        return {
-            "No": no++,
-            "id": item.id,
-            "NIS": item.nis,
-            "NISN": item.nisn,
-            "Nama": item.nama,
-            "Kelas": kelas ? kelas.namaKelas : '',
-            "Angkatan": item.angkatan,
-            "JK": item.jk,
-            "Hp": item.hp,
-            "Alamat": item.alamat,
-            "Data dibuat": item.createdAt,
-            "Data diubah": item.updatedAt
-        }
-    })
-    return siswa
+		return {
+			"No": no++,
+			"id": item.id,
+			"NIS": item.nis,
+			"NISN": item.nisn,
+			"Nama": item.nama,
+			"Kelas": kelas ? kelas.namaKelas : '',
+			"Angkatan": item.angkatan,
+			"JK": item.jk,
+			"Hp": item.hp,
+			"Alamat": item.alamat,
+			"Data dibuat": item.createdAt,
+			"Data diubah": item.updatedAt
+		}
+	})
+	return siswa
 }
 
 export const petugasFormat = async (data, page = 1) => {
-    let no = getNumber(page)
-    const petugas = data.map(item => {
-        return {
-            "No": no++,
-            "id": item.id,
-            "NIP": item.nip,
-            "Nama": item.nama,
-            "Alamat": item.alamat,
-            "JK": item.jk,
-            "Hp": item.hp,
-            "Data dibuat": item.createdAt,
-            "Data diubah": item.updatedAt
-        }
-    })
-    return petugas
+	let no = getNumber(page)
+	const petugas = data.map(item => {
+		return {
+			"No": no++,
+			"id": item.id,
+			"NIP": item.nip,
+			"Nama": item.nama,
+			"Alamat": item.alamat,
+			"JK": item.jk,
+			"Hp": item.hp,
+			"Data dibuat": item.createdAt,
+			"Data diubah": item.updatedAt
+		}
+	})
+	return petugas
 }
 
 export const kelasFormat = async (data, page = 1) => {
-    let no = getNumber(page)
-    const kelas = data.map(item => {
-        return {
-            "No": no++,
-            "id": item.id,
-            "Nama": item.namaKelas,
-            "Data dibuat": item.createdAt,
-            "Data diubah": item.updatedAt
-        }
-    })
-    return kelas
+	let no = getNumber(page)
+	const kelas = data.map(item => {
+		return {
+			"No": no++,
+			"id": item.id,
+			"Nama": item.namaKelas,
+			"Data dibuat": item.createdAt,
+			"Data diubah": item.updatedAt
+		}
+	})
+	return kelas
 }
 
 export const getKelas = (kelasSiswa, tahunId) => {
-    return kelasSiswa.find(kelas => kelas.tahunId === tahunId)
+	return kelasSiswa.find(kelas => kelas.tahunId === tahunId)
 }
 
 export const kelasSiswaFormat = async (data, page = 1) => {
-    let no = getNumber(page)
-    const kelasSiswa = data.map(item => {
-        return {
-            "No": no++,
-            "id": item.siswa.id,
-            "NIS": item.siswa.nis,
-            "Nama": item.siswa.nama,
-            // "Kelas": kelas ? kelas.namaKelas : '',
-            "Angkatan": item.siswa.angkatan,
-            "JK": item.siswa.jk,
-            "Hp": item.siswa.hp,
-            "Alamat": item.siswa.alamat,
-            "Data dibuat": item.createdAt,
-            "Data diubah": item.updatedAt
-        }
-    })
-    return kelasSiswa
+	let no = getNumber(page)
+	const kelasSiswa = data.map(item => {
+		return {
+			"No": no++,
+			"id": item.siswa.id,
+			"NIS": item.siswa.nis,
+			"Nama": item.siswa.nama,
+			// "Kelas": kelas ? kelas.namaKelas : '',
+			"Angkatan": item.siswa.angkatan,
+			"JK": item.siswa.jk,
+			"Hp": item.siswa.hp,
+			"Alamat": item.siswa.alamat,
+			"Data dibuat": item.createdAt,
+			"Data diubah": item.updatedAt
+		}
+	})
+	return kelasSiswa
 }
 
 export const pembayaranFormat = async (data, page = 1) => {
-    let no = getNumber(page)
-    const pembayaran = data.map(item => {
-        return {
-            "No": no++,
-            "id": item.id,
-            "Nama Siswa": item.namaSiswa,
-            "Nama Petugas": item.namaPetugas,
-            "Tanggal Bayar": item.tanggalBayar,
-            "Total Bayar": item.totalBayar,
-            "Bulan": item.bulan,
-            "Data diubah": item.createdAt,
-            "Data diubah": item.updatedAt,
-        }
-    })
-    return pembayaran
+	let no = getNumber(page)
+	const pembayaran = data.map(item => {
+		return {
+			"No": no++,
+			"id": item.id,
+			"Nama Siswa": item.namaSiswa,
+			"Nama Petugas": item.namaPetugas,
+			"Tanggal Bayar": item.tanggalBayar,
+			"Total Bayar": item.totalBayar,
+			"Bulan": item.bulan,
+			"Data diubah": item.createdAt,
+			"Data diubah": item.updatedAt,
+		}
+	})
+	return pembayaran
 }
 
 export const isEmpty = (object) => {
-    for (const prop in object) {
-        if (Object.hasOwn(object, prop)) {
-            return false
-        }
-    }
-    return true
+	for (const prop in object) {
+		if (Object.hasOwn(object, prop)) {
+			return false
+		}
+	}
+	return true
 }
 
 export const bulan = ['Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni']
 
 export const ttl = (tempat, tanggal) => {
-    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+	const options = { day: 'numeric', month: 'long', year: 'numeric' }
 
-    const formattedDate = new Date(tanggal).toLocaleDateString('id-ID', options);
+	const formattedDate = new Date(tanggal).toLocaleDateString('id-ID', options)
 
-    return `${tempat}, ${formattedDate}`;
+	return `${tempat}, ${formattedDate}`
 }
 
 export const formatDateForInputDate = (tanggal) => {
-    const isoDate = new Date(tanggal).toISOString().split('T')[0];
-    return isoDate;
+	return new Date(tanggal).toISOString().split('T')[0]
 }
 
 export const filterBulan = (data, bulan) => {
-    if (!data || !data.length || !data[0].bulan) {
-        return bulan;
-    }
-    
-    return bulan.filter(item => !data.map(obj => obj.bulan).includes(item))
+	if (!data || !data.length || !data[0].bulan) {
+		return bulan
+	}
+
+	return bulan.filter(item => !data.map(obj => obj.bulan).includes(item))
 }

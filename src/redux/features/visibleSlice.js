@@ -3,15 +3,15 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const visibleSlice = createSlice({
-    name: 'visible',
-    initialState: {
-        isVisible: false,
-    },
-    reducers: {
-        toggleVisibility: (state) => {
-            state.isVisible = !state.isVisible
-        },
-    },
+	name: 'visible',
+	initialState: {
+		isVisible: false,
+	},
+	reducers: {
+		toggleVisibility: (state) => {
+			state.isVisible = !state.isVisible
+		},
+	},
 })
 
 export const { toggleVisibility } = visibleSlice.actions
