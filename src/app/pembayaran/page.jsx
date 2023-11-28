@@ -40,8 +40,6 @@ export default function Pembayaran() {
     }
   }
 
-  console.log(isNotif)
-
   const alertHandler = () => {
     dispatch(closeAlert())
   }
@@ -128,6 +126,7 @@ export default function Pembayaran() {
     const tahunParams = params.get('tahun')
     setTahun(tahunParams)
     dispatch(closeAlert())
+    dispatch(closeNotif())
   }, [])
 
   return (
@@ -140,7 +139,7 @@ export default function Pembayaran() {
           {isNotif && <Alert type={"green"} clickHandler={notifToggle}>Data Transaksi Berhasil Dibuat!!</Alert>}
           <div className="w-full bg-zinc-700 p-2 md:p-4 rounded-lg flex flex-col">
             <div className="flex flex-row-reverse">
-              <InputData title="Bayar SPP" form="From Pembayaran SPP">
+              <InputData title="Bayar SPP" form="Form Pembayaran SPP">
                 <Create loading={loading} submitHandler={submitHandler} siswa={dataSiswa} data={dataPembayaran} spp={dataSpp} bulan={bulan} notifHandler={notifToggle} />
               </InputData>
             </div>

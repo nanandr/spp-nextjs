@@ -50,7 +50,7 @@ export const PUT = async (req, context) => {
             }
         });
 
-        if(kelas) {
+        if(kelas && typeof kelas    == 'number') {
             const kelasSiswa = await prisma.kelasSiswa.upsert({
                 where: { siswaId_tahunAjarId: { siswaId: parseInt(siswa.id), tahunAjarId: tahunAjar } },
                 update: { kelasId: kelas, updatedAt: new Date() },

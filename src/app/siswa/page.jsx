@@ -9,21 +9,28 @@ import axios from "axios"
 import { getUrl, kelasFormat, getNum, getKelas, deleteDialog, ttl } from "../../../utils/format"
 import Pagination from "@/components/Pagination"
 import TableFormat, { Td, Tr, Link, Button } from "@/components/TableFormat"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { getId } from "@/redux/features/tahunAjarSlice"
 import { Delete, Edit } from "../../../public/svg"
 import PopUp from "@/components/PopUp"
+import { closeEPopUp, openEPopUp, selectEPopUpStat } from "@/redux/features/editInputPopUpSlice"
+import { openNotif, closeNotif, notificationVisiblility } from "@/redux/features/notificationSlice"
+import Alert from "@/components/Alert"
 
 export default function Siswa() {
   const [dataSiswa, setDataSiswa] = useState([])
   const [kelas, setKelas] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [message, setMessage] = useState('')
+  const [notifColor, setNotifColor] = useState('')
   const [page, setPage] = useState(1)
   const [view, setView] = useState(0)
   const [total, setTotal] = useState(0)
-  const [showPopUp, setPopUp] = useState(false)
   const url = "/api/siswa/"
+  const dispatch = useDispatch()
+  const showEPopUp = useSelector(selectEPopUpStat)
+  const isNotif = useSelector(notificationVisiblility)
 
   const tahunId = useSelector(getId)
 
@@ -38,6 +45,9 @@ export default function Siswa() {
     } catch (err) {
       console.error(err)
       setError(err.message)
+      setMessage(err.message)
+      setNotifColor('red')
+      dispatch(openNotif())
     } finally {
       setLoading(false)
     }
@@ -46,46 +56,79 @@ export default function Siswa() {
   const submitHandler = async (data) => {
     setLoading(true)
     await axios.post(getUrl(url), data)
-      .then(res => console.log(res))
+      .then(res => {
+        setMessage(res.data.message)
+        setNotifColor('green')
+      })
       .catch(err => {
         console.error(err)
         setError(err.response.data.message)
+        setMessage(err.response.data.message)
+        setNotifColor('red')
       })
-      .finally(() => fetchData())
+      .finally(() => {
+        fetchData()
+        dispatch(openNotif())
+      })
   }
 
   const editHandler = async (form) => {
     setLoading(true)
     await axios.put(getUrl(`${url}${form.id}`), form)
-      .then(res => console.log(res))
+      .then(res => {
+        setMessage(res.data.message)
+        setNotifColor('yellow')
+      })
       .catch(err => {
         console.error(err)
         setError(err.response.data.message)
+        setMessage(err.response.data.message)
+        setNotifColor('red')
       })
-      .finally(() => fetchData())
+      .finally(() => {
+        fetchData()
+        dispatch(openNotif())
+      })
   }
 
   const deleteHandler = async (id) => {
     if (deleteDialog()) {
       setLoading(true)
       await axios.delete(getUrl(`${url}${id}`))
-        .then(res => console.log(res))
+        .then(res => {
+          setMessage(res.data.message)
+          setNotifColor('red')
+        })
         .catch(err => {
           console.error(err)
           setError(err.response.data.message)
+          setMessage(err.response.data.message)
         })
-        .finally(() => fetchData())
+        .finally(() => {
+          fetchData()
+          dispatch(openNotif())
+        })
+    }
+  }
+
+  const notifToggle = () => {
+    if (isNotif) {
+      dispatch(closeNotif())
+    } else {
+      dispatch(openNotif())
     }
   }
 
   useEffect(() => {
     setLoading(true)
     fetchData()
+    dispatch(closeNotif())
   }, [page])
 
   return (
     <Index title='Siswa' placeholder='Cari Siswa (NIS, Nama)...'>
       {/* search onsubmit={searchHandler} */}
+      {isNotif && <Alert type={notifColor} clickHandler={notifToggle}>{message}</Alert>}
       <div className="flex flex-row gap-2 justify-end">
         <UploadSheet />
         <InputData title="Input Data Akun Siswa" form="Form Tambah Akun Siswa">
@@ -109,7 +152,7 @@ export default function Siswa() {
             <Td><Link title={siswa.updatedAt} /></Td>
             <Td className='flex flex-row gap-2 justify-end'>
               <Button clickHandler={() => {
-                setPopUp(true)
+                dispatch(openEPopUp())
                 setView(index)
               }} backgroundColor={'bg-orange-500'}><Edit /></Button>
               <Button clickHandler={() => deleteHandler(siswa.id)} backgroundColor={'bg-red-500'}><Delete /></Button>
@@ -119,8 +162,8 @@ export default function Siswa() {
         }
       </TableFormat>
       {
-        showPopUp &&
-        <PopUp title="Edit Data Siswa" onClose={() => setPopUp(false)}>
+        showEPopUp &&
+        <PopUp title="Edit Data Siswa" onClose={() => dispatch(closeEPopUp())}>
           <Create data={dataSiswa[view]} kelas={kelas} submitHandler={(form) => editHandler(form)} loading={loading} />
         </PopUp>
       }

@@ -3,11 +3,13 @@
 import Input from "@/components/Input"
 import { getId } from "@/redux/features/tahunAjarSlice"
 import { useState } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { formatDateForInputDate, getKelas } from "../../../utils/format"
+import { closePopUp } from "@/redux/features/inputPopUpSlice"
 
 export default function Create({ data, kelas, submitHandler, loading }) {
 	const tahunAjarId = useSelector(getId)
+	const dispatch = useDispatch()
 
 	const currentData = data ?? ''
 	const dataKelas = kelas ?? ''
@@ -38,6 +40,7 @@ export default function Create({ data, kelas, submitHandler, loading }) {
 	const submit = (e) => {
 		e.preventDefault()
 		submitHandler(form)
+		dispatch(closePopUp())
 	}
 
 	return (
