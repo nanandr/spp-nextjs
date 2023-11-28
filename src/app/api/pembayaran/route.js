@@ -3,6 +3,9 @@ import { prisma } from "../../../../utils/prisma";
 import { dateTimeFormat, getDateRange } from "../../../../utils/format";
 
 export const GET = async (req) => {
+    BigInt.prototype.toJSON = function () {
+        return this.toString();
+    };
     const url = new URL(req.url)
     let siswa = url.searchParams.get("siswa")
     let range = url.searchParams.get("range")
@@ -12,21 +15,21 @@ export const GET = async (req) => {
     try {
         let whereCondition = {}
 
-        if(range) {
+        if (range) {
             const tahun = await prisma.tahunAjar.findFirst({ where: { id: tahunAjar } })
             const params = { range: range, tahun: tahun.tahun, bulan: bulan ? bulan : undefined }
             const dateRange = getDateRange(params)
 
-            console.log({tahun: tahun.tahun, bulan: bulan, params: params, range: dateRange, format: { gte: dateTimeFormat(dateRange.gte), lt: dateTimeFormat(dateRange.lt) }})
-            
+            console.log({ tahun: tahun.tahun, bulan: bulan, params: params, range: dateRange, format: { gte: dateTimeFormat(dateRange.gte), lt: dateTimeFormat(dateRange.lt) } })
+
             whereCondition = {
                 ...whereCondition,
                 createdAt: { gte: dateRange.gte, lt: dateRange.lt }
             }
-            
+
         }
 
-        if(siswa) {
+        if (siswa) {
             whereCondition = {
                 ...whereCondition,
                 siswaId: siswa
@@ -36,50 +39,43 @@ export const GET = async (req) => {
         const transaksi = await prisma.transaksi.findMany({
             where: whereCondition,
             include: {
-                spp: true
+                spp: true,
+                user: true,
+                siswa: true,
             }
-        });
+        })
 
-        const data = await Promise.all(transaksi.map(async (item) => {
-            const siswa = await prisma.siswa.findFirst({
-                where: { id: item.siswaId }
-            });
-            const spp = await prisma.spp.findFirst({
-                where: tahunAjar
-                    ? {
-                        id: item.spp.id,
-                        tahunAjarId: tahunAjar,
-                    } : { id: item.spp.id }
-            });
-            const petugas = await prisma.user.findFirst({
-                where: { id: item.userId }
+        let filterTransaksi = transaksi
+
+        if (tahunAjar) {
+            filterTransaksi = transaksi.filter(item => {
+                return item.spp.tahunAjarId == tahunAjar
             })
-            if (spp) {
-                return {
-                    id: parseInt(item.id),
-                    namaSiswa: siswa.nama,
-                    namaPetugas: petugas.nama,
-                    tanggalBayar: dateTimeFormat(item.tanggal),
-                    totalBayar: parseInt(item.totalBayar),
-                    bulan: item.bulan,
-                    spp: {
-                        id: parseInt(spp.id),
-                        tahunAjarId: parseInt(spp.tahunAjarId),
-                        spp: parseInt(spp.spp),
-                    },
-                    createdAt: dateTimeFormat(item.createdAt),
-                    updatedAt: dateTimeFormat(item.updatedAt)
-                };
-            }
-            return null
-        }));
-        const filteredData = data.filter(item => item !== null);
+        }
 
-        return NextResponse.json({ message: "Successfully fetched data", transaksi: filteredData });
+        const data = filterTransaksi.map(item => {
+            return {
+                id: parseInt(item.id),
+                namaSiswa: item.siswa.nama,
+                namaPetugas: item.user.nama,
+                tanggalBayar: dateTimeFormat(item.tanggal),
+                totalBayar: parseInt(item.totalBayar),
+                bulan: item.bulan,
+                spp: {
+                    id: parseInt(item.spp.id),
+                    tahunAjarId: parseInt(item.spp.tahunAjarId),
+                    spp: parseInt(item.spp.spp),
+                },
+                createdAt: dateTimeFormat(item.createdAt),
+                updatedAt: dateTimeFormat(item.updatedAt)
+            }
+        })
+
+        return NextResponse.json({ message: "Successfully fetched data", transaksi: data })
     }
     catch (error) {
         console.log(error)
-        return NextResponse.json({ message: "Error fetching data" }, { status: 500 });
+        return NextResponse.json({ message: "Error fetching data" }, { status: 500 })
     }
 }
 
