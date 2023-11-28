@@ -7,11 +7,20 @@ export const GET = async (req) => {
     let page = url.searchParams.get("page")
 
     try {
-        const tahun = await prisma.tahunAjar.findMany()
+        const tahun = await prisma.tahunAjar.findMany({
+            include: {
+                spp: true
+            }
+        })
         const data = tahun.map(item => {
             return {
                 id: parseInt(item.id),
                 tahun: item.tahun,
+                spp: item.spp.map(spp => {
+                    return {
+                        spp: parseInt(spp.spp)
+                    }
+                }),
                 createdAt: dateTimeFormat(item.createdAt),
                 updatedAt: dateTimeFormat(item.updatedAt)
             }

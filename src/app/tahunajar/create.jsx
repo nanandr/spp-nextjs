@@ -8,7 +8,7 @@ export default function Create({ data, submitHandler, loading }) {
 	const [form, setForm] = useState({
 		id: currentData.id ?? '',
 		tahun: currentData.tahun ?? '',
-		spp: currentData.spp ?? ''
+		spp: currentData.spp ? currentData.spp[0].spp : ''
 	})
 
 
@@ -35,6 +35,7 @@ export default function Create({ data, submitHandler, loading }) {
 					id='tahun'
 					name='tahun'
 					value={form['tahun']}
+					placeholder='Masukkan Tahun Ajar cth. 2020/2021'
 					onChange={handleChange}
 				/>
 			</div>

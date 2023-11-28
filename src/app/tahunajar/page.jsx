@@ -5,19 +5,30 @@ import InputData from "@/components/InputData"
 import { useState, useEffect } from "react"
 import Create from "./create"
 import axios from "axios"
-import { getNum, getUrl, take } from "../../../utils/format"
-import TableFormat, { Td, Tr } from "@/components/TableFormat"
+import { deleteDialog, getNum, getUrl, take } from "../../../utils/format"
+import TableFormat, { Button, Td, Tr } from "@/components/TableFormat"
+import Pagination from "@/components/Pagination"
+import { useDispatch, useSelector } from "react-redux"
+import { closeEPopUp, openEPopUp, selectEPopUpStat } from "@/redux/features/editInputPopUpSlice"
+import { Delete, Edit } from "../../../public/svg"
+import PopUp from "@/components/PopUp"
 
 export default function TahunAjar() {
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState('')
 	const [dataTahun, setDataTahun] = useState([])
 	const [page, setPage] = useState(1)
+	const [total, setTotal] = useState(0)
+	const dispatch = useDispatch()
+	const showEPopUp = useSelector(selectEPopUpStat)
+	const [view, setView] = useState(0)
+	const url = "/api/tahun/"
 
 	const fetchData = async () => {
 		try {
 			const res = await axios.get(getUrl(`/api/tahun?take=${take}`))
 			setDataTahun(res.data.tahun)
+			setTotal(res.data.total)
 		}
 		catch (err) {
 			setError(err.message)
@@ -30,7 +41,7 @@ export default function TahunAjar() {
 
 	const submitHandler = async (data) => {
 		setLoading(true)
-		await axios.post(getUrl('/api/tahun'), data)
+		await axios.post(getUrl(url), data)
 			.then(res => console.log(res))
 			.catch(err => {
 				console.error(err)
@@ -39,6 +50,29 @@ export default function TahunAjar() {
 			.finally(() => fetchData())
 	}
 
+	const editHandler = async (form) => {
+		setLoading(true)
+		await axios.put(getUrl(`${url}${form.id}`), form)
+			.then(res => console.log(res))
+			.catch(err => {
+				console.error(err)
+				setError(err.response.data.message)
+			})
+			.finally(() => fetchData())
+	}
+
+	const deleteHandler = async (id) => {
+		if (deleteDialog()) {
+			setLoading(true)
+			await axios.delete(getUrl(`${url}${id}`))
+				.then(res => console.log(res))
+				.catch(err => {
+					console.error(err)
+					setError(err.response.data.message)
+				})
+				.finally(() => fetchData())
+		}
+	}
 	useEffect(() => {
 		fetchData()
 	}, [])
@@ -56,13 +90,26 @@ export default function TahunAjar() {
 					<Tr>
 						<Td>{getNum(page, index)}</Td>
 						<Td>{tahun.tahun}</Td>
-						<Td>200000</Td>
+						<Td>{tahun.spp[0].spp}</Td>
 						<Td>{tahun.createdAt}</Td>
 						<Td>{tahun.updatedAt}</Td>
+						<Td className='flex flex-row gap-2 justify-end'>
+							<Button clickHandler={() => {
+								dispatch(openEPopUp())
+								setView(index)
+							}} backgroundColor={'bg-orange-500'}><Edit /></Button>
+							<Button clickHandler={() => deleteHandler(tahun.id)} backgroundColor={'bg-red-500'}><Delete /></Button>
+						</Td>
 					</Tr>
 				))}
 			</TableFormat>
-			{/* <Pagination page={page} setPage={setPage} loading={loading} total={total} /> */}
+			{
+				showEPopUp &&
+				<PopUp title="Edit Data Tahun & SPP" onClose={() => dispatch(closeEPopUp())}>
+					<Create data={dataTahun[view]} submitHandler={(form) => editHandler(form)} loading={loading} />
+				</PopUp>
+			}
+			<Pagination page={page} setPage={setPage} loading={loading} total={total} />
 		</Index>
 	)
 }
