@@ -3,9 +3,6 @@ import { prisma } from "../../../../utils/prisma";
 import { dateTimeFormat, getDateRange } from "../../../../utils/format";
 
 export const GET = async (req) => {
-    BigInt.prototype.toJSON = function () {
-        return this.toString();
-    };
     const url = new URL(req.url)
     let siswa = url.searchParams.get("siswa")
     let range = url.searchParams.get("range")
