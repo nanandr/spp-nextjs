@@ -1,17 +1,34 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../utils/prisma";
-import { dateTimeFormat } from "../../../../utils/format";
+import { dateTimeFormat, getDateRange } from "../../../../utils/format";
 
 export const GET = async (req) => {
     const url = new URL(req.url)
     let siswa = url.searchParams.get("siswa")
+    let range = url.searchParams.get("range")
     let tahunAjar = url.searchParams.get("tahun")
+    let bulan = url.searchParams.get("bulan")
 
     try {
         let whereCondition = {}
 
-        if (siswa) {
+        if(range) {
+            const tahun = await prisma.tahunAjar.findFirst({ where: { id: tahunAjar } })
+            const params = { range: range, tahun: tahun.tahun, bulan: bulan ? bulan : undefined }
+            const dateRange = getDateRange(params)
+
+            console.log({tahun: tahun.tahun, bulan: bulan, params: params, range: dateRange, format: { gte: dateTimeFormat(dateRange.gte), lt: dateTimeFormat(dateRange.lt) }})
+            
             whereCondition = {
+                ...whereCondition,
+                createdAt: { gte: dateRange.gte, lt: dateRange.lt }
+            }
+            
+        }
+
+        if(siswa) {
+            whereCondition = {
+                ...whereCondition,
                 siswaId: siswa
             }
         }

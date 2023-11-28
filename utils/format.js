@@ -201,3 +201,76 @@ export const filterBulan = (data, bulan) => {
 
 	return bulan.filter(item => !data.map(obj => obj.bulan).includes(item))
 }
+
+export const getDateRange = ({range, tahun, bulan}) => {
+	let date = new Date()
+	let gte, lt
+
+	if(bulan) {
+		date.setMonth(parseBulan[bulan])
+	}
+
+	if(tahun) {
+		const getTahun = tahun.split('/')
+		date.setFullYear(bulan ? (date.getMonth() < 6 ? parseInt(getTahun[1]) : parseInt(getTahun[0])) : parseInt(getTahun[0]))
+	}
+
+	switch(range) {
+		case "today":
+			gte = new Date(date.setHours(0, 0, 0, 0))
+			lt = new Date(date.setHours(23, 59, 59, 999))
+			break
+		case "1-month":
+			if(bulan) {
+				gte = new Date(date.getFullYear(), date.getMonth(), 1)
+				lt = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999)
+			}
+			else {
+				gte = new Date(date.setMonth(date.getMonth() - 1))
+				lt = new Date()
+			}
+			break
+		case "6-month":
+			gte = new Date(date.setMonth(date.getMonth() - 6))
+            lt = new Date()
+			break
+		case "semester-1":
+			gte = new Date(date.getFullYear(), 0, 1)
+            lt = new Date(date.getFullYear(), 5, 30, 23, 59, 59, 999)
+			break
+		case "semester-2":
+			gte = new Date(date.getFullYear(), 6, 1)
+            lt = new Date(date.getFullYear(), 11, 31, 23, 59, 59, 999)
+			break
+		case "1-year":
+			gte = new Date(date.setFullYear(date.getFullYear() - 1))
+            lt = new Date()
+			break
+		case "full-year":
+			gte = new Date(date.getFullYear(), 6, 1)
+            lt = new Date(date.getFullYear() + 1, 5, 30, 23, 59, 59, 999)
+			break
+		default: 
+			console.log("Invalid range input")
+	}
+
+	return {
+		gte: gte,
+		lt: lt
+	}
+}
+
+export const parseBulan = {
+	"Januari": 0,
+	"Februari": 1,
+	"Maret": 2,
+	"April": 3,
+	"Mei": 4,
+	"Juni": 5,
+	"Juli": 6,
+	"Agustus": 7,
+	"September": 8,
+	"Oktober": 9,
+	"November": 10,
+	"Desember": 11
+};
