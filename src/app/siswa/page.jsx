@@ -16,6 +16,7 @@ import PopUp from "@/components/PopUp"
 import { closeEPopUp, openEPopUp, selectEPopUpStat } from "@/redux/features/editInputPopUpSlice"
 import { openNotif, closeNotif, notificationVisiblility } from "@/redux/features/notificationSlice"
 import Alert from "@/components/Alert"
+import Search from "@/components/Search"
 
 export default function Siswa() {
   const [dataSiswa, setDataSiswa] = useState([])
@@ -27,6 +28,7 @@ export default function Siswa() {
   const [page, setPage] = useState(1)
   const [view, setView] = useState(0)
   const [total, setTotal] = useState(0)
+  const [search, setSearch] = useState('')
   const url = "/api/siswa/"
   const dispatch = useDispatch()
   const showEPopUp = useSelector(selectEPopUpStat)
@@ -36,7 +38,7 @@ export default function Siswa() {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(getUrl(`/api/siswa?page=${page}`))
+      const res = await axios.get(getUrl(`/api/siswa?page=${page}&nama=${search}`))
       const resKelas = await axios.get(getUrl('/api/kelas?page=all'))
       const formattedKelas = await kelasFormat(resKelas.data.kelas)
       setDataSiswa(res.data.siswa)
@@ -126,10 +128,10 @@ export default function Siswa() {
   }, [page])
 
   return (
-    <Index title='Siswa' placeholder='Cari Siswa (NIS, Nama)...'>
-      {/* search onsubmit={searchHandler} */}
+    <Index title='Siswa'>
       {isNotif && <Alert type={notifColor} clickHandler={notifToggle}>{message}</Alert>}
-      <div className="flex flex-row gap-2 justify-end">
+      <div className="flex flex-row gap-2 justify-end flex-wrap">
+        <Search placeholder='Cari Siswa...' search={search} setSearch={setSearch} searchHandler={() => fetchData()}/>
         <UploadSheet />
         <InputData title="Input Data Akun Siswa" form="Form Tambah Akun Siswa">
           <Create loading={loading} submitHandler={submitHandler} kelas={kelas} />

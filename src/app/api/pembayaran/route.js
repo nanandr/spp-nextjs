@@ -12,6 +12,24 @@ export const GET = async (req) => {
     try {
         let whereCondition = {}
 
+        if (!tahunAjar) {
+            const dataTahun = await prisma.tahunAjar.findMany()
+            dataTahun.sort((a, b) => {
+                const tahunA = parseInt(a.tahun.split("/")[0], 10)
+                const tahunB = parseInt(b.tahun.split("/")[0], 10)
+    
+                if (tahunA > tahunB) {
+                    return -1
+                  } else if (tahunA < tahunB) {
+                    return 1
+                  } else {
+                    return 0
+                  }
+            })
+
+            tahunAjar = dataTahun[0].id
+        }
+
         if (range) {
             const tahun = await prisma.tahunAjar.findFirst({ where: { id: tahunAjar } })
             const params = { range: range, tahun: tahun.tahun, bulan: bulan ? bulan : undefined }
@@ -68,7 +86,7 @@ export const GET = async (req) => {
             }
         })
 
-        return NextResponse.json({ message: "Successfully fetched data", transaksi: data })
+        return NextResponse.json({ message: "Successfully fetched data", transaksi: data, total: filterTransaksi.length })
     }
     catch (error) {
         console.log(error)

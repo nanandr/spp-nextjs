@@ -74,10 +74,10 @@ export default function UploadSheet() {
 	const submitHandler = async () => {
 		setLoading(true)
 		console.log(kelas[index].id)
-		// await axios.post(getUrl('/api/siswa/bulk'), {siswa: data, kelasId: kelas[index].id, tahunAjar: tahunAjarId})
-		//     .then(res => console.log(res))
-		//     .catch(err => console.error(err))
-		//     .finally(() => setLoading(false))
+		await axios.post(getUrl('/api/siswa/bulk'), {siswa: data, kelasId: kelas[index].id, tahunAjar: tahunAjarId})
+		    .then(res => console.log(res))
+		    .catch(err => console.error(err))
+		    .finally(() => setLoading(false))
 	}
 
 	return (
