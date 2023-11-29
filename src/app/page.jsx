@@ -7,17 +7,20 @@ import { getUrl } from "../../utils/format"
 import axios from "axios"
 
 export default async function Dashboard() {
-	const [dataSiswa, setDataSiswa] = useState([])
-	const [dataKelas, setDataKelas] = useState([])
+	const [dataSiswa, setDataSiswa] = useState(0)
+	const [dataKelas, setDataKelas] = useState(0)
+	const [dataPembayaran, setDataPembayaran] = useState(0)
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState('')
 
 	const fetchData = async () => {
 		try {
-			const res = await axios.get(getUrl(`/api/siswa?page=all`))
-			const resKelas = await axios.get(getUrl('/api/kelas?page=all'))
-			setDataSiswa(res.data.siswa)
-			setDataKelas(resKelas.data.kelas)
+			const resSiswa = await axios.get(getUrl(`/api/siswa`))
+			const resKelas = await axios.get(getUrl('/api/kelas'))
+			const resPembayaran = await axios.get(getUrl(`/api/pembayaran?range=1-month`))
+			setDataSiswa(resSiswa.data.total)
+			setDataKelas(resKelas.data.total)
+			setDataPembayaran(resPembayaran.data.total)
 		} catch (err) {
 			console.error(err)
 			setError(err.message)
@@ -33,10 +36,10 @@ export default async function Dashboard() {
 	return (
 		<Index title='Dashboard' placeholder='Pencarian cepat...'>
 			<div className="w-full grid grid-cols-2 xl:grid-cols-3 min-[2560px]:grid-cols-5 gap-2 md:gap-3">
-				<Card content={dataSiswa.length} title="Jumlah Siswa" background='bg-blue-600' loading={loading} />
-				<Card content="5" title="Transaksi Bulan Ini" background='bg-yellow-500' loading={loading} />
+				<Card content={dataSiswa} title="Jumlah Siswa" background='bg-blue-600' loading={loading} />
+				<Card content={dataPembayaran} title="Transaksi Bulan Ini" background='bg-yellow-500' loading={loading} />
 				<Card content="7" title="Belum Lunas" background='bg-red-600' loading={loading} />
-				<Card content={dataKelas.length} title="Jumlah Kelas" background='bg-blue-400' loading={loading} />
+				<Card content={dataKelas} title="Jumlah Kelas" background='bg-blue-400' loading={loading} />
 				<Card content="Rp. 200.000.000,-" title="Total Saldo" background='bg-green-600' loading={loading} />
 			</div>
 			<Table title="Transaksi" data={[]} />

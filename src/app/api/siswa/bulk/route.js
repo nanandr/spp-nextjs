@@ -24,13 +24,19 @@ export const POST = async (req) => {
     const body = await req.json()
     try {
         const { siswa, kelasId, tahunAjar } = body
+
+        console.log({siswa: siswa, kelas: kelasId, tahunAjar: tahunAjar})
+
+        let data = {}
+        let kelasSiswa = {}
+
         await Promise.all(siswa.map(async (item, index) => {
             const { nama, nis, nisn, alamat, jk, angkatan, hp, tempatLahir, tanggalLahir } = item
             if(isNaN(Date.parse(tanggalLahir))) {
                 console.log({nama: nama, tanggalLahir: tanggalLahir})
             }
             else {
-                const data = await prisma.siswa.upsert({
+                data = await prisma.siswa.upsert({
                     where: {nisn: nisn, nis: nis},
                     update: {nama: nama, alamat: alamat, jk: jk, angkatan: angkatan, hp: hp, tempatLahir: tempatLahir, tanggalLahir: new Date(tanggalLahir), updatedAt: new Date()},
                     create: {nama: nama, nis: nis, nisn: nisn, alamat: alamat, jk: jk, angkatan: angkatan, hp: hp, tempatLahir: tempatLahir, tanggalLahir: new Date(tanggalLahir)},
@@ -38,7 +44,7 @@ export const POST = async (req) => {
             }
 
             if(kelasId) {
-                const kelasSiswa = await prisma.kelasSiswa.upsert({
+                kelasSiswa = await prisma.kelasSiswa.upsert({
                     where: { siswaId_tahunAjarId: { siswaId: parseInt(data.id), tahunAjarId: tahunAjar } },
                     update: { kelasId: kelasId, updatedAt: new Date() },
                     create: { siswaId: parseInt(data.id), kelasId: kelasId, tahunAjarId: tahunAjar }

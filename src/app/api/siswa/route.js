@@ -6,6 +6,7 @@ export const GET = async (req, res) => {
     const url = new URL(req.url)
     let page = url.searchParams.get("page")
     let search = url.searchParams.get("search")
+    let nama = url.searchParams.get("nama")
     let tahunAjar = url.searchParams.get("tahun")
 
     try {
@@ -15,6 +16,12 @@ export const GET = async (req, res) => {
             whereCondition.OR = [
                 { nis: search },
                 { nisn: search },
+            ]
+        }
+
+        if (nama) {
+            whereCondition.OR = [
+                { nama: { contains: nama } }
             ]
         }
 
