@@ -10,6 +10,7 @@ import Pagination from "@/components/Pagination"
 import TableFormat, { Button, Link, Td, Tr } from "@/components/TableFormat"
 import { Delete, Edit } from "../../../public/svg"
 import PopUp from "@/components/PopUp"
+import Search from "@/components/Search"
 
 export default function Kelas() {
   const [dataKelas, setDataKelas] = useState([])
@@ -19,11 +20,11 @@ export default function Kelas() {
   const [view, setView] = useState(0)
   const [total, setTotal] = useState(0)
   const [showPopUp, setPopUp] = useState(false)
-
+  const [search, setSearch] = useState('')
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(getUrl(`/api/kelas?page=${page}`))
+      const res = await axios.get(getUrl(`/api/kelas?page=${page}&search=${search}`))
       setDataKelas(res.data.kelas)
       setTotal(res.data.total)
     } catch (err) {
@@ -76,7 +77,8 @@ export default function Kelas() {
 
   return (
     <Index title='Kelas' placeholder='Cari Kelas...'>
-      <div className="flex flex-row gap-2 justify-end">
+      <div className="flex flex-row gap-2 justify-end flex-wrap">
+        <Search placeholder='Cari Kelas...' search={search} setSearch={setSearch} searchHandler={() => fetchData()} setPage={setPage}/>
         <InputData title="Input Data Kelas" form="Form Tambah Data Kelas">
           <Create loading={loading} submitHandler={submitHandler} />
         </InputData>

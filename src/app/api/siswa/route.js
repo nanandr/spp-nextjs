@@ -13,28 +13,23 @@ export const GET = async (req, res) => {
         let whereCondition = {}
 
         if (search) {
-            whereCondition.OR = [
-                { nis: search },
-                { nisn: search },
-            ]
+            whereCondition.where = {
+                OR: [{ nis: search }, { nisn: search }]
+            }
         }
 
         if (nama) {
-            whereCondition.OR = [
-                { nama: { contains: nama } }
-            ]
+            whereCondition.where = {
+                OR: [{ nama: { contains: nama } }]
+            }
         }
 
-        const total = await prisma.siswa.count({
-            where: whereCondition,
-        })
-
+        const total = await prisma.siswa.count(whereCondition)
         const pagination = paginate(page, total)
 
         const siswa = await prisma.siswa.findMany({
-            where: whereCondition,
-            skip: pagination.skip,
-            take: pagination.take,
+            ...whereCondition,
+            ...pagination,
             include: {
                 kelas: {
                     include: { kelas: true, tahunAjar: true },

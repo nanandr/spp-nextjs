@@ -10,6 +10,7 @@ import TableFormat, { Button, Link, Td, Tr } from "@/components/TableFormat"
 import PopUp from "@/components/PopUp"
 import Pagination from "@/components/Pagination"
 import { Delete, Edit } from "../../../public/svg"
+import Search from "@/components/Search"
 
 export default function Petugas() {
   const [dataPetugas, setDataPetugas] = useState([])
@@ -19,11 +20,12 @@ export default function Petugas() {
   const [view, setView] = useState(0)
   const [total, setTotal] = useState(0)
   const [showPopUp, setPopUp] = useState(false)
+  const [search, setSearch] = useState('')
   const url = "/api/petugas/";
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(getUrl(`/api/petugas?page=${page}`))
+      const res = await axios.get(getUrl(`/api/petugas?page=${page}&search=${search}`))
       setDataPetugas(res.data.petugas)
       setTotal(res.data.total)
     } catch (err) {
@@ -78,7 +80,8 @@ export default function Petugas() {
   return (
     <Index title='Petugas' placeholder='Cari Petugas (NIP, Nama)...'>
       {/* search onsubmit={searchHandler} */}
-      <div className="flex flex-row gap-2 justify-end">
+      <div className="flex flex-row gap-2 justify-end flex-wrap">
+        <Search placeholder='Cari Nama Petugas...' search={search} setSearch={setSearch} searchHandler={() => fetchData()} setPage={setPage}/>
         <InputData title="Input Data Akun Petugas" form="Form Tambah Akun Petugas">
           <Create loading={loading} submitHandler={submitHandler} />
         </InputData>
