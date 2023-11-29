@@ -131,7 +131,7 @@ export default function Siswa() {
     <Index title='Siswa'>
       {isNotif && <Alert type={notifColor} clickHandler={notifToggle}>{message}</Alert>}
       <div className="flex flex-row gap-2 justify-end flex-wrap">
-        <Search placeholder='Cari Siswa...' search={search} setSearch={setSearch} searchHandler={() => fetchData()}/>
+        <Search placeholder='Cari Siswa...' search={search} setSearch={setSearch} searchHandler={() => fetchData()} setPage={setPage}/>
         <UploadSheet />
         <InputData title="Input Data Akun Siswa" form="Form Tambah Akun Siswa">
           <Create loading={loading} submitHandler={submitHandler} kelas={kelas} />

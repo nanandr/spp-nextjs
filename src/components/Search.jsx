@@ -1,8 +1,11 @@
 import { Search as SearchIcon } from "../../public/svg"
 
-export default function Search({ placeholder, search, setSearch, searchHandler }) {
+export default function Search({ placeholder, search, setSearch, searchHandler, setPage }) {
 	const submitHandler = (e) => {
 		e.preventDefault()
+		if(setPage) {
+			setPage(1)
+		}
 		searchHandler()
 	}
 	
