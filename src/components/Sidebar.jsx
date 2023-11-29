@@ -8,9 +8,11 @@ import { signOut } from 'next-auth/react'
 import { useState } from 'react'
 import { useSelector } from "react-redux"
 import { selectVisibility } from '@/redux/features/visibleSlice.js'
+import { useSession } from 'next-auth/react'
 
 export default function Sidebar(props) {
 	const isVisible = useSelector(selectVisibility)
+	const { data: session } = useSession()
 
 	return (
 		<aside className={(isVisible ? "" : "hidden ") + "sm:block fixed top-0 left-0 z-40 max-w-[calc(100vw/1.5)] sm:w-80 h-screen sm:translate-x-0"}>
@@ -32,9 +34,11 @@ export default function Sidebar(props) {
 					<Navigation title="Dashboard" href="/" active={props.active == 'Dashboard' ? true : false} icon={<Menu />} />
 					<Navigation title="Pembayaran" href="/pembayaran" active={props.active == 'Pembayaran' ? true : false} icon={<Money />} />
 					<Navigation title="Laporan" href="/laporan" active={props.active == 'Laporan' ? true : false} icon={<Document />} />
-					<Dropdown title="Akun" links={[{ name: 'Siswa', href: '/siswa', active: props.active }, { name: 'Petugas', href: '/petugas', active: props.active }]} icon={<People />} />
-					<Navigation title="Kelas" href="/kelas" active={props.active == 'Kelas' ? true : false} icon={<Book />} />
-					<Navigation title="Tahun Ajar" href="/tahunajar" active={props.active == 'Tahun Ajar' ? true : false} icon={<Calendar />} />
+					{session ? session.user.role == 'Admin' && <>
+						<Dropdown title="Akun" links={[{ name: 'Siswa', href: '/siswa', active: props.active }, { name: 'Petugas', href: '/petugas', active: props.active }]} icon={<People />} />
+						<Navigation title="Kelas" href="/kelas" active={props.active == 'Kelas' ? true : false} icon={<Book />} />
+						<Navigation title="Tahun Ajar" href="/tahunajar" active={props.active == 'Tahun Ajar' ? true : false} icon={<Calendar />} />
+					</> : ''}
 				</ul>
 				<div className="relative left-0 bottom-0 w-full">
 					<button className="flex w-full text-gray-200 flex-row justify-between items-center px-2 py-4 bg-zinc-700 hover:bg-gray-600 hover:cursor-pointer transition duration-200 rounded-lg my-2" type='button' onClick={() => signOut()}><span>Logout</span><Logout /></button>

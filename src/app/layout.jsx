@@ -16,11 +16,16 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   const session = await getServerSession(authOptions)
+  const protectedPath = ['siswa', 'petugas', 'kelas', 'tahunajar']
 
   const headersList = headers()
   const pathname = headersList.get('x-invoke-path')
 
   if (!session && pathname !== '/') {
+    redirect('/')
+  }
+
+  if (session && session.user.role !== 'Admin' && protectedPath.includes(pathname.split('/')[1])) {
     redirect('/')
   }
 
