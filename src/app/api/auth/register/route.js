@@ -22,6 +22,7 @@ export const POST = async (req, res) => {
                 email: email,
                 password: hashedPassword,
                 hp: hp,
+                role: 'Admin',
             }
         });
         return NextResponse.json({ message: 'Successfully registered account' }, { status: 201 });

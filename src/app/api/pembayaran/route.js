@@ -3,9 +3,6 @@ import { prisma } from "../../../../utils/prisma";
 import { dateTimeFormat, getDateRange } from "../../../../utils/format";
 
 export const GET = async (req) => {
-    BigInt.prototype.toJSON = function () {
-        return this.toString();
-    };
     const url = new URL(req.url)
     let siswa = url.searchParams.get("siswa")
     let range = url.searchParams.get("range")
@@ -14,35 +11,37 @@ export const GET = async (req) => {
 
     try {
         let whereCondition = {}
+        let getTahun = '' 
 
         if (!tahunAjar) {
             const dataTahun = await prisma.tahunAjar.findMany()
             dataTahun.sort((a, b) => {
                 const tahunA = parseInt(a.tahun.split("/")[0], 10)
                 const tahunB = parseInt(b.tahun.split("/")[0], 10)
-    
+
                 if (tahunA > tahunB) {
                     return -1
-                  } else if (tahunA < tahunB) {
+                } else if (tahunA < tahunB) {
                     return 1
-                  } else {
+                } else {
                     return 0
-                  }
+                }
             })
 
             tahunAjar = dataTahun[0].id
+            getTahun = dataTahun[0].tahunAjar
         }
 
         if (range) {
             const tahun = await prisma.tahunAjar.findFirst({ where: { id: tahunAjar } })
             const params = { range: range, tahun: tahun.tahun, bulan: bulan ? bulan : undefined }
             const dateRange = getDateRange(params)
-
+            getTahun = tahun.tahun
             console.log({ tahun: tahun.tahun, bulan: bulan, params: params, range: dateRange, format: { gte: dateTimeFormat(dateRange.gte), lt: dateTimeFormat(dateRange.lt) } })
 
             whereCondition = {
                 ...whereCondition,
-                createdAt: { gte: dateRange.gte, lt: dateRange.lt }
+                tanggal: { gte: dateRange.gte, lt: dateRange.lt }
             }
 
         }
@@ -101,7 +100,7 @@ export const GET = async (req) => {
             }
         })
 
-        return NextResponse.json({ message: "Successfully fetched data", transaksi: data, total: filterTransaksi.length })
+        return NextResponse.json({ message: "Successfully fetched data", transaksi: data, total: filterTransaksi.length, tahun: getTahun })
     }
     catch (error) {
         console.log(error)
@@ -113,6 +112,8 @@ export const POST = async (req) => {
     const body = await req.json()
     try {
         const { siswaId, userId, sppId, tanggal, totalBayar, totalBulan, bulan } = body
+        const curDate = new Date(tanggal)
+        const addedHours = curDate.setHours(new Date().getHours(), new Date().getMinutes(), new Date().getSeconds())
 
         let data = []
         for (let i = 0; i < totalBulan; i++) {
@@ -120,7 +121,7 @@ export const POST = async (req) => {
                 siswaId: siswaId,
                 userId: userId,
                 sppId: sppId,
-                tanggal: new Date(tanggal),
+                tanggal: new Date(addedHours),
                 totalBayar: totalBayar / totalBulan,
                 bulan: bulan[i],
             }
