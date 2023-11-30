@@ -58,6 +58,8 @@ export const authOptions = {
     secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
         session: async ({ session }) => {
+            console.log(session)
+            
             const user = await prisma.user.findFirst({
                 where: { email: session.user.email },
             });
@@ -72,6 +74,9 @@ export const authOptions = {
                 expires: session.expires
             }
         },
+        jwt: async ({token}) => {
+            
+        }
     }
 }
 

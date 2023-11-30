@@ -235,12 +235,12 @@ export const getDateRange = ({range, tahun, bulan}) => {
             lt = new Date()
 			break
 		case "semester-1":
-			gte = new Date(date.getFullYear(), 0, 1)
-            lt = new Date(date.getFullYear(), 5, 30, 23, 59, 59, 999)
-			break
-		case "semester-2":
 			gte = new Date(date.getFullYear(), 6, 1)
             lt = new Date(date.getFullYear(), 11, 31, 23, 59, 59, 999)
+			break
+		case "semester-2":
+			gte = new Date(date.getFullYear() + 1, 0, 1)
+			lt = new Date(date.getFullYear() + 1, 5, 30, 23, 59, 59, 999)
 			break
 		case "1-year":
 			gte = new Date(date.setFullYear(date.getFullYear() - 1))
