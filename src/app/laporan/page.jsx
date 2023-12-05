@@ -12,6 +12,7 @@ export default function Laporan() {
   const [dataLaporan, setDataLaporan] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [tahun, setTahun] = useState('')
   const tahunId = useSelector(getId)
 
   // const fetchData = async () => {
@@ -27,7 +28,10 @@ export default function Laporan() {
   const rangeHandler = async (range, bulan = '') => {
     setLoading(true)
     await axios.get(getUrl(`/api/pembayaran?tahun=${tahunId ? tahunId : 3}&range=${range}&bulan=${bulan}`))
-      .then(res => setDataLaporan(res.data.transaksi))
+      .then(res => {
+        setDataLaporan(res.data.transaksi)
+        setTahun(res.data.tahun)
+      })
       .catch(err => setError(err.response.data.message))
       .finally(() => setLoading(false))
   }
@@ -48,7 +52,7 @@ export default function Laporan() {
   }, [])
 
   return (
-    <Index title='Laporan' placeholder='Cari Laporan...'>
+    <Index title='Laporan'>
       <div className="flex w-full gap-x-3">
         <Button custom={'w-fit h-fit p-3'} backgroundColor={'bg-zinc-800'} clickHandler={() => rangeHandler('today')}>Today</Button>
         <Button custom={'w-fit h-fit p-3'} backgroundColor={'bg-zinc-800'} clickHandler={() => rangeHandler('1-month')}>1 Month</Button>
@@ -58,8 +62,9 @@ export default function Laporan() {
         <Button custom={'w-fit h-fit p-3'} backgroundColor={'bg-zinc-800'} clickHandler={() => rangeHandler('1-year')}>1 Year</Button>
         <Button custom={'w-fit h-fit p-3'} backgroundColor={'bg-zinc-800'} clickHandler={() => rangeHandler('full-year')}>Full Year</Button>
       </div>
-      {dataLaporan?.length > 0 ? <>
-        <TableFormat title='Tagihan' format={['No', 'Nama Petugas', 'Nama Siswa', 'Kelas', 'Bulan', 'Nominal SPP', 'Nominal Bayar', 'Tanggal Transaksi']} loading={loading} error={error} data={dataLaporan}>
+      {dataLaporan?.length > 0 ? <div className="bg-white text-black font-serif p-2 text-center">
+        <h1 className="text-2xl font-bold">Laporan Pembayaran SPP {tahun}</h1>
+        <TableFormat format={['No', 'Nama Petugas', 'Nama Siswa', 'Kelas', 'Bulan', 'Nominal SPP', 'Nominal Bayar', 'Tanggal Transaksi']} loading={loading} error={error} data={dataLaporan}>
           {dataLaporan.map((transaksi, i) => {
             return (
               <Tr key={i}>
@@ -75,7 +80,7 @@ export default function Laporan() {
             );
           })}
         </TableFormat>
-      </> : <>Data Tidak Tersedia</>}
+      </div> : <span className="text-center my-2">Data Tidak Tersedia</span>}
     </Index>
   )
 }

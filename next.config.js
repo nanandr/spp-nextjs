@@ -1,4 +1,8 @@
 const nextConfig = {
+  // i18n: {
+  //   locales: ['', 'fr', 'nl-NL', 'id-ID'],
+  //   defaultLocale: 'id-ID',
+  // },
   experimental: {
     serverActions: true,
   },

@@ -30,7 +30,7 @@ export const paginate = (page, total, itemsPerPage = take, type = 'sql') => {
 export const dateTimeFormat = (dateTime) => {
 	if (dateTime !== null) {
 		const input = new Date(dateTime)
-		return input.toLocaleDateString('en-GB', {
+		return input.toLocaleDateString('id-ID', {
 			hour: '2-digit',
 			minute: '2-digit',
 			day: '2-digit',
@@ -202,41 +202,41 @@ export const filterBulan = (data, bulan) => {
 	return bulan.filter(item => !data.map(obj => obj.bulan).includes(item))
 }
 
-export const getDateRange = ({range, tahun, bulan}) => {
+export const getDateRange = ({ range, tahun, bulan }) => {
 	let date = new Date()
 	let gte, lt
 
-	if(bulan) {
+	if (bulan) {
 		date.setMonth(parseBulan[bulan])
 	}
 
-	if(tahun) {
+	if (tahun) {
 		const getTahun = tahun.split('/')
 		date.setFullYear(bulan ? (date.getMonth() < 6 ? parseInt(getTahun[1]) : parseInt(getTahun[0])) : parseInt(getTahun[0]))
 	}
 
-	switch(range) {
+	switch (range) {
 		case "today":
 			gte = new Date(date.setHours(0, 0, 0, 0))
 			lt = new Date(date.setHours(23, 59, 59, 999))
 			break
 		case "1-month":
-			if(bulan) {
+			if (bulan) {
 				gte = new Date(date.getFullYear(), date.getMonth(), 1)
 				lt = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999)
 			}
 			else {
-				gte = new Date(date.setMonth(date.getMonth() - 1))
-				lt = new Date()
+				gte = new Date(date.getFullYear(), date.getMonth(), 0, 0, 0)
+				lt = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999)
 			}
 			break
 		case "6-month":
 			gte = new Date(date.setMonth(date.getMonth() - 6))
-            lt = new Date()
+			lt = new Date()
 			break
 		case "semester-1":
 			gte = new Date(date.getFullYear(), 6, 1)
-            lt = new Date(date.getFullYear(), 11, 31, 23, 59, 59, 999)
+			lt = new Date(date.getFullYear(), 11, 31, 23, 59, 59, 999)
 			break
 		case "semester-2":
 			gte = new Date(date.getFullYear() + 1, 0, 1)
@@ -244,13 +244,13 @@ export const getDateRange = ({range, tahun, bulan}) => {
 			break
 		case "1-year":
 			gte = new Date(date.setFullYear(date.getFullYear() - 1))
-            lt = new Date()
+			lt = new Date()
 			break
 		case "full-year":
 			gte = new Date(date.getFullYear(), 6, 1)
-            lt = new Date(date.getFullYear() + 1, 5, 30, 23, 59, 59, 999)
+			lt = new Date(date.getFullYear() + 1, 5, 30, 23, 59, 59, 999)
 			break
-		default: 
+		default:
 			console.log("Invalid range input")
 	}
 

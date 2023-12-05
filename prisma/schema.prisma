@@ -125,7 +125,7 @@ model Transaksi {
   siswaId     BigInt        @db.UnsignedBigInt
   userId      BigInt        @db.UnsignedBigInt
   sppId       BigInt        @db.UnsignedBigInt
-  tanggal     DateTime      @db.Date
+  tanggal     DateTime      @db.Timestamp(0)
   totalBayar  BigInt
   bulan       String
   createdAt   DateTime?     @db.Timestamp(0) @default(now())
