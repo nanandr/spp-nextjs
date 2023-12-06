@@ -74,8 +74,13 @@ export const GET = async (req, res) => {
 export const POST = async (req, res) => {
     const body = await req.json()
     try {
-        const { nama, nis, nisn, jk, angkatan, kelas, alamat, hp, tahunAjar, tempatLahir, tanggalLahir } = body
+        const { nama, nis, nisn, jk, angkatan, kelas, alamat, hp, tahunAjar, tempatLahir, tanggalLahir, password } = body
 
+        let hashedPassword = null
+        if(password) {
+            hashedPassword = await bcrypt.hash(password, 10)
+        }
+        
         const siswa = await prisma.siswa.create({
             data: {
                 nama: nama,
@@ -87,6 +92,7 @@ export const POST = async (req, res) => {
                 hp: hp,
                 tempatLahir: tempatLahir,
                 tanggalLahir: new Date(tanggalLahir),
+                password: hashedPassword,
             },
         })
 

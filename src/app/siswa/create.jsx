@@ -29,6 +29,8 @@ export default function Create({ data, kelas, submitHandler, loading }) {
 		tanggalLahir: currentData.tanggalLahir ? formatDateForInputDate(currentData.tanggalLahir) : '',
 	})
 
+
+
 	const handleChange = (e) => {
 		const { name, value } = e.target
 		setForm(prevForm => ({
@@ -37,9 +39,25 @@ export default function Create({ data, kelas, submitHandler, loading }) {
 		}))
 	}
 
-	const submit = (e) => {
+	const generatePassword = (studentData) => {
+		const { tanggalLahir, jk, nama, nis } = studentData;
+		const year = new Date(tanggalLahir).getFullYear().toString();
+		const month = (new Date(tanggalLahir).getMonth() + 1).toString().padStart(2, '0');
+		const day = new Date(tanggalLahir).getDate().toString().padStart(2, '0');
+		const jenisKelamin = jk === 'LakiLaki' ? '1' : '0';
+		const initials = nama.split(' ').map(word => word.charAt(0)).join('');
+		const nisLastFour = nis.slice(-4);
+
+		const password = `${year}${month}${day}${jenisKelamin}${initials}${nisLastFour}`;
+
+		return password
+	}
+
+	const submit =  (e) => {
 		e.preventDefault()
-		submitHandler(form)
+		const password = generatePassword(form)
+		const updatedForm = { ...form, password };
+		submitHandler(updatedForm)
 		dispatch(closePopUp())
 	}
 
