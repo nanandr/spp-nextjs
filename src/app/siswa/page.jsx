@@ -142,7 +142,7 @@ export default function Siswa() {
           <Tr>
             <Td>{getNum(page, index)}</Td>
             <Td><Link title={siswa.nama} /></Td>
-            <Td><Link title={getKelas(siswa.kelas, tahunId)?.namaKelas} /></Td>
+            <Td><Link title={getKelas(siswa.kelas, tahunId)?.namaKelas} href={'/kelas/' + getKelas(siswa.kelas, tahunId)?.kelasId || ''} /></Td>
             <Td><Link title={siswa.nis} /></Td>
             <Td><Link title={siswa.nisn} /></Td>
             <Td><Link title={ttl(siswa.tempatLahir, siswa.tanggalLahir)} /></Td>

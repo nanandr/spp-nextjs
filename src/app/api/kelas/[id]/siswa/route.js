@@ -31,6 +31,8 @@ export const GET = async (req, context) => {
                     nama: item.siswa.nama,
                     nis: item.siswa.nis,
                     nisn: item.siswa.nisn,
+                    tempatLahir: item.siswa.tempatLahir,
+                    tanggalLahir: item.siswa.tanggalLahir,
                     alamat: item.siswa.alamat,
                     nama: item.siswa.nama,
                     jk: item.siswa.jk,
