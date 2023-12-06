@@ -36,6 +36,7 @@ export const GET = async (req, res) => {
                     where: tahunAjar ? { tahunAjarId: tahunAjar } : undefined
                 },
             },
+            orderBy: [{ nama: 'asc' }]
         })
 
         const data = siswa.map(item => {

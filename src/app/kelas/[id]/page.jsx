@@ -7,7 +7,7 @@ import Create from "./create"
 import { useState } from "react"
 import { useEffect } from "react"
 import axios from "axios"
-import { getNum, getUrl } from "../../../../utils/format"
+import { getNum, getUrl, ttl } from "../../../../utils/format"
 import { useSearchParams } from "next/navigation"
 import TableFormat, { Tr, Td, Link } from "@/components/TableFormat"
 
@@ -47,13 +47,14 @@ export default function Kelas({ params }) {
           <Create />
         </InputData>
       </div>
-      <TableFormat title={`Kelas ${kelas.namaKelas || ''}`} format={['No', 'Nama Siswa', 'NIS', 'NISN', 'JK', 'Alamat', 'HP', 'Data Dibuat', 'Data Diubah']} loading={loading} data={data}>
+      <TableFormat title={`Kelas ${kelas.namaKelas || ''}`} format={['No', 'Nama Siswa', 'NIS', 'NISN', 'TTL', 'JK', 'Alamat', 'HP', 'Data Dibuat', 'Data Diubah']} loading={loading} data={data}>
         {data.map((kelas, index) => (
           <Tr>
             <Td>{getNum(page, index)}</Td>
             <Td><Link title={kelas.siswa.nama} /></Td>
             <Td><Link title={kelas.siswa.nis} /></Td>
             <Td><Link title={kelas.siswa.nisn} /></Td>
+            <Td><Link title={ttl(kelas.siswa.tempatLahir, kelas.siswa.tanggalLahir)} /></Td>
             <Td><Link title={kelas.siswa.jk} /></Td>
             <Td><Link title={kelas.siswa.alamat} /></Td>
             <Td><Link title={kelas.siswa.hp} /></Td>
